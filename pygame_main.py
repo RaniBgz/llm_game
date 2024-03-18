@@ -3,6 +3,7 @@ import sys
 from model.character import Character
 from model.item import Item
 from model.object import Object
+# from view.main_menu import MainMenu
 
 # Set up some constants
 WIDTH, HEIGHT = 640, 480
