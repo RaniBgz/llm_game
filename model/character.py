@@ -2,6 +2,12 @@
 from model.entity import Entity
 
 class Character(Entity):
-    def __init__(self, name, description, hp):
-        super().__init__(name, description)
+    def __init__(self, hp):
+        super().__init__()
         self.hp = hp
+        self.inventory = []
+    def add_item_to_inventory(self, item):
+        self.inventory.append(item)
+    def remove_item_from_inventory(self, item):
+        if item in self.inventory:
+            self.inventory.remove(item)
