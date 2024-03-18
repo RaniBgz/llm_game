@@ -5,7 +5,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 
 class MainMenuView:
-    def __init__(self, screen, WIDTH, HEIGHT, RED):
+    def __init__(self, screen):
         self.screen = screen
         self.title_font = pygame.font.SysFont("Arial", 50)
         self.title_text = self.title_font.render("My Game", True, RED)
@@ -19,7 +19,7 @@ class MainMenuView:
         self.quit_text = self.quit_font.render("Quit", True, RED)
         self.quit_rect = self.quit_text.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 50))
 
-    def draw(self):
+    def display_menu(self):
         self.screen.fill(WHITE)
         self.screen.blit(self.title_text, self.title_rect)
         self.screen.blit(self.play_text, self.play_rect)
