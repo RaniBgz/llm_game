@@ -3,6 +3,7 @@ import sys
 from model.character import Character
 from model.item import Item
 from model.object import Object
+from controller.game_controller import GameController
 # from view.main_menu import MainMenu
 
 # Set up some constants
@@ -102,44 +103,6 @@ def main():
 
     # Start the main menu
     main_menu()
-
-
-    # # Set up the menu buttons
-    # menu_font = pygame.font.SysFont("Arial", 30)
-    # menu_buttons = ["Quests", "Inventory", "Map", "World"]
-    # menu_rects = []
-    # for i, button in enumerate(menu_buttons):
-    #     menu_text = menu_font.render(button, True, RED)
-    #     menu_rect = menu_text.get_rect(center=(WIDTH / 2, HEIGHT / 2 + (i + 1) * 50))
-    #     menu_rects.append(menu_rect)
-
-    # # Game loop
-    # while True:
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #             sys.exit()
-    #
-    #     # Check if the play or quit button was clicked
-    #     if play_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
-    #         # Display the menu buttons
-    #         screen.fill(WHITE)
-    #         for button, rect in zip(menu_buttons, menu_rects):
-    #             menu_text = menu_font.render(button, True, RED)
-    #             screen.blit(menu_text, rect)
-    #     elif quit_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
-    #         # Exit the game
-    #         pygame.quit()
-    #         sys.exit()
-    #     else:
-    #         # Draw the main menu
-    #         screen.fill(WHITE)
-    #         screen.blit(title_text, title_rect)
-    #         screen.blit(play_text, play_rect)
-    #         screen.blit(quit_text, quit_rect)
-    #
-    #     # Update the display
-    #     pygame.display.flip()
 
 
 
