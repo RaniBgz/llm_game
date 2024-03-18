@@ -17,12 +17,6 @@ class MainGameView:
         self.world_text = self.button_font.render("World", True, RED)
         self.world_rect = self.world_text.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 250))
 
-    def draw(self):
-        self.screen.fill(WHITE)
-        self.screen.blit(self.quests_text, self.quests_rect)
-        self.screen.blit(self.inventory_text, self.inventory_rect)
-        self.screen.blit(self.map_text, self.map_rect)
-        self.screen.blit(self.world_text, self.world_rect)
 
     def display_game_ui(self):
         self.screen.fill(WHITE)
@@ -33,6 +27,14 @@ class MainGameView:
         # ... (Displaying elements)
         pygame.display.flip()
 
+
+
+    def draw(self):
+        self.screen.fill(WHITE)
+        self.screen.blit(self.quests_text, self.quests_rect)
+        self.screen.blit(self.inventory_text, self.inventory_rect)
+        self.screen.blit(self.map_text, self.map_rect)
+        self.screen.blit(self.world_text, self.world_rect)
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Handle button clicks
