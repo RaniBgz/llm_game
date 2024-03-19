@@ -7,6 +7,7 @@ from model.character import Character
 from model.item import Item
 from model.quest import Quest
 from model.settings import Settings
+from view import view_constants as view_cst
 
 
 
@@ -16,7 +17,7 @@ def initialize_screen():
     # Initialize Pygame
     pygame.init()
     # Set up the display
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((view_cst.WIDTH, view_cst.HEIGHT))
     return screen
 
 
