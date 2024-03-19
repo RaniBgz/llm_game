@@ -2,6 +2,7 @@ import sys
 import pygame
 from view.main_game_view import MainGameView
 from controller.main_game_controller import MainGameController
+from model.service_locator import ServiceLocator
 
 class MainMenuController:
     def __init__(self, model, view):

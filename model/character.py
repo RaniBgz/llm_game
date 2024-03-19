@@ -7,6 +7,7 @@ class Character(Entity):
         self.hp = hp
         self.inventory = []
         self.quests = []
+        self.location = None
 
 
     def add_item_to_inventory(self, item):

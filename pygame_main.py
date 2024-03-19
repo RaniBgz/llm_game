@@ -2,14 +2,14 @@ import pygame
 import sys
 from view.main_menu_view import MainMenuView
 from controller.main_menu_controller import MainMenuController
-from model.game_model import GameModel
+from model.game_data import GameData
 from model.character import Character
 from model.item import Item
 from model.quest import Quest
 from model.settings import Settings
 from view import view_constants as view_cst
-
-
+from model.service_locator import ServiceLocator
+from model.world_map import WorldMap
 
 #TODO: find a place to store that
 
@@ -22,7 +22,9 @@ def initialize_screen():
 
 
 def main():
-    model = GameModel()
+    service_locator = ServiceLocator()
+    service_locator.register("world_map", WorldMap())
+    model = GameData()
     settings = Settings()
     screen = initialize_screen()
     model.character = Character(16)  # Create a character
