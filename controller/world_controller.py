@@ -1,11 +1,15 @@
 import sys
 import pygame
 from view import view_constants as view_cst
+from model.world_map import WorldMap
 
 class WorldController:
     def __init__(self, model, view):
         self.model = model
         self.view = view
+        self.character_x = self.view.character_rect.x
+        self.character_y = self.view.character_rect.y
+        self.world_map = WorldMap.get_instance()
 
     def run(self):
         while True:
@@ -20,6 +24,7 @@ class WorldController:
                         return
 
             self.view.display_world()
+            self.view.display_coordinates(self.character_x, self.character_y)
 
     def move_character(self, key):
         x_change = y_change = 0
@@ -33,6 +38,8 @@ class WorldController:
             x_change = self.view.character_image.get_width()
 
         # Move the character and check boundaries
+        # self.world_map.set_player_coords(self.view.character_rect.x, self.view.character_rect.y)
+        self.world_map.set_player_coords(0, 0)
         self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
 
@@ -47,3 +54,4 @@ class WorldController:
             self.view.character_rect.bottom = view_cst.HEIGHT
         elif self.view.character_rect.bottom > view_cst.HEIGHT:
             self.view.character_rect.top = 0
+            # Update coordinates in the WorldMap

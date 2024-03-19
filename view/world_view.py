@@ -15,3 +15,11 @@ class WorldView:
         self.screen.blit(self.character_image, self.character_rect)
         self.screen.blit(self.back_button_text, self.back_button_rect)
         pygame.display.flip()
+
+    def display_coordinates(self, x, y):
+        # font = pygame.font.Font("Arial", 36)
+        coord_text = pygame.font.SysFont("Arial", 20).render(f"({x}, {y})", True, view_cst.TEXT_COLOR)
+        # coord_text = font.render(f"({x}, {y})", True, (255, 255, 255))
+        coord_rect = coord_text.get_rect(topleft=(50, view_cst.HEIGHT - 10))
+        # coord_rect.bottomleft = (10, view_cst.HEIGHT - 10)  # Position at bottom-left
+        self.screen.blit(coord_text, coord_rect)
