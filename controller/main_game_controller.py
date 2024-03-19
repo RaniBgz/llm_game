@@ -2,8 +2,12 @@ import sys
 import pygame
 from view.inventory_view import InventoryView
 from view.quest_view import QuestView
+from view.map_view import MapView
+from view.world_view import WorldView
 from controller.inventory_controller import InventoryController
 from controller.quest_controller import QuestController
+from controller.map_controller import MapController
+from controller.world_controller import WorldController
 
 class MainGameController:
     def __init__(self, model, view):
@@ -25,6 +29,13 @@ class MainGameController:
                         quest_view = QuestView(self.view.screen)
                         quest_controller = QuestController(self.model, quest_view)
                         quest_controller.run()
-                        # ... Handle button clicks for quests, inventory, etc.
+                    elif self.view.map_rect.collidepoint(event.pos):
+                        map_view = MapView(self.view.screen)
+                        map_controller = MapController(self.model, map_view)
+                        map_controller.run()
+                    elif self.view.world_rect.collidepoint(event.pos):
+                        world_view = WorldView(self.view.screen)
+                        world_controller = WorldController(self.model, world_view)
+                        world_controller.run()
 
             self.view.draw()

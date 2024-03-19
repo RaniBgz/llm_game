@@ -1,23 +1,21 @@
 import pygame
-
-WIDTH, HEIGHT = 640, 480
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
+from view import view_constants as view_cst
+from model import settings as settings
 
 
 class InventoryView:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont("Arial", 20)
-        self.exit_button_text = self.font.render("X", True, RED)
-        self.exit_button_rect = self.exit_button_text.get_rect(topright=(WIDTH - 10, 10))  # Top right corner
+        self.exit_button_text = self.font.render("X", True, view_cst.TEXT_COLOR)
+        self.exit_button_rect = self.exit_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))  # Top right corner
 
     def display_inventory(self, inventory):
-         self.screen.fill(WHITE)
+         self.screen.fill(view_cst.WHITE)
 
          # Title
-         title_text = self.font.render("Inventory", True, RED)
-         title_rect = title_text.get_rect(center=(WIDTH // 2, 20))
+         title_text = self.font.render("Inventory", True, view_cst.TEXT_COLOR)
+         title_rect = title_text.get_rect(center=(view_cst.WIDTH // 2, 20))
          self.screen.blit(title_text, title_rect)
 
          # Display items
