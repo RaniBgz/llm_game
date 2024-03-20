@@ -22,6 +22,8 @@ def initialize_screen():
 
 def main():
     WorldMap()
+    world_map = WorldMap.get_instance()
+    world_map.set_player_coords(0, 0)
     model = GameData()
     settings = Settings()
     screen = initialize_screen()
