@@ -7,4 +7,13 @@ class GameData:  # Placeholder for now
     def __init__(self):
         self.world_map = Map()
         self.character = None
-    pass
+        self.npc_list = []
+        self.quest_builder = None
+
+    def find_npc_by_id(self, id):
+        for npc in self.npc_list:
+            if npc.id == id:
+                return npc
+        return None
+
+

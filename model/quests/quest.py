@@ -7,3 +7,9 @@ class Quest:
         self.description = description
         self.active = active
         self.objective = None
+
+    def set_active(self, active):
+        self.active = active
+
+    def set_inactive(self):
+        self.active = False
