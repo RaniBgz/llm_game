@@ -6,4 +6,5 @@ from model.maps.map import Map
 class GameData:  # Placeholder for now
     def __init__(self):
         self.world_map = Map()
+        self.character = None
     pass
