@@ -1,14 +1,13 @@
 import pygame
-import sys
 from view.main_menu_view import MainMenuView
 from controller.main_menu_controller import MainMenuController
 from model.game_data import GameData
 from model.character import Character
 from model.item import Item
-from model.quest import Quest
+from model.quests.quest import Quest
 from model.settings import Settings
 from view import view_constants as view_cst
-from model.world_map import WorldMap
+from model.maps.world_map import WorldMap
 
 #TODO: find a place to store that
 

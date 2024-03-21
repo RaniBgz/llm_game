@@ -1,5 +1,3 @@
-from model.map import Map
-
 class WorldMap():
     _instance = None
     def __new__(cls, *args, **kwargs):
@@ -24,46 +22,53 @@ class WorldMap():
     def get_local_map_at(self, x, y):
         return self.map_grid[(x, y)]
 
-    def get_player_coords(self):
-        return self.get_current_map().get_player_coords()
-
     def set_player_coords(self, x, y):
-        self.get_current_map().set_player_coords(x, y)
+        self.player_x = x
+        self.player_y = y
 
-    def get_current_map(self):
-        return self.get_local_map_at(self.get_player_x(), self.get_player_y())
+    def get_player_coords(self):
+        return self.player_x, self.player_y
 
-    def set_current_map(self, new_map):
-        # If the new map is not None, the character is moving to a new map
-        if new_map is not None:
-            self.get_local_map_at(self.get_player_x(), self.get_player_y()).remove_player()
-            new_map.add_player(self)
-            self.current_map = new_map
 
-    def get_player_x(self):
-        return self.current_map.get_player_x()
+    # def get_player_coords(self):
+    #     return self.get_current_map().get_player_coords()
+    #
+    # def set_player_coords(self, x, y):
+    #     self.get_current_map().set_player_coords(x, y)
 
-    def get_player_y(self):
-        return self.current_map.get_player_y()
-
-    def transition_player(self, current_map, new_x, new_y, target_map=None):
-        current_map.remove_player()  # Remove from the current map
-
-        if target_map is None:
-            # Transition on the overworld
-            self.add_local_map(new_x, new_y, self.get_local_map_at(new_x, new_y))
-        else:
-            # Enter a submap
-            target_map.add_player(self.player)
-
-        self.player.change_map(target_map)  # Update the player's location
+    # def get_current_map(self):
+    #     return self.get_local_map_at(self.get_player_x(), self.get_player_y())
+    #
+    # def set_current_map(self, new_map):
+    #     # If the new map is not None, the character is moving to a new map
+    #     if new_map is not None:
+    #         self.get_local_map_at(self.get_player_x(), self.get_player_y()).remove_player()
+    #         new_map.add_player(self)
+    #         self.current_map = new_map
+    #
+    # def get_player_x(self):
+    #     return self.current_map.get_player_x()
+    #
+    # def get_player_y(self):
+    #     return self.current_map.get_player_y()
+    #
+    # def transition_player(self, current_map, new_x, new_y, target_map=None):
+    #     current_map.remove_player()  # Remove from the current map
+    #
+    #     if target_map is None:
+    #         # Transition on the overworld
+    #         self.add_local_map(new_x, new_y, self.get_local_map_at(new_x, new_y))
+    #     else:
+    #         # Enter a submap
+    #         target_map.add_player(self.player)
+    #
+    #     self.player.change_map(target_map)  # Update the player's location
 
     # def set_player_coords(self, x, y):
     #     self.player_x = x
     #     self.player_y = y
     #
-    # def get_player_coords(self):
-    #     return self.player_x, self.player_y
+
 
 
     # def __init__(self):
@@ -78,9 +83,6 @@ class WorldMap():
     #         WorldMap()
     #     return WorldMap._instance
     #
-    # def set_player_coords(self, x, y):
-    #     self.player_x = x
-    #     self.player_y = y
-    #
+
     # def get_player_coords(self):
     #     return self.player_x, self.player_y

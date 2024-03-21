@@ -1,7 +1,7 @@
 import sys
 import pygame
 from view import view_constants as view_cst
-from model.world_map import WorldMap
+from model.maps.world_map import WorldMap
 
 class WorldController:
     def __init__(self, model, view):

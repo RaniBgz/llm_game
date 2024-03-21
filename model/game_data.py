@@ -1,6 +1,4 @@
-import pygame
-import sys
-from model.map import Map
+from model.maps.map import Map
 
 # Model (This would eventually hold game data and logic)
 
