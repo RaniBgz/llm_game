@@ -20,6 +20,10 @@ def initialize_screen():
     return screen
 
 
+
+def initialize_character():
+    return Character(16)
+
 def main():
     WorldMap()
     world_map = WorldMap.get_instance()

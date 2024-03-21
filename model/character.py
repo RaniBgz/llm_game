@@ -8,6 +8,7 @@ class Character(Entity):
         self.inventory = []
         self.quests = []
         self.location = None
+        self.current_map = None  # Add this attribute to track the current map
 
 
     def add_item_to_inventory(self, item):
@@ -23,3 +24,9 @@ class Character(Entity):
     def remove_quest(self, quest):
         if quest in self.quests:
             self.quests.remove(quest)
+
+    def change_map(self, new_map):
+        # If the new map is not None, the character is moving to a new map
+        if new_map is not None:
+            self.current_map = new_map
+            self.location = None  # Reset the character's location on the new map
