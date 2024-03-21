@@ -19,8 +19,20 @@ class Game:
         self.model = GameData()
         self.settings = Settings(screen_width, screen_height)
 
+    #TODO: Separate world initialization from the rest
+
+    # def setup_world(world_map):
+    #     # Create local maps and add them to the world map
+    #     # ...
+    # 
+    #     # Create NPCs
+    #     goblin_monster = NPC("Lieutenant Goblin", 8)
+    #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
+    #
+
     def setup(self):
         world_map = WorldMap.get_instance()
+        world_map.build_map(10, 10)
         world_map.set_player_coords(0, 0)
         self.model.quest_builder = QuestBuilder()
         self.initialize_character()
@@ -43,9 +55,7 @@ class Game:
         self.model.character.add_quest(Quest("Defeat the Goblin", "Find and defeat the Goblin King", True))
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
-        # self.model.npc_list.append(NPC("Goblin",  8))
         goblin_monster = NPC("Lieutenant Goblin", 8)
-        # goblin_id = goblin_monster.get_id()
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
         self.model.character.add_quest(kill_goblin_quest)
 
