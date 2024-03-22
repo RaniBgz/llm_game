@@ -30,47 +30,39 @@ class Game:
     #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
     #
 
-    def setup(self):
+    def initialize_world(self):
         world_map = WorldMap.get_instance()
         world_map.build_map(10, 10)
         world_map.set_player_coords(0, 0)
+
+    def initialize_quests(self):
         self.model.quest_builder = QuestBuilder()
-        self.initialize_character()
-        self.model.character.current_map = world_map
-        # Set up initial map location (assuming you have map setup logic)
-        # initial_x, initial_y = 0, 0  # Replace with your desired start coordinates
-        # initial_map = world_map.get_local_map_at(initial_x, initial_y)
-        # self.model.character.change_map(initial_map)
-        self.screen = self.initialize_screen()
-
-    # def on_npc_death(self, npc):
-    #     for quest in self.model.character.quests:
-    #         if isinstance(quest.objective, KillObjective) and quest.objective.target_id == npc.id:
-    #     # Mark quest as completed or perform other quest completion logic and rewards!
-
-    def initialize_character(self):
-        self.model.character = Character(16)
-        self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
-        self.model.character.add_item_to_inventory(Item("Healing Potion", "Restores Health"))
-        self.model.character.add_quest(Quest("Defeat the Goblin", "Find and defeat the Goblin King", True))
-        self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
-
         goblin_monster = NPC("Lieutenant Goblin", 8)
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
         self.model.character.add_quest(kill_goblin_quest)
 
-        # goblin_id = self.model.npc_list[0].id
-        # print(f"Goblin id: {self.model.npc_list[0].id}")
-        # created_goblin = self.model.find_npc_by_id(goblin_id)
-        # print(f"Created Goblin id: {created_goblin.id}")
-        # self.model.quest_builder().create_kill_quest("Goblin", 8)
+        self.model.character.add_quest(Quest("Defeat the Goblin", "Find and defeat the Goblin King", True))
+        self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
-        return Character(16)
+    def initialize_character(self):
+        self.model.character = Character(16)
+        self.model.character.current_map = WorldMap.get_instance()
+
+    def initialize_inventory(self):
+        self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
+        self.model.character.add_item_to_inventory(Item("Healing Potion", "Restores Health"))
+
+    def setup(self):
+        self.initialize_world()
+        self.initialize_character()
+        self.initialize_inventory()
+        self.initialize_quests()
+        self.initialize_screen()
 
     def initialize_screen(self):
         pygame.init()
         screen = pygame.display.set_mode((view_cst.WIDTH, view_cst.HEIGHT))
-        return screen
+        self.screen = screen
 
     def initialize_ui(self):
         main_menu_view = MainMenuView(self.screen)
