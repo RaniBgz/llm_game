@@ -24,7 +24,7 @@ class Game:
     # def setup_world(world_map):
     #     # Create local maps and add them to the world map
     #     # ...
-    # 
+    #
     #     # Create NPCs
     #     goblin_monster = NPC("Lieutenant Goblin", 8)
     #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
