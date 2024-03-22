@@ -22,6 +22,7 @@ class WorldController:
                     self.move_character(event.key)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
+                        self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)
                         return
 
             self.view.display_world(self.character_pos_x, self.character_pos_y)
@@ -39,6 +40,7 @@ class WorldController:
 
         # Move the character and check boundaries
         self.view.character_rect.move_ip(x_change, y_change)
+        # self.character_pos_x, self.character_pos_y = self.view.character_rect.x, self.view.character_rect.y
         self.wrap_character()
 
     def wrap_character(self):

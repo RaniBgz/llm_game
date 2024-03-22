@@ -22,4 +22,3 @@ class WorldView:
         self.coord_rect = self.coord_text.get_rect(topleft=(0, 10))
         # coord_rect.bottomleft = (10, view_cst.HEIGHT - 10)  # Position at bottom-left
         self.screen.blit(self.coord_text, self.coord_rect)
-        # pygame.display.flip()
