@@ -17,6 +17,11 @@ class WorldView:
         self.display_coordinates(x, y)
         pygame.display.flip()
 
+    def load_entities(self, entities):
+        for entity in entities:
+            entity_rect = entity.image.get_rect(center=(entity.x, entity.y))
+            self.screen.blit(entity.image, entity_rect)
+
     def display_coordinates(self, x, y):
         self.coord_text = pygame.font.SysFont("Arial", 20).render(f"({x}, {y})", True, view_cst.TEXT_COLOR)
         self.coord_rect = self.coord_text.get_rect(topleft=(0, 10))

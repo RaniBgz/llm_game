@@ -47,6 +47,7 @@ class Game:
     def initialize_character(self):
         self.model.character = Character(16)
         self.model.character.current_map = WorldMap.get_instance()
+        WorldMap.add_entity(self.model.character, (0, 0))
 
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
