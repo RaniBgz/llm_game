@@ -19,35 +19,29 @@ class Game:
         self.model = GameData()
         self.settings = Settings(screen_width, screen_height)
 
-    #TODO: Separate world initialization from the rest
-
-    # def setup_world(world_map):
-    #     # Create local maps and add them to the world map
-    #     # ...
-    #
-    #     # Create NPCs
-    #     goblin_monster = NPC("Lieutenant Goblin", 8)
-    #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
-    #
-
     def initialize_world(self):
-        world_map = WorldMap.get_instance()
-        world_map.build_map(10, 10)
-        world_map.set_player_coords(0, 0)
+        self.model.world_map = WorldMap.get_instance()
+        self.model.world_map.build_map(10, 10)
+        self.model.world_map.set_player_coords(0, 0)
 
     def initialize_quests(self):
         self.model.quest_builder = QuestBuilder()
-        goblin_monster = NPC("Lieutenant Goblin", 8)
+        #Creating goblin and positioning it on the world map
+        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/goblin.png")
+        self.model.world_map.add_entity(goblin_monster, (0, 1))
+
+        #Defining a kill goblin quest and adding it to the character
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
         self.model.character.add_quest(kill_goblin_quest)
 
+        #Creating generic quests and adding them to the character
         self.model.character.add_quest(Quest("Defeat the Goblin", "Find and defeat the Goblin King", True))
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
         self.model.character = Character(16)
-        self.model.character.current_map = WorldMap.get_instance()
-        WorldMap.add_entity(self.model.character, (0, 0))
+        self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
+        self.model.world_map.add_entity(self.model.character, (0, 0))
 
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
@@ -79,3 +73,17 @@ class Game:
 if __name__ == "__main__":
     game = Game(view_cst.WIDTH, view_cst.HEIGHT)
     game.run()
+
+
+
+    #TODO: Separate world initialization from the rest
+
+    # def setup_world(world_map):
+    #     # Create local maps and add them to the world map
+    #     # ...
+    #
+    #     # Create NPCs
+    #     goblin_monster = NPC("Lieutenant Goblin", 8)
+    #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
+    #
+

@@ -11,7 +11,6 @@ class WorldMap():
     def __init__(self):
         if "map_grid" not in self.__dict__:
             self.map_grid = {}  # Ensure this only happens once
-            self.entities = []
 
     @classmethod
     def get_instance(cls):
@@ -24,12 +23,10 @@ class WorldMap():
             for y in range(y_size):
                 print(f"Adding local map at {x}, {y}")
                 self.map_grid[(x, y)] = LocalMap()
-    def add_entity(self, entity, local_map_coords):
-        entity.local_map_coords = local_map_coords
-        self.entities.append(entity)
 
-    def get_entities_at(self, local_map_coords):
-        return [entity for entity in self.entities if entity.local_map_coords == local_map_coords]
+    def add_entity(self, entity, local_map_coords):
+        local_map = self.map_grid[local_map_coords]
+        local_map.add_entity(entity)
 
     def add_local_map(self, x, y, local_map):
         self.map_grid[(x, y)] = local_map

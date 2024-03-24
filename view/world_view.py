@@ -19,7 +19,9 @@ class WorldView:
 
     def load_entities(self, entities):
         for entity in entities:
-            entity_rect = entity.image.get_rect(center=(entity.x, entity.y))
+            entity_image = pygame.image.load(entity.sprite).convert_alpha()
+            entity_rect = entity_image.get_rect(center=(view_cst.WIDTH//2, view_cst.HEIGHT//2))
+            # entity_rect = entity.image.get_rect(center=(view_cst.WIDTH/2,view_cst.HEIGHT/2))
             self.screen.blit(entity.image, entity_rect)
 
     def display_coordinates(self, x, y):

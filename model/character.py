@@ -4,10 +4,12 @@ import json
 from model.quests.quest import Quest
 from model.item import Item
 
+
 class Character(Entity):
     def __init__(self, hp):
         super().__init__()
         self.hp = hp
+        self.sprite = "./assets/character.png"
         self.inventory = []
         self.quests = []
         self.location = None
