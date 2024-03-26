@@ -8,6 +8,7 @@ from model.item import Item
 class Character(Entity):
     def __init__(self, hp):
         super().__init__()
+        self.name = "Player"
         self.hp = hp
         self.sprite = "./assets/sprites/character.png"
         self.inventory = []

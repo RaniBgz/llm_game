@@ -5,7 +5,6 @@ class LocalMap(Map):
         super().__init__()
         self.items = []
         self.entities = []
-        self.dungeon_map = None # Attribute to hold a nested dungeon map (if applicable)
         self.parent_map = None
 
     def add_player(self, character):
