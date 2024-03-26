@@ -19,8 +19,8 @@ class WorldMap():
         return cls._instance
 
     def build_map(self, x_size, y_size):
-        for x in range(x_size):
-            for y in range(y_size):
+        for x in range(-x_size, x_size):
+            for y in range(-y_size, y_size):
                 print(f"Adding local map at {x}, {y}")
                 self.map_grid[(x, y)] = LocalMap()
 

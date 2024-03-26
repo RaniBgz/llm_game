@@ -11,6 +11,17 @@ class WorldController:
         # self.character_pos_y = 0
         self.world_map = WorldMap.get_instance()
         self.character_pos_x, self.character_pos_y = self.world_map.get_player_coords()
+        self.local_map = self.world_map.get_local_map_at(self.character_pos_x, self.character_pos_y)
+        self.entities = self.local_map.entities
+        for entity in self.entities:
+            if("Character" in str(type(entity))):
+                print("Character found")
+            print(entity)
+            print(type(entity))
+            if("Character" in str(type(entity))):
+                print("Character found")
+            elif("NPC" in str(type(entity))):
+                print("NPC found")
 
     def run(self):
         while True:
@@ -59,6 +70,7 @@ class WorldController:
             self.view.character_rect.top = 0
             self.character_pos_y = self.character_pos_y - 1
             # Update coordinates in the WorldMap
-        self.world_map.set_player_coords(self.view.character_rect.x, self.view.character_rect.y)
+        self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)
         x, y = self.world_map.get_player_coords()
+        self.local_map = self.world_map.get_local_map_at(x, y)
         self.view.display_coordinates(x, y)

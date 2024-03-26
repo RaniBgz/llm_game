@@ -21,7 +21,7 @@ class Game:
 
     def initialize_world(self):
         self.model.world_map = WorldMap.get_instance()
-        self.model.world_map.build_map(10, 10)
+        self.model.world_map.build_map(100, 100)
         self.model.world_map.set_player_coords(0, 0)
 
     def initialize_quests(self):
