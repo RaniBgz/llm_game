@@ -13,15 +13,12 @@ class WorldController:
         self.character_pos_x, self.character_pos_y = self.world_map.get_player_coords()
         self.local_map = self.world_map.get_local_map_at(self.character_pos_x, self.character_pos_y)
         self.entities = self.local_map.entities
+        self.view.load_entities(self.entities)
         for entity in self.entities:
             if("Character" in str(type(entity))):
-                print("Character found")
-            print(entity)
-            print(type(entity))
-            if("Character" in str(type(entity))):
-                print("Character found")
-            elif("NPC" in str(type(entity))):
-                print("NPC found")
+                self.character = entity
+                self.view.initialize_character_position(self.character)
+
 
     def run(self):
         while True:
