@@ -28,7 +28,7 @@ class Game:
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
         goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/goblin.png")
-        self.model.world_map.add_entity(goblin_monster, (0, 1))
+        self.model.world_map.add_entity(goblin_monster, (0, 0))
 
         #Defining a kill goblin quest and adding it to the character
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)

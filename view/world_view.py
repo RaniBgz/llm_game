@@ -1,17 +1,19 @@
 import sys
 import pygame
 from view import view_constants as view_cst
+from model.maps.world_map import WorldMap
 
 #TODO: set location where the character is on the map
 class WorldView:
     def __init__(self, screen):
         self.screen = screen
+        self.local_map = None
 
         self.character_image = pygame.image.load("assets/sprites/character.png").convert_alpha()
-        self.character_rect = self.character_image.get_rect(center=(view_cst.WIDTH // 2, view_cst.HEIGHT // 2))
+        self.character_rect = self.character_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["middle"])
 
         self.goblin_image = pygame.image.load("assets/sprites/goblin.png").convert_alpha()
-        self.goblin_rect = self.goblin_image.get_rect(center=(view_cst.WIDTH // 4, view_cst.HEIGHT // 4))
+        self.goblin_rect = self.goblin_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["top_right"])
 
 
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
@@ -19,6 +21,8 @@ class WorldView:
 
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
+        self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
+        print(f"Nb Entities in local map: {len(self.local_map.entities)}")
         self.screen.blit(self.character_image, self.character_rect)
         self.screen.blit(self.goblin_image, self.goblin_rect)
         self.screen.blit(self.back_button_text, self.back_button_rect)
