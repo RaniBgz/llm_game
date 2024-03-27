@@ -6,21 +6,15 @@ from model.item import Item
 
 
 class Character(Entity):
-    def __init__(self, hp):
+    def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0)):
         super().__init__()
         self.name = "Player"
         self.hp = hp
         self.sprite = "./assets/sprites/character.png"
         self.inventory = []
         self.quests = []
-        self.location = None
-        self.current_map = None  # Add this attribute to track the current map
-
-    # def __dict__(self):
-    #     data = super().__dict__()
-    #     data['inventory'] = [item.__dict__() for item in self.inventory]
-    #     data['quests'] = [quest.__dict__() for quest in self.quests]
-    #     return data
+        self.global_position = (0, 0)
+        self.local_position = (0, 0)
 
     def add_item_to_inventory(self, item):
         self.inventory.append(item)
@@ -42,6 +36,12 @@ class Character(Entity):
             self.current_map = new_map
             self.location = None  # Reset the character's location on the new map
 
+
+    # def __dict__(self):
+    #     data = super().__dict__()
+    #     data['inventory'] = [item.__dict__() for item in self.inventory]
+    #     data['quests'] = [quest.__dict__() for quest in self.quests]
+    #     return data
     # def save_character(character, filename):
     #     with open(filename, 'w') as file:
     #         json.dump(character.__dict__(), file)

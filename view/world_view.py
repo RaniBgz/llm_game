@@ -33,8 +33,10 @@ class WorldView:
                 self.initialize_character_position(self.character)
             else:
                 entity_image = pygame.image.load(entity.sprite).convert_alpha()
+                entity_image = pygame.transform.scale(entity_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
                 spawn_random = random.choice(view_cst.SPAWN_POSITIONS)
                 entity_rect = entity_image.get_rect(center=spawn_random)
+
                 # entity_rect = entity.image.get_rect(center=(view_cst.WIDTH/2,view_cst.HEIGHT/2))
                 self.entities.append((entity_image, entity_rect))
                 self.screen.blit(entity_image, entity_rect)

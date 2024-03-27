@@ -47,8 +47,8 @@ class Game:
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
-        self.model.character = Character(16)
-        self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
+        self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(0, 0))
+        # self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
         self.model.world_map.add_entity(self.model.character, (0, 0))
 
     def initialize_inventory(self):
