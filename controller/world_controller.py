@@ -15,9 +15,15 @@ class WorldController:
         self.entities = self.local_map.entities
         self.view.load_entities(self.entities)
         for entity in self.entities:
+            print(entity.id)
+            print(entity)
+            print(type(entity))
             if("Character" in str(type(entity))):
+                print("Character found")
                 self.character = entity
                 self.view.initialize_character_position(self.character)
+            elif("NPC" in str(type(entity))):
+                print("NPC found")
 
 
     def run(self):

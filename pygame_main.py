@@ -24,10 +24,18 @@ class Game:
         self.model.world_map.build_map(100, 100)
         self.model.world_map.set_player_coords(0, 0)
 
+    #TODO: in the future, DB with static NPCs/monsters will be defined, and these will be initialized and placed at their default location
+    #TODO: quests will most likely
+    #TODO: change resolution, set up grid/tiles, normalize sprite sizes, adapt movements
+    #
+    # def initialize_npcs(self):
+    #     elder = NPC("Lieutenant Goblin", 8)
+    #     self.model.world_map.add_npc_to_map(1, 2, goblin_monster)
+
     def initialize_quests(self):
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
-        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/goblin.png")
+        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/elder.png")
         self.model.world_map.add_entity(goblin_monster, (0, 0))
 
         #Defining a kill goblin quest and adding it to the character
@@ -35,7 +43,7 @@ class Game:
         self.model.character.add_quest(kill_goblin_quest)
 
         #Creating generic quests and adding them to the character
-        self.model.character.add_quest(Quest("Defeat the Goblin", "Find and defeat the Goblin King", True))
+        self.model.character.add_quest(Quest("Defeat the Mage", "Find and defeat the Mage King", True))
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
