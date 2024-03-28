@@ -24,7 +24,7 @@ class WorldMap():
                 # print(f"Adding local map at {x}, {y}")
                 self.map_grid[(x, y)] = LocalMap()
 
-    def add_entity(self, entity, local_map_coords, local_position):
+    def add_entity(self, entity, local_map_coords):
         local_map = self.map_grid[local_map_coords]
         local_map.add_entity(entity)
 
@@ -33,6 +33,10 @@ class WorldMap():
 
     def get_local_map_at(self, x, y):
         return self.map_grid[(x, y)]
+
+    def get_entities_at(self, x, y):
+        local_map = self.map_grid[(x, y)]
+        return local_map.entities
 
 
     def set_player_coords(self, x, y):

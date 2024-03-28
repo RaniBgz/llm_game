@@ -9,17 +9,20 @@ import model.npc
 class WorldView:
     def __init__(self, screen, global_position):
         self.screen = screen
-        self.local_map = WorldMap.get_instance().get_local_map_at(global_position[0], global_position[1])
-        self.entities = self.local_map.entities
-        self.npcs = []
-
+        # self.local_map = WorldMap.get_instance().get_local_map_at(global_position[0], global_position[1])
+        # self.entities = self.local_map.entities
+        # self.npcs = []
+        self.initialize_local_map(global_position[0], global_position[1])
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
+
 
     #Go through entities dict (grid), initialize entities and add them to the entities list
     def initialize_local_map(self, x, y):
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.entities = self.local_map.entities
+        self.npcs = []  # Clear the NPC list to start fresh
+        # self.load_entities()
 
     def initialize_character_position(self, character):
         self.character_image = pygame.image.load(character.sprite).convert_alpha()
@@ -41,22 +44,18 @@ class WorldView:
                                                       entity.local_position[1]*view_cst.TILE_HEIGHT-(view_cst.TILE_HEIGHT/2)))
                 self.npcs.append((npc_image, npc_rect))
 
+    def clear_npcs(self):
+        self.npcs = []
+
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.screen.blit(self.character_image, self.character_rect)
         for i in range(len(self.npcs)):
             self.screen.blit(self.npcs[i][0], self.npcs[i][1])
-
-        # self.screen.blit(self.goblin_image, self.goblin_rect)
-        # for i in range(len(self.entities)):
-        #     self.screen.blit(self.entities[i][0], self.entities[i][1])
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
         pygame.display.flip()
-
-
-
 
     def display_coordinates(self, x, y):
         self.coord_text = pygame.font.SysFont("Arial", 20).render(f"({x}, {y})", True, view_cst.TEXT_COLOR)

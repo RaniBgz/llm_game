@@ -15,7 +15,6 @@ class WorldController:
 
         self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
         self.entities = self.local_map.entities
-        self.entities_dict = self.local_map.entities_dict
         self.view.load_entities()
         # self.view.load_entities_dict()
 
@@ -52,25 +51,33 @@ class WorldController:
         # self.character_pos_x, self.character_pos_y = self.view.character_rect.x, self.view.character_rect.y
         self.wrap_character()
 
+    #TODO: when the character wraps to another local map, we need to remove it from the 0, 0 local map and add it to the new one
     def wrap_character(self):
-        character_width = self.view.character_image.get_width()
-        character_height = self.view.character_image.get_height()
+        is_wrapped = False
         if self.view.character_rect.left < 0:
             self.view.character_rect.right = view_cst.WIDTH
             self.character_global_pos_x = self.character_global_pos_x - 1
+            is_wrapped = True
         elif self.view.character_rect.right > view_cst.WIDTH:
             self.view.character_rect.left = 0
             self.character_global_pos_x = self.character_global_pos_x + 1
+            is_wrapped = True
         if self.view.character_rect.top < 0:
             self.view.character_rect.bottom = view_cst.HEIGHT
             self.character_global_pos_y = self.character_global_pos_y + 1
+            is_wrapped = True
         elif self.view.character_rect.bottom > view_cst.HEIGHT:
             self.view.character_rect.top = 0
             self.character_global_pos_y = self.character_global_pos_y - 1
+            is_wrapped = True
             # Update coordinates in the WorldMap
         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
-        # x, y = self.world_map.get_player_coords()
+
+        if is_wrapped:
+            print(f"Character wrapped to {self.character_global_pos_x}, {self.character_global_pos_y}! Updating local map...")
+            self.view.initialize_local_map(self.character_global_pos_x, self.character_global_pos_y)
+            self.view.load_entities()
+        x, y = self.world_map.get_player_coords()
         self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
         self.view.local_map = self.local_map
         self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
-        # self.view.display_coordinates(self.character_global_pos_x, self.character_global_pos_y)

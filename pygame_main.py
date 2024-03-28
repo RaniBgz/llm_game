@@ -37,8 +37,8 @@ class Game:
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
         goblin_monster = NPC("Elder", 8, sprite="./assets/sprites/elder.png", global_position=(0, 0), local_position=(4, 3))
-        print(f"Goblin: {goblin_monster.name} at {goblin_monster.local_position}")
-        self.model.world_map.add_entity(goblin_monster, (0, 0), (0, 0))
+        print(f"NPC: {goblin_monster.name} at {goblin_monster.local_position}")
+        self.model.world_map.add_entity(goblin_monster, (0, 0))
 
         #Defining a kill goblin quest and adding it to the character
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
@@ -52,7 +52,7 @@ class Game:
         self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
         print(f"Character: {self.model.character.name} at {self.model.character.local_position}")
         # self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
-        self.model.world_map.add_entity(self.model.character, (0, 0), (view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
+        self.model.world_map.add_entity(self.model.character, (0, 0))
 
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
