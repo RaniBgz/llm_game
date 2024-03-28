@@ -7,24 +7,15 @@ class WorldController:
     def __init__(self, model, view):
         self.model = model
         self.view = view
-        # self.character_pos_x = 0
-        # self.character_pos_y = 0
         self.world_map = WorldMap.get_instance()
+
         self.character_pos_x, self.character_pos_y = self.world_map.get_player_coords()
+
         self.local_map = self.world_map.get_local_map_at(self.character_pos_x, self.character_pos_y)
         self.entities = self.local_map.entities
-        self.view.load_entities(self.entities)
-        for entity in self.entities:
-            print(entity.id)
-            print(entity)
-            print(type(entity))
-            if("Character" in str(type(entity))):
-                print("Character found")
-                self.character = entity
-                self.view.initialize_character_position(self.character)
-            elif("NPC" in str(type(entity))):
-                print("NPC found")
-        self.keys_pressed = {}
+        self.entities_dict = self.local_map.entities_dict
+        # self.view.load_entities(self.entities)
+        self.view.load_entities_dict()
 
     def run(self):
         while True:
@@ -33,10 +24,10 @@ class WorldController:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    self.keys_pressed[event.key] = True
+                    # self.keys_pressed[event.key] = True
                     self.move_character(event.key)
-                if event.type == pygame.KEYUP:
-                    self.keys_pressed[event.key] = False
+                # if event.type == pygame.KEYUP:
+                    # self.keys_pressed[event.key] = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)

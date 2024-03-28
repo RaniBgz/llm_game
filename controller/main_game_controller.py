@@ -34,7 +34,7 @@ class MainGameController:
                         map_controller = MapController(self.model, map_view)
                         map_controller.run()
                     elif self.view.world_rect.collidepoint(event.pos):
-                        world_view = WorldView(self.view.screen)
+                        world_view = WorldView(self.view.screen, self.model.character.global_position)
                         world_controller = WorldController(self.model, world_view)
                         world_controller.run()
 

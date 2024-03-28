@@ -34,6 +34,7 @@ class WorldMap():
     def get_local_map_at(self, x, y):
         return self.map_grid[(x, y)]
 
+
     def set_player_coords(self, x, y):
         self.player_x = x
         self.player_y = y

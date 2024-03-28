@@ -21,7 +21,7 @@ class LocalMap(Map):
 
     def add_entity(self, entity):
         self.entities_dict[entity.local_position] = entity
-        # self.entities.append(entity)
+        self.entities.append(entity)
 
     def remove_player(self):
         self.player = None

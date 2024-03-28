@@ -21,7 +21,7 @@ class Game:
 
     def initialize_world(self):
         self.model.world_map = WorldMap.get_instance()
-        self.model.world_map.build_map(100, 100)
+        self.model.world_map.build_map(20, 20)
         self.model.world_map.set_player_coords(0, 0)
 
     #TODO: in the future, DB with static NPCs/monsters will be defined, and these will be initialized and placed at their default location
@@ -36,7 +36,7 @@ class Game:
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
         goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/elder.png", global_position=(0, 0), local_position=(0, 0))
-        self.model.world_map.add_entity(goblin_monster, (0, 0))
+        self.model.world_map.add_entity(goblin_monster, (0, 0), (0, 0))
 
         #Defining a kill goblin quest and adding it to the character
         kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)

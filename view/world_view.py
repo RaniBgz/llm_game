@@ -5,20 +5,18 @@ from model.maps.world_map import WorldMap
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
-    def __init__(self, screen):
+    def __init__(self, screen, global_position):
         self.screen = screen
-        self.local_map = None
+        self.local_map = WorldMap.get_instance().get_local_map_at(global_position[0], global_position[1])
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
-        self.entities = []
+        self.entities = self.local_map.entities
+        self.entities_dict = self.local_map.entities_dict
 
-
-        # self.character_image = pygame.image.load("assets/sprites/character.png").convert_alpha()
-        # self.character_rect = self.character_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["middle"])
-        #
-        # self.goblin_image = pygame.image.load("assets/sprites/goblin.png").convert_alpha()
-        # self.goblin_rect = self.goblin_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["top_right"])
-
+    #Go through entities dict (grid), initialize entities and add them to the entities list
+    def initialize_local_map(self, x, y):
+        self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
+        self.entities = self.local_map.entities
 
     def initialize_character_position(self, character):
         self.character_image = pygame.image.load(character.sprite).convert_alpha()
@@ -41,6 +39,13 @@ class WorldView:
                 self.entities.append((entity_image, entity_rect))
                 self.screen.blit(entity_image, entity_rect)
 
+    def load_entities_dict(self):
+        for (x, y), entity in self.entities_dict.items():
+            print(f"x: {x}, y: {y}")
+            if entity is not None:
+                print(f"Entity: {entity}")
+            else:
+                print("Entity: None")
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
