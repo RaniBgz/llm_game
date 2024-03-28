@@ -21,15 +21,3 @@ SPAWN_POSITIONS_DICT = {
     "bottom_middle": (WIDTH // 2, 3 * HEIGHT // 4),
     "bottom_right": (3 * WIDTH // 4, 3 * HEIGHT // 4)
 }
-
-SPAWN_POSITIONS = [
-    (WIDTH // 4, HEIGHT // 4),  # top left
-    (WIDTH // 2, HEIGHT // 4),  # top middle
-    (3 * WIDTH // 4, HEIGHT // 4),  # top right
-    (WIDTH // 4, HEIGHT // 2),  # middle left
-    (WIDTH // 2, HEIGHT // 2),  # middle
-    (3 * WIDTH // 4, HEIGHT // 2),  # middle right
-    (WIDTH // 4, 3 * HEIGHT // 4),  # bottom left
-    (WIDTH // 2, 3 * HEIGHT // 4),  # bottom middle
-    (3 * WIDTH // 4, 3 * HEIGHT // 4)  # bottom right
-]

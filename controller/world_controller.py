@@ -8,10 +8,12 @@ class WorldController:
         self.model = model
         self.view = view
         self.world_map = WorldMap.get_instance()
+        self.character = self.model.character
 
-        self.character_pos_x, self.character_pos_y = self.world_map.get_player_coords()
+        # self.character_pos_x, self.character_pos_y = self.world_map.get_player_coords()
+        self.character_global_pos_x, self.character_global_pos_y = self.character.global_position
 
-        self.local_map = self.world_map.get_local_map_at(self.character_pos_x, self.character_pos_y)
+        self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
         self.entities = self.local_map.entities
         self.entities_dict = self.local_map.entities_dict
         self.view.load_entities()
@@ -30,9 +32,9 @@ class WorldController:
                     # self.keys_pressed[event.key] = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
-                        self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)
+                        self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
-            self.view.display_world(self.character_pos_x, self.character_pos_y)
+            self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
 
     def move_character(self, key):
         x_change = y_change = 0
@@ -55,18 +57,20 @@ class WorldController:
         character_height = self.view.character_image.get_height()
         if self.view.character_rect.left < 0:
             self.view.character_rect.right = view_cst.WIDTH
-            self.character_pos_x = self.character_pos_x - 1
+            self.character_global_pos_x = self.character_global_pos_x - 1
         elif self.view.character_rect.right > view_cst.WIDTH:
             self.view.character_rect.left = 0
-            self.character_pos_x = self.character_pos_x + 1
+            self.character_global_pos_x = self.character_global_pos_x + 1
         if self.view.character_rect.top < 0:
             self.view.character_rect.bottom = view_cst.HEIGHT
-            self.character_pos_y = self.character_pos_y + 1
+            self.character_global_pos_y = self.character_global_pos_y + 1
         elif self.view.character_rect.bottom > view_cst.HEIGHT:
             self.view.character_rect.top = 0
-            self.character_pos_y = self.character_pos_y - 1
+            self.character_global_pos_y = self.character_global_pos_y - 1
             # Update coordinates in the WorldMap
-        self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)
-        x, y = self.world_map.get_player_coords()
-        self.local_map = self.world_map.get_local_map_at(x, y)
-        self.view.display_coordinates(x, y)
+        self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
+        # x, y = self.world_map.get_player_coords()
+        self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
+        self.view.local_map = self.local_map
+        self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
+        # self.view.display_coordinates(self.character_global_pos_x, self.character_global_pos_y)

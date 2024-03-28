@@ -36,7 +36,7 @@ class Game:
     def initialize_quests(self):
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
-        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/elder.png", global_position=(0, 0), local_position=(4, 3))
+        goblin_monster = NPC("Elder", 8, sprite="./assets/sprites/elder.png", global_position=(0, 0), local_position=(4, 3))
         print(f"Goblin: {goblin_monster.name} at {goblin_monster.local_position}")
         self.model.world_map.add_entity(goblin_monster, (0, 0), (0, 0))
 
