@@ -24,7 +24,7 @@ class WorldMap():
                 print(f"Adding local map at {x}, {y}")
                 self.map_grid[(x, y)] = LocalMap()
 
-    def add_entity(self, entity, local_map_coords):
+    def add_entity(self, entity, local_map_coords, local_position):
         local_map = self.map_grid[local_map_coords]
         local_map.add_entity(entity)
 

@@ -24,7 +24,7 @@ class WorldController:
                 self.view.initialize_character_position(self.character)
             elif("NPC" in str(type(entity))):
                 print("NPC found")
-
+        self.keys_pressed = {}
 
     def run(self):
         while True:
@@ -32,13 +32,15 @@ class WorldController:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
+                    self.keys_pressed[event.key] = True
                     self.move_character(event.key)
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.KEYUP:
+                    self.keys_pressed[event.key] = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         self.world_map.set_player_coords(self.character_pos_x, self.character_pos_y)
                         return
-
             self.view.display_world(self.character_pos_x, self.character_pos_y)
 
     def move_character(self, key):

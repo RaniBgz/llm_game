@@ -35,7 +35,7 @@ class Game:
     def initialize_quests(self):
         self.model.quest_builder = QuestBuilder()
         #Creating goblin and positioning it on the world map
-        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/elder.png")
+        goblin_monster = NPC("Lieutenant Goblin", 8, sprite="./assets/sprites/elder.png", global_position=(0, 0), local_position=(0, 0))
         self.model.world_map.add_entity(goblin_monster, (0, 0))
 
         #Defining a kill goblin quest and adding it to the character
@@ -47,9 +47,9 @@ class Game:
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
-        self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(0, 0))
+        self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
         # self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
-        self.model.world_map.add_entity(self.model.character, (0, 0))
+        self.model.world_map.add_entity(self.model.character, (0, 0), (view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
 
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))

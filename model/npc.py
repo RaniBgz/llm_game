@@ -3,7 +3,7 @@ from model.entity import Entity
 default_sprite = "./assets/default.png"
 
 class NPC(Entity):
-    def __init__(self, name, hp, sprite=default_sprite):
+    def __init__(self, name, hp, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0)):
         super().__init__()
         self.name = name
         self.hp = hp
