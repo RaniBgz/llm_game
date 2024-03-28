@@ -30,33 +30,24 @@ class WorldView:
     def load_entities(self):
         for entity in self.entities:
             if isinstance(entity, model.character.Character):
+                print(f"Loading Character: {entity.name} at {entity.local_position}")
                 self.character = entity
                 self.initialize_character_position(self.character)
             if isinstance(entity, model.npc.NPC):
+                print(f"Loading NPC: {entity.name} at {entity.local_position}")
                 npc_image = pygame.image.load(entity.sprite).convert_alpha()
                 npc_image = pygame.transform.scale(npc_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
-                npc_rect = npc_image.get_rect(center=(entity.local_position[0]*view_cst.TILE_WIDTH, entity.local_position[1]*view_cst.TILE_HEIGHT))
+                npc_rect = npc_image.get_rect(center=(entity.local_position[0]*view_cst.TILE_WIDTH-(view_cst.TILE_WIDTH/2),
+                                                      entity.local_position[1]*view_cst.TILE_HEIGHT-(view_cst.TILE_HEIGHT/2)))
                 self.npcs.append((npc_image, npc_rect))
-                self.screen.blit(npc_image, npc_rect)
-            #
-            # if ("Character" in str(type(entity))):
-            #     self.character = entity
-            #     self.initialize_character_position(self.character)
-            # else:
-            #     entity_image = pygame.image.load(entity.sprite).convert_alpha()
-            #     entity_image = pygame.transform.scale(entity_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
-            #     spawn_random = random.choice(view_cst.SPAWN_POSITIONS)
-            #     entity_rect = entity_image.get_rect(center=spawn_random)
-            #
-            #     # entity_rect = entity.image.get_rect(center=(view_cst.WIDTH/2,view_cst.HEIGHT/2))
-            #     self.entities.append((entity_image, entity_rect))
-            #     self.screen.blit(entity_image, entity_rect)
 
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
-        # print(f"Nb Entities in local map: {len(self.local_map.entities)}")
         self.screen.blit(self.character_image, self.character_rect)
+        for i in range(len(self.npcs)):
+            self.screen.blit(self.npcs[i][0], self.npcs[i][1])
+
         # self.screen.blit(self.goblin_image, self.goblin_rect)
         # for i in range(len(self.entities)):
         #     self.screen.blit(self.entities[i][0], self.entities[i][1])

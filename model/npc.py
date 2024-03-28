@@ -8,8 +8,8 @@ class NPC(Entity):
         self.name = name
         self.hp = hp
         self.sprite = sprite
-        self.global_position = (0, 0)
-        self.local_position = (0, 0)
+        self.global_position = global_position
+        self.local_position = local_position
 
     def get_id(self):
         return self.id

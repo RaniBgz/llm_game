@@ -8,13 +8,13 @@ from model.item import Item
 class Character(Entity):
     def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0)):
         super().__init__()
-        self.name = "Player"
+        self.name = name
         self.hp = hp
         self.sprite = "./assets/sprites/character.png"
         self.inventory = []
         self.quests = []
-        self.global_position = (0, 0)
-        self.local_position = (0, 0)
+        self.global_position = global_position
+        self.local_position = local_position
 
     def add_item_to_inventory(self, item):
         self.inventory.append(item)
