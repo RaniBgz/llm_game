@@ -14,8 +14,8 @@ class WorldController:
         self.local_map = self.world_map.get_local_map_at(self.character_pos_x, self.character_pos_y)
         self.entities = self.local_map.entities
         self.entities_dict = self.local_map.entities_dict
-        # self.view.load_entities(self.entities)
-        self.view.load_entities_dict()
+        self.view.load_entities()
+        # self.view.load_entities_dict()
 
     def run(self):
         while True:
