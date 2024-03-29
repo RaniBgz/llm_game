@@ -59,6 +59,11 @@ class Game:
         # self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
         self.model.world_map.add_entity(self.model.character, self.model.character.global_position)
 
+    def initialize_npcs(self):
+        npcs = retrieve_npcs()
+        for npc in npcs:
+            self.model.world_map.add_entity(npc, npc.global_position)
+
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
         self.model.character.add_item_to_inventory(Item("Healing Potion", "Restores Health"))
@@ -66,8 +71,9 @@ class Game:
     def setup(self):
         self.initialize_world()
         self.initialize_character()
-        self.initialize_inventory()
-        self.initialize_quests()
+        self.initialize_npcs()
+        # self.initialize_inventory()
+        # self.initialize_quests()
         self.initialize_screen()
 
     def initialize_screen(self):

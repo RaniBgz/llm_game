@@ -1,8 +1,8 @@
 """ Constants to handle the view of the game. """
 
 WIDTH, HEIGHT = 1280, 720
-H_TILES = 15
-V_TILES = 5
+H_TILES = 24
+V_TILES = 8
 TILE_WIDTH = WIDTH // H_TILES
 TILE_HEIGHT = HEIGHT // V_TILES
 WHITE = (255, 255, 255)

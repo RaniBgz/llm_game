@@ -1,12 +1,16 @@
 import psycopg2
+from sqlalchemy import update
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 # from sqlalchemy.orm import declared_attr
 # from sqlalchemy.sql.schema import Table
+import view.view_constants as view_cst
 
 engine = create_engine('postgresql+psycopg2://rani:ranidb@localhost/llmgame')
 Base = declarative_base()
+
+#TODO: will need methods to update some attributes of an object
 
 class Character(Base):
     __tablename__ = 'characters'
@@ -101,21 +105,21 @@ def load_database():
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    character = Character(name='Gary', hp=16, global_position="0,0", local_position="7,3",
+    character = Character(name='Gary', hp=16, global_position="0,0", local_position="7,5",
                           sprite="./assets/sprites/character/character.png")
     session.add(character)
 
     # Add 5 NPCs (2 friendly, 3 hostile)
     npcs = [
-        NPC(name='Elder', hp=1000, global_position="0,0", local_position="4,3", sprite="./assets/sprites/npcs/elder.png",
+        NPC(name='Elder', hp=1000, global_position="0,0", local_position="4,1", sprite="./assets/sprites/npcs/elder.png",
             hostile=False),
-        NPC(name='Robot', hp=10000, global_position="0,1", local_position="7,3", sprite="./assets/sprites/npcs/robot.png",
+        NPC(name='Robot', hp=10000, global_position="0,0", local_position="12,1", sprite="./assets/sprites/npcs/robot.png",
             hostile=False),
-        NPC(name='Plant', hp=8, global_position="0,-1", local_position="7,3", sprite="./assets/sprites/npcs/plant.png",
+        NPC(name='Plant', hp=8, global_position="0,1", local_position="4,1", sprite="./assets/sprites/npcs/plant.png",
             hostile=True),
-        NPC(name='Goblin', hp=10, global_position="0,-2", local_position="7,3", sprite="./assets/sprites/npcs/goblin.png",
+        NPC(name='Goblin', hp=10, global_position="0,1", local_position="8,1", sprite="./assets/sprites/npcs/goblin.png",
             hostile=True),
-        NPC(name='Skeleton', hp=12, global_position="0,-3", local_position="7,3", sprite="./assets/sprites/npcs/skeleton.png",
+        NPC(name='Skeleton', hp=12, global_position="0,1", local_position="12,1", sprite="./assets/sprites/npcs/skeleton.png",
             hostile=True),
     ]
     session.add_all(npcs)
