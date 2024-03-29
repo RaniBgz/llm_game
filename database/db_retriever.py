@@ -39,13 +39,6 @@ def retrieve_quests(session):
         print(f"Quest: {game_quest.name}, Active: {game_quest.active}, Description: {game_quest.description}")
         print(f"Object instantiated: {game_quest}\n")
 
-# def retrieve_objectives(session):
-#     objectives = session.query(DBObjective).all()
-#     for objective in objectives:
-#         game_objective = convert_sqlalchemy_objective_to_game_objective(objective)
-#         print(f"Objective ID: {game_objective.id}, Quest ID: {objective.quest_id}, Type: {objective.type}")
-#         print(f"Object instantiated: {game_objective}\n")
-
 
 def retrieve_npcs(session):
     npcs = session.query(DBNPC).all()

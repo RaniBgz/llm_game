@@ -9,6 +9,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TEXT_COLOR = BLACK
 RED = (255, 0, 0)
+FPS = 12
+MOVEMENT_SPEED = 10
 
 SPAWN_POSITIONS_DICT = {
     "top_left": (WIDTH // 4, HEIGHT // 4),

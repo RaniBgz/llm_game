@@ -19,37 +19,59 @@ class WorldController:
         # self.view.load_entities_dict()
 
     def run(self):
+        clock = pygame.time.Clock()
+        moving_left = moving_right = moving_up = moving_down = False
+
         while True:
+            clock.tick(view_cst.FPS)  # Limit the frame rate
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    # self.keys_pressed[event.key] = True
-                    self.move_character(event.key)
-                # if event.type == pygame.KEYUP:
-                    # self.keys_pressed[event.key] = False
+                    if event.key == pygame.K_LEFT:
+                        moving_left = True
+                    elif event.key == pygame.K_RIGHT:
+                        moving_right = True
+                    elif event.key == pygame.K_UP:
+                        moving_up = True
+                    elif event.key == pygame.K_DOWN:
+                        moving_down = True
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_LEFT:
+                        moving_left = False
+                    elif event.key == pygame.K_RIGHT:
+                        moving_right = False
+                    elif event.key == pygame.K_UP:
+                        moving_up = False
+                    elif event.key == pygame.K_DOWN:
+                        moving_down = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
+
+            keys_pressed = pygame.key.get_pressed()
+            self.move_character(keys_pressed)
             self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
 
-    def move_character(self, key):
+    def move_character(self, keys_pressed):
         x_change = y_change = 0
-        if key == pygame.K_DOWN:
-            y_change = self.view.character_image.get_height()
-        elif key == pygame.K_UP:
-            y_change = -self.view.character_image.get_height()
-        elif key == pygame.K_LEFT:
-            x_change = -self.view.character_image.get_width()
-        elif key == pygame.K_RIGHT:
-            x_change = self.view.character_image.get_width()
+        speed = view_cst.TILE_WIDTH // view_cst.MOVEMENT_SPEED  # Calculate speed based on desired tiles per second
+
+        if keys_pressed[pygame.K_LEFT]:
+            x_change = -view_cst.TILE_WIDTH
+        if keys_pressed[pygame.K_RIGHT]:
+            x_change = view_cst.TILE_WIDTH
+        if keys_pressed[pygame.K_UP]:
+            y_change = -view_cst.TILE_HEIGHT
+        if keys_pressed[pygame.K_DOWN]:
+            y_change = view_cst.TILE_HEIGHT
 
         # Move the character and check boundaries
         self.view.character_rect.move_ip(x_change, y_change)
-        # self.character_pos_x, self.character_pos_y = self.view.character_rect.x, self.view.character_rect.y
         self.wrap_character()
+
 
     #TODO: when the character wraps to another local map, we need to remove it from the 0, 0 local map and add it to the new one
     def wrap_character(self):
