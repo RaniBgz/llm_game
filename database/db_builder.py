@@ -102,7 +102,7 @@ def load_database():
     session = Session()
 
     character = Character(name='Gary', hp=16, global_position="0,0", local_position="7,3",
-                          sprite="./assets/sprites/characters/character.png")
+                          sprite="./assets/sprites/character/character.png")
     session.add(character)
 
     # Add 5 NPCs (2 friendly, 3 hostile)

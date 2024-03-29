@@ -6,11 +6,11 @@ from model.item import Item
 
 
 class Character(Entity):
-    def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0)):
+    def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0), sprite="./assets/sprites/character/character.png"):
         super().__init__()
         self.name = name
         self.hp = hp
-        self.sprite = "./assets/sprites/character/base_character.png"
+        self.sprite = sprite
         self.inventory = []
         self.quests = []
         self.global_position = global_position

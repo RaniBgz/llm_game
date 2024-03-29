@@ -10,8 +10,8 @@ from model.settings import Settings
 from view import view_constants as view_cst
 from model.maps.world_map import WorldMap
 from model.quests.quest_builder import QuestBuilder
+from database.db_retriever import retrieve_characters, retrieve_npcs, retrieve_items, retrieve_quests, retrieve_objectives
 
-#TODO: find a place to store that
 
 class Game:
     def __init__(self, screen_width, screen_height):
@@ -24,9 +24,12 @@ class Game:
         self.model.world_map.build_map(20, 20)
         self.model.world_map.set_player_coords(0, 0)
 
-    #TODO: in the future, DB with static NPCs/monsters will be defined, and these will be initialized and placed at their default location
-    #TODO: quests will most likely
-    #TODO: change resolution, set up grid/tiles, normalize sprite sizes, adapt movements
+    #TODO: load npcs, items and quests from database and make sure everything works correctly
+    #TODO: add entities_dict back to local map and start linking view with entities
+    #TODO: Handle interactions for friendly npcs
+    #TODO: Handle interactions for hostile npcs
+    #TODO: Inspect with right click (display stats)
+    #TODO: Dialogue logic with NPCs
     #
     # def initialize_npcs(self):
     #     elder = NPC("Lieutenant Goblin", 8)
@@ -49,10 +52,12 @@ class Game:
         self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
-        self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
+        characters = retrieve_characters()
+        self.model.character = characters[0]
+        # self.model.character = Character("Player", 16, global_position=(0, 0), local_position=(view_cst.H_TILES//2, 3*view_cst.V_TILES//4))
         print(f"Character: {self.model.character.name} at {self.model.character.local_position}")
         # self.model.character.current_map = self.model.world_map.get_local_map_at(0, 0)
-        self.model.world_map.add_entity(self.model.character, (0, 0))
+        self.model.world_map.add_entity(self.model.character, self.model.character.global_position)
 
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
