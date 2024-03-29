@@ -10,7 +10,7 @@ class Character(Entity):
         super().__init__()
         self.name = name
         self.hp = hp
-        self.sprite = "./assets/sprites/character.png"
+        self.sprite = "./assets/sprites/character/base_character.png"
         self.inventory = []
         self.quests = []
         self.global_position = global_position

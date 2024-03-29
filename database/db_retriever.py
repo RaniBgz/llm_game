@@ -1,4 +1,6 @@
-from database.db_builder import Character, NPC, Item, Quest, Objective, KillObjective, LocationObjective, RetrievalObjective
+from database.db_builder import (Character as DBCharacter, NPC as DBNPC, Item as DBItem,
+                                 Quest as DBQuest, Objective as DBObjective, KillObjective as DBKillObjective,
+                                 LocationObjective as DBLocationObjective, RetrievalObjective as DBRetrievalObjective)
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -17,39 +19,44 @@ def initialize_session():
     return session
 
 def retrieve_characters(session):
-    characters = session.query(Character).all()
+    characters = session.query(DBCharacter).all()
     for character in characters:
-        print(f"Character: {character.name}, HP: {character.hp}, Global: {character.global_position}, Local: {character.local_position}")
-        # Instantiate an object of the Character class for each record
-        character_obj = Character(name=character.name, hp=character.hp, global_position=character.global_position, local_position=character.local_position)
-        print(f"Object instantiated: {character_obj}\n")
-
-def retrieve_npcs(session):
-    npcs = session.query(NPC).all()
-    for npc in npcs:
-        print(f"NPC: {npc.name}, HP: {npc.hp}, Hostile: {npc.hostile}, Global: {npc.global_position}, Local: {npc.local_position}")
-        # Instantiate an object of the NPC class for each record
-        npc_obj = NPC(name=npc.name, hp=npc.hp, hostile=npc.hostile, global_position=npc.global_position, local_position=npc.local_position)
-        print(f"Object instantiated: {npc_obj}\n")
+        game_character = convert_sqlalchemy_character_to_game_character(character)
+        print(f"Character: {game_character.name}, HP: {game_character.hp}, Global: {game_character.global_position}, Local: {game_character.local_position}")
+        print(f"Object instantiated: {game_character}\n")
 
 def retrieve_items(session):
-    items = session.query(Item).all()
+    items = session.query(DBItem).all()
     for item in items:
-        print(f"Item ID: {item.id}, Character ID: {item.character_id}")
-        # Instantiate an object of the Item class for each record
-        item_obj = Item(id=item.id, character_id=item.character_id)
-        print(f"Object instantiated: {item_obj}\n")
+        game_item = convert_sqlalchemy_item_to_game_item(item)
+        print(f"Item ID: {game_item.id}, Name: {game_item.name}, Description: {game_item.description}")
+        print(f"Object instantiated: {game_item}\n")
 
 def retrieve_quests(session):
-    quests = session.query(Quest).all()
+    quests = session.query(DBQuest).all()
     for quest in quests:
-        print(f"Quest: {quest.name}, Active: {quest.active}, Description: {quest.description}")
-        # Instantiate an object of the Quest class for each record
-        quest_obj = Quest(name=quest.name, description=quest.description, active=quest.active)
-        print(f"Object instantiated: {quest_obj}\n")
+        game_quest = convert_sqlalchemy_quest_to_game_quest(quest)
+        print(f"Quest: {game_quest.name}, Active: {game_quest.active}, Description: {game_quest.description}")
+        print(f"Object instantiated: {game_quest}\n")
+
+# def retrieve_objectives(session):
+#     objectives = session.query(DBObjective).all()
+#     for objective in objectives:
+#         game_objective = convert_sqlalchemy_objective_to_game_objective(objective)
+#         print(f"Objective ID: {game_objective.id}, Quest ID: {objective.quest_id}, Type: {objective.type}")
+#         print(f"Object instantiated: {game_objective}\n")
+
+
+def retrieve_npcs(session):
+    npcs = session.query(DBNPC).all()
+    for npc in npcs:
+        game_npc = convert_sqlalchemy_npc_to_game_npc(npc)
+        print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile}, Global: {game_npc.global_position}, Local: {game_npc.local_position}")
+        print(f"Object instantiated: {game_npc}\n")
+
 
 def retrieve_objectives(session):
-    objectives = session.query(Objective).all()
+    objectives = session.query(DBObjective).all()
     for objective in objectives:
         print(f"Objective ID: {objective.id}, Quest ID: {objective.quest_id}, Type: {objective.type}")
         # Note: Instantiating the right subclass based on the type
@@ -62,6 +69,52 @@ def retrieve_objectives(session):
         else:
             objective_obj = Objective()
         print(f"Object instantiated: {objective_obj}\n")
+
+
+def convert_sqlalchemy_character_to_game_character(sqlalchemy_character):
+    """Converts a SQLAlchemy Character instance to a game model Character instance."""
+    return Character(
+        name=sqlalchemy_character.name,
+        hp=sqlalchemy_character.hp,
+        global_position=tuple(map(int, sqlalchemy_character.global_position.split(','))),
+        local_position=tuple(map(int, sqlalchemy_character.local_position.split(','))),
+    )
+
+
+def convert_sqlalchemy_npc_to_game_npc(sqlalchemy_npc):
+    """Converts a SQLAlchemy NPC instance to a game model NPC instance."""
+    return NPC(
+        name=sqlalchemy_npc.name,
+        hp=sqlalchemy_npc.hp,
+        sprite=sqlalchemy_npc.sprite,
+        global_position=tuple(map(int, sqlalchemy_npc.global_position.split(','))),
+        local_position=tuple(map(int, sqlalchemy_npc.local_position.split(','))),
+        hostile=sqlalchemy_npc.hostile,
+    )
+
+def convert_sqlalchemy_item_to_game_item(sqlalchemy_item):
+    """Converts a SQLAlchemy Item instance to a game model Item instance."""
+    # Assuming the game model Item constructor takes an id and character_id
+    return Item(name=sqlalchemy_item.name, description=sqlalchemy_item.description)
+
+
+def convert_sqlalchemy_quest_to_game_quest(sqlalchemy_quest):
+    """Converts a SQLAlchemy Quest instance to a game model Quest instance."""
+    # Assuming the game model Quest constructor takes name, description, and active status
+    return Quest(name=sqlalchemy_quest.name, description=sqlalchemy_quest.description, active=sqlalchemy_quest.active)
+
+
+def convert_sqlalchemy_objective_to_game_objective(sqlalchemy_objective):
+    """Converts a SQLAlchemy Objective instance to the correct subclass of game model Objective instance."""
+    if sqlalchemy_objective.type == 'kill':
+        return KillObjective(target_id=sqlalchemy_objective.target_id)  # Assuming similar constructor for KillObjective
+    elif sqlalchemy_objective.type == 'location':
+        return LocationObjective(target_location=sqlalchemy_objective.target_location)  # And so on for each type
+    elif sqlalchemy_objective.type == 'retrieval':
+        return RetrievalObjective(target_item_id=sqlalchemy_objective.target_item_id)
+    else:
+        # Assuming a generic Objective constructor for unspecified types
+        return Objective()
 
 if __name__ == '__main__':
     session = initialize_session()

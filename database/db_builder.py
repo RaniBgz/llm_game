@@ -33,6 +33,8 @@ class NPC(Base):
 class Item(Base):
     __tablename__ = 'items'
     id = Column(Integer, primary_key=True)
+    name = Column(String)
+    description = Column(String)
     character_id = Column(Integer, ForeignKey('characters.id'))
 
 class Quest(Base):
@@ -120,12 +122,12 @@ def load_database():
 
     # Add 5 Items
     items = [
-        Item(character_id=character.id),
+        Item(name="Dagger", description="A common iron dagger", character_id=character.id),
         # Assuming Item has a character_id but not linked directly to character's inventory
-        Item(character_id=character.id),
-        Item(character_id=character.id),
-        Item(character_id=character.id),
-        Item(character_id=character.id),
+        Item(name="Staff", description="A common wooden staff", character_id=character.id),
+        Item(name="Shield", description="A common wooden shield", character_id=character.id),
+        Item(name="Health Potion", description="A weak health potion",character_id=character.id),
+        Item(name="Mana Potion", description="A weak mana potion",character_id=character.id),
     ]
     session.add_all(items)
 
