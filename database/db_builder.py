@@ -101,21 +101,21 @@ def load_database():
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    character = Character(name='Hero', hp=100, global_position="1,1", local_position="2,2",
-                          sprite="./assets/sprites/character.png")
+    character = Character(name='Gary', hp=16, global_position="0,0", local_position="7,3",
+                          sprite="./assets/sprites/characters/character.png")
     session.add(character)
 
     # Add 5 NPCs (2 friendly, 3 hostile)
     npcs = [
-        NPC(name='Friendly NPC 1', hp=50, global_position="3,3", local_position="4,4", sprite="./assets/default.png",
+        NPC(name='Elder', hp=1000, global_position="0,0", local_position="4,3", sprite="./assets/sprites/npcs/elder.png",
             hostile=False),
-        NPC(name='Friendly NPC 2', hp=50, global_position="5,5", local_position="6,6", sprite="./assets/default.png",
+        NPC(name='Robot', hp=10000, global_position="0,1", local_position="7,3", sprite="./assets/sprites/npcs/robot.png",
             hostile=False),
-        NPC(name='Hostile NPC 1', hp=70, global_position="7,7", local_position="8,8", sprite="./assets/default.png",
+        NPC(name='Plant', hp=8, global_position="0,-1", local_position="7,3", sprite="./assets/sprites/npcs/plant.png",
             hostile=True),
-        NPC(name='Hostile NPC 2', hp=70, global_position="9,9", local_position="10,10", sprite="./assets/default.png",
+        NPC(name='Goblin', hp=10, global_position="0,-2", local_position="7,3", sprite="./assets/sprites/npcs/goblin.png",
             hostile=True),
-        NPC(name='Hostile NPC 3', hp=70, global_position="11,11", local_position="12,12", sprite="./assets/default.png",
+        NPC(name='Skeleton', hp=12, global_position="0,-3", local_position="7,3", sprite="./assets/sprites/npcs/skeleton.png",
             hostile=True),
     ]
     session.add_all(npcs)
@@ -124,10 +124,10 @@ def load_database():
     items = [
         Item(name="Dagger", description="A common iron dagger", character_id=character.id),
         # Assuming Item has a character_id but not linked directly to character's inventory
-        Item(name="Staff", description="A common wooden staff", character_id=character.id),
         Item(name="Shield", description="A common wooden shield", character_id=character.id),
         Item(name="Health Potion", description="A weak health potion",character_id=character.id),
         Item(name="Mana Potion", description="A weak mana potion",character_id=character.id),
+        Item(name="Steak", description="Omnomnom", character_id=character.id),
     ]
     session.add_all(items)
 
