@@ -1,10 +1,9 @@
 import psycopg2
-from sqlalchemy import create_engine
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy.orm import declared_attr
-from sqlalchemy.sql.schema import Table
+# from sqlalchemy.orm import declared_attr
+# from sqlalchemy.sql.schema import Table
 
 engine = create_engine('postgresql+psycopg2://rani:ranidb@localhost/llmgame')
 Base = declarative_base()
@@ -95,7 +94,7 @@ def load_database():
     # First, create the database schema
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-    
+
     # Create a session
     Session = sessionmaker(bind=engine)
     session = Session()
