@@ -9,17 +9,5 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TEXT_COLOR = BLACK
 RED = (255, 0, 0)
-FPS = 12
+FPS = 16
 MOVEMENT_SPEED = 10
-
-SPAWN_POSITIONS_DICT = {
-    "top_left": (WIDTH // 4, HEIGHT // 4),
-    "top_middle": (WIDTH // 2, HEIGHT // 4),
-    "top_right": (3 * WIDTH // 4, HEIGHT // 4),
-    "middle_left": (WIDTH // 4, HEIGHT // 2),
-    "middle": (WIDTH // 2, HEIGHT // 2),
-    "middle_right": (3 * WIDTH // 4, HEIGHT // 2),
-    "bottom_left": (WIDTH // 4, 3 * HEIGHT // 4),
-    "bottom_middle": (WIDTH // 2, 3 * HEIGHT // 4),
-    "bottom_right": (3 * WIDTH // 4, 3 * HEIGHT // 4)
-}

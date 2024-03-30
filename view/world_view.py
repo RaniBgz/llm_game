@@ -28,7 +28,9 @@ class WorldView:
         self.character_image = pygame.image.load(character.sprite).convert_alpha()
         self.character_image = pygame.transform.scale(self.character_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
         # self.character_imager = pygame.transform.scale(player_image, (tile_width, tile_height))
-        self.character_rect = self.character_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["middle"])
+        # self.character_rect = self.character_image.get_rect(center=view_cst.SPAWN_POSITIONS_DICT["middle"])
+        self.character_rect = self.character_image.get_rect(center=(character.local_position[0]*view_cst.TILE_WIDTH-(view_cst.TILE_WIDTH/2),
+                                                                  character.local_position[1]*view_cst.TILE_HEIGHT-(view_cst.TILE_HEIGHT/2)))
 
     def load_entities(self):
         for entity in self.entities:
