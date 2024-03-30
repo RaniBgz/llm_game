@@ -11,7 +11,7 @@ class WorldView:
         self.screen = screen
         # self.local_map = WorldMap.get_instance().get_local_map_at(global_position[0], global_position[1])
         # self.entities = self.local_map.entities
-        # self.npcs = []
+        self.npcs = []
         self.initialize_local_map(global_position[0], global_position[1])
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
@@ -44,7 +44,7 @@ class WorldView:
                 npc_image = pygame.transform.scale(npc_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
                 npc_rect = npc_image.get_rect(center=(entity.local_position[0]*view_cst.TILE_WIDTH-(view_cst.TILE_WIDTH/2),
                                                       entity.local_position[1]*view_cst.TILE_HEIGHT-(view_cst.TILE_HEIGHT/2)))
-                self.npcs.append((npc_image, npc_rect))
+                self.npcs.append((entity, npc_image, npc_rect))
 
     def clear_npcs(self):
         self.npcs = []
@@ -54,7 +54,7 @@ class WorldView:
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.screen.blit(self.character_image, self.character_rect)
         for i in range(len(self.npcs)):
-            self.screen.blit(self.npcs[i][0], self.npcs[i][1])
+            self.screen.blit(self.npcs[i][1], self.npcs[i][2])
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
         pygame.display.flip()

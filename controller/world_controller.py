@@ -50,6 +50,8 @@ class WorldController:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
+                    else:
+                        self.handle_npc_interaction(event.pos)
 
             keys_pressed = pygame.key.get_pressed()
             self.move_character(keys_pressed)
@@ -71,9 +73,6 @@ class WorldController:
         # Move the character and check boundaries
         self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
-
-
-    #TODO: when the character wraps to another local map, we need to remove it from the 0, 0 local map and add it to the new one
     def wrap_character(self):
         is_wrapped = False
         if self.view.character_rect.left < 0:
@@ -103,3 +102,10 @@ class WorldController:
         self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
         self.view.local_map = self.local_map
         self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
+
+    def handle_npc_interaction(self, pos):
+        for npc, npc_image, npc_rect in self.view.npcs:
+            if npc_rect.collidepoint(pos):
+                # Perform the desired action for the clicked NPC
+                print(f"Interacting with NPC: {npc.name}")
+                # You can add more functionality here, like displaying a dialogue box
