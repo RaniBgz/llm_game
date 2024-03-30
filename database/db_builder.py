@@ -136,16 +136,22 @@ def load_database():
     session.add_all(items)
 
     # Add 3 Quests with different Objectives
-    quest1 = Quest(name="Quest 1", description="Kill Objective", active=True)
+    quest1 = Quest(name="Kill the Plant", description="Kill the Plant", active=True)
     quest1.objectives.append(KillObjective(target_id=1))
 
-    quest2 = Quest(name="Quest 2", description="Location Objective", active=True)
-    quest2.objectives.append(LocationObjective(target_location="13,13"))
+    quest2 = Quest(name="Kill the Goblin", description="Kill the Goblin", active=False)
+    quest2.objectives.append(KillObjective(target_id=2))
 
-    quest3 = Quest(name="Quest 3", description="Retrieval Objective", active=True)
-    quest3.objectives.append(RetrievalObjective(target_item_id=1))
+    quest3 = Quest(name="Kill the Skeleton", description="Kill the Goblin", active=False)
+    quest3.objectives.append(KillObjective(target_id=3))
 
-    session.add_all([quest1, quest2, quest3])
+    quest4 = Quest(name="Locate", description="Location Objective", active=False)
+    quest4.objectives.append(LocationObjective(target_location="13,13"))
+
+    quest5 = Quest(name="Retrieve", description="Retrieval Objective", active=False)
+    quest5.objectives.append(RetrievalObjective(target_item_id=1))
+
+    session.add_all([quest1, quest2, quest3, quest4, quest5])
 
     # Commit everything to the database
     session.commit()

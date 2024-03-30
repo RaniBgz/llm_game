@@ -37,19 +37,23 @@ class Game:
 
 
     def initialize_quests(self):
-        self.model.quest_builder = QuestBuilder()
-        #Creating goblin and positioning it on the world map
-        goblin_monster = NPC("Elder", 8, sprite="./assets/sprites/npcs/elder.png", global_position=(0, 0), local_position=(4, 3))
-        print(f"NPC: {goblin_monster.name} at {goblin_monster.local_position}")
-        self.model.world_map.add_entity(goblin_monster, (0, 0))
-
-        #Defining a kill goblin quest and adding it to the character
-        kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
-        self.model.character.add_quest(kill_goblin_quest)
-
-        #Creating generic quests and adding them to the character
-        self.model.character.add_quest(Quest("Defeat the Mage", "Find and defeat the Mage King", True))
-        self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
+        quests = retrieve_quests()
+        for quest in quests:
+            self.model.character.add_quest(quest)
+        # pass
+        # self.model.quest_builder = QuestBuilder()
+        # #Creating goblin and positioning it on the world map
+        # goblin_monster = NPC("Elder", 8, sprite="./assets/sprites/npcs/elder.png", global_position=(0, 0), local_position=(4, 3))
+        # print(f"NPC: {goblin_monster.name} at {goblin_monster.local_position}")
+        # self.model.world_map.add_entity(goblin_monster, (0, 0))
+        #
+        # #Defining a kill goblin quest and adding it to the character
+        # kill_goblin_quest = self.model.quest_builder.create_kill_quest(goblin_monster.name, goblin_monster.id)
+        # self.model.character.add_quest(kill_goblin_quest)
+        #
+        # #Creating generic quests and adding them to the character
+        # self.model.character.add_quest(Quest("Defeat the Mage", "Find and defeat the Mage King", True))
+        # self.model.character.add_quest(Quest("Find the Hidden Treasure", "Follow the clues...", False))
 
     def initialize_character(self):
         characters = retrieve_characters()
@@ -64,6 +68,11 @@ class Game:
         for npc in npcs:
             self.model.world_map.add_entity(npc, npc.global_position)
 
+    def initialize_items(self):
+        items = retrieve_items()
+        for item in items:
+            self.model.character.add_item_to_inventory(item)
+
     def initialize_inventory(self):
         self.model.character.add_item_to_inventory(Item("Sword", "A Rusty Sword"))
         self.model.character.add_item_to_inventory(Item("Healing Potion", "Restores Health"))
@@ -72,8 +81,9 @@ class Game:
         self.initialize_world()
         self.initialize_character()
         self.initialize_npcs()
+        self.initialize_items()
         # self.initialize_inventory()
-        # self.initialize_quests()
+        self.initialize_quests()
         self.initialize_screen()
 
     def initialize_screen(self):
