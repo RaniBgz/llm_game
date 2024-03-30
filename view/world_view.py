@@ -16,6 +16,45 @@ class WorldView:
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
+        self.popup_surface = None
+        self.popup_rect = None
+        self.popup_text = None
+        self.show_popup = False
+
+    def create_popup(self, npc, npc_rect):
+        # Create a new surface for the popup window
+        #TODO: see how to dynamically adjust the size of the popup window
+        popup_width, popup_height = 200, 100
+        self.popup_surface = pygame.Surface((popup_width, popup_height))
+        self.popup_surface.fill(view_cst.POPUP_BG_COLOR)
+
+        # Add text information about the NPC
+        text = f"Name: {npc.name}"
+        self.popup_text = pygame.font.SysFont("Arial", 16).render(text, True, view_cst.TEXT_COLOR)
+        self.popup_surface.blit(self.popup_text, (10, 10))  # Blit the text at (10, 10) on the popup surface
+
+        # Add a close button
+        close_button_text = pygame.font.SysFont("Arial", 16).render("X", True, view_cst.TEXT_COLOR)
+        close_button_rect = close_button_text.get_rect(topright=(popup_width - 10, 10))
+        pygame.draw.rect(self.popup_surface, view_cst.TEXT_COLOR, close_button_rect)
+        self.popup_surface.blit(close_button_text, close_button_rect)
+
+        # Position the popup window next to the NPC
+        # self.popup_rect = self.popup_surface.get_rect(center=(view_cst.WIDTH//2, view_cst.HEIGHT//2))
+        self.popup_rect = self.popup_surface.get_rect(midleft=(npc_rect.midright[0] + 10, npc_rect.midright[1]))
+
+    def display_popup(self):
+        if self.show_popup:
+            print(f"Displaying popup at {self.popup_rect.topleft}")
+            self.screen.blit(self.popup_surface, self.popup_rect)
+
+    def handle_popup_events(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if the close button was clicked
+            if self.popup_rect and self.popup_rect.collidepoint(event.pos):
+                close_button_rect = pygame.Rect(self.popup_rect.topright[0] - 20, self.popup_rect.topright[1], 20, 20)
+                if close_button_rect.collidepoint(event.pos):
+                    self.show_popup = False
 
     #Go through entities dict (grid), initialize entities and add them to the entities list
     def initialize_local_map(self, x, y):
@@ -57,6 +96,9 @@ class WorldView:
             self.screen.blit(self.npcs[i][1], self.npcs[i][2])
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
+        # Blit the pop-up surface after rendering all other elements
+        if self.show_popup:
+            self.screen.blit(self.popup_surface, self.popup_rect)
         pygame.display.flip()
 
     def display_coordinates(self, x, y):

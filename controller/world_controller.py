@@ -51,11 +51,14 @@ class WorldController:
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
                     else:
-                        self.handle_npc_interaction(event.pos)
+                        self.view.handle_popup_events(event)
+                        self.handle_npc_interaction(event.pos, event.button)
+                    pass
 
             keys_pressed = pygame.key.get_pressed()
             self.move_character(keys_pressed)
             self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
+            self.view.display_popup()
 
     def move_character(self, keys_pressed):
         x_change = y_change = 0
@@ -103,9 +106,14 @@ class WorldController:
         self.view.local_map = self.local_map
         self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
 
-    def handle_npc_interaction(self, pos):
+    def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
             if npc_rect.collidepoint(pos):
-                # Perform the desired action for the clicked NPC
-                print(f"Interacting with NPC: {npc.name}")
-                # You can add more functionality here, like displaying a dialogue box
+                if button == pygame.BUTTON_RIGHT:
+                    # Right-click on NPC, show popup
+                    print("Right-clicked on NPC")
+                    self.view.create_popup(npc, npc_rect)
+                    self.view.show_popup = True
+                elif button == pygame.BUTTON_LEFT:
+                    # Left-click on NPC, perform other actions
+                    print(f"Interacting with NPC: {npc.name}")
