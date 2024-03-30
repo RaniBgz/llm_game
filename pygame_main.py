@@ -24,7 +24,7 @@ class Game:
         self.model.world_map.build_map(20, 20)
         self.model.world_map.set_player_coords(0, 0)
 
-    #TODO: load npcs, items and quests from database and make sure everything works correctly
+    #TODO: Have a way to lookup quests
     #TODO: add entities_dict back to local map and start linking view with entities
     #TODO: Handle interactions for friendly npcs
     #TODO: Handle interactions for hostile npcs

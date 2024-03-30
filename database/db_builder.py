@@ -95,6 +95,17 @@ class RetrievalObjective(Objective):
         # Implementation specific to RetrievalObjective
         pass
 
+class TalkToNPCObjective(Objective):
+    __mapper_args__ = {
+        'polymorphic_identity': 'talk_to_npc'
+    }
+    target_npc_id = Column(Integer)  # Assuming item ID is an integer
+
+    def check_completion(self, player):
+        # Implementation specific to RetrievalObjective
+        pass
+
+
 def load_database():
     print(f"Adding instances to the database")
     # First, create the database schema
@@ -136,7 +147,10 @@ def load_database():
     session.add_all(items)
 
     # Add 3 Quests with different Objectives
-    quest1 = Quest(name="Kill the Plant", description="Kill the Plant", active=True)
+    quest0 = Quest(name="Talk to the Elder", description="Talk to the Elder", active=True)
+    quest0.objectives.append(TalkToNPCObjective(target_npc_id=1))
+
+    quest1 = Quest(name="Kill the Plant", description="Kill the Plant", active=False)
     quest1.objectives.append(KillObjective(target_id=1))
 
     quest2 = Quest(name="Kill the Goblin", description="Kill the Goblin", active=False)
@@ -151,7 +165,7 @@ def load_database():
     quest5 = Quest(name="Retrieve", description="Retrieval Objective", active=False)
     quest5.objectives.append(RetrievalObjective(target_item_id=1))
 
-    session.add_all([quest1, quest2, quest3, quest4, quest5])
+    session.add_all([quest0, quest1, quest2, quest3, quest4, quest5])
 
     # Commit everything to the database
     session.commit()

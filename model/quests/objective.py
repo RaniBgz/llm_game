@@ -34,3 +34,12 @@ class RetrievalObjective(Objective):
     def check_completion(self, player):
         # Logic to check if the target_item_id is in the player's inventory.
         pass
+
+class TalkToNPCObjective(Objective):
+    def __init__(self, target_npc_id):
+        super().__init__()
+        self.target_npc_id = target_npc_id
+
+    def check_completion(self, player):
+        # Logic to check if the player has talked to the target NPC.
+        pass
