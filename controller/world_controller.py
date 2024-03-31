@@ -1,5 +1,8 @@
 import sys
 import pygame
+
+import model.quest.objective
+from model.quest.objective import KillObjective
 from view import view_constants as view_cst
 from model.map.world_map import WorldMap
 
@@ -59,7 +62,7 @@ class WorldController:
                                                     self.model.character.local_position[1] + 1)
 
         # Move the character and check boundaries
-        print(f"Character local position is: {self.model.character.local_position}")
+        # print(f"Character local position is: {self.model.character.local_position}")
         self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
 
@@ -110,6 +113,17 @@ class WorldController:
                     if(npc.hostile):
                         print("Left-clicked on hostile NPC")
                         self.view.kill_npc(npc)
+                        #TODO: Expand and encapsulate this logic in a separate function
+                        for quest in self.model.character.quests:
+                            for objective in quest.objectives:
+                                if isinstance(objective, model.quest.objective.KillObjective):
+                                    if objective.target_id == npc.id:
+                                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
+                                        quest.objectives.remove(objective)
+                                        if len(quest.objectives) == 0:
+                                            quest.complete = True
+                                            quest.active = False
+                                        print(f"Quest {quest.id} is now complete")
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.create_dialogue_box(npc, npc_rect)

@@ -1,5 +1,8 @@
+import uuid
+
 class Objective:
     def __init__(self):
+        self.id = uuid.uuid4()
         pass
 
     def check_completion(self, player):
@@ -11,7 +14,8 @@ class KillObjective(Objective):
         super().__init__()
         self.target_id = target_id
 
-    def check_completion(self, player):
+    def check_completion(self):
+
         # Logic to check if the entity with target_id has been killed by the player
         pass
 

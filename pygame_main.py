@@ -16,24 +16,28 @@ from database.db_retriever import retrieve_characters, retrieve_npcs, retrieve_i
 class Game:
     def __init__(self, screen_width, screen_height):
         self.screen = None  # Initialize screen later in setup
-        self.model = GameData()
+        self.model = GameData() #Initializes GameData and WorldMap
         self.settings = Settings(screen_width, screen_height)
 
     def initialize_world(self):
-        self.model.world_map = WorldMap.get_instance()
         self.model.world_map.build_map(20, 20)
 
     #TODO: Have a way to lookup quests
-    #TODO: add entities_dict back to local map and start linking view with entities
-    #TODO: Handle interactions for friendly npcs
-    #TODO: Handle interactions for hostile npcs
-    #TODO: Inspect with right click (display stats)
-    #TODO: Dialogue logic with NPCs
+    #TODO: NPC retrieval by name? Handle multiple NPCs with same name? Subclass NPC?
 
     def initialize_quests(self):
         quests = retrieve_quests()
         for quest in quests:
-            self.model.character.add_quest(quest)
+            if quest.name == "Kill the Plant":
+                quest.active = True
+                npc = self.model.find_npc_by_name("Plant")
+                quest = self.model.quest_builder.build_kill_quest(quest, npc.id)
+                print(f"Quest created for npc {npc.id} with name {npc.name}")
+                self.model.character.add_quest(quest)
+                # quest.objectives.append(QuestBuilder.build_kill_objective(1))
+            else:
+                quest.active = False
+
 
     def initialize_character(self):
         characters = retrieve_characters()
@@ -46,7 +50,8 @@ class Game:
     def initialize_npcs(self):
         npcs = retrieve_npcs()
         for npc in npcs:
-            self.model.world_map.add_entity(npc, npc.global_position)
+            self.model.world_map.add_entity(npc, npc.global_position) #Add NPC to right local map through world map
+            self.model.npcs.append(npc) #Add NPC to global list of NPC for now (need better storage/retrieval strat)
 
     def initialize_items(self):
         items = retrieve_items()
@@ -84,17 +89,3 @@ class Game:
 if __name__ == "__main__":
     game = Game(view_cst.WIDTH, view_cst.HEIGHT)
     game.run()
-
-
-
-    #TODO: Separate world initialization from the rest
-
-    # def setup_world(world_map):
-    #     # Create local maps and add them to the world map
-    #     # ...
-    #
-    #     # Create NPCs
-    #     goblin_monster = NPC("Lieutenant Goblin", 8)
-    #     world_map.add_entity(goblin_monster, (1, 2))  # Place goblin at local map (1, 2)
-    #
-

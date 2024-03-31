@@ -21,7 +21,12 @@ class QuestView:
         # Display quests
         y = 50
         for quest in quests:
-            color = view_cst.RED if quest.active else (0, 0, 0)  # Red for active, black otherwise
+            if quest.active:
+                color = view_cst.RED
+            if quest.completed:
+                color = view_cst.GREEN
+            else:
+                color = view_cst.TEXT_COLOR
             quest_text = self.font.render(quest.name, True, color)
             self.screen.blit(quest_text, (20, y))
             y += 30

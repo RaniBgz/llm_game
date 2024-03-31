@@ -1,0 +1,1 @@
+''' Defines the scenario of the game. Builds the quests, associates them to the right targets, and associates them to a NPC'''
