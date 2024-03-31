@@ -59,7 +59,8 @@ def retrieve_npcs():
     for npc in npcs:
         game_npc = convert_sqlalchemy_npc_to_game_npc(npc)
         npcs_list.append(game_npc)
-        print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile}, Global: {game_npc.global_position}, Local: {game_npc.local_position}")
+        print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile},"
+              f"Global: {game_npc.global_position}, Local: {game_npc.local_position}")
         print(f"Object instantiated: {game_npc}\n")
     return npcs_list
 

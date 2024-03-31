@@ -17,8 +17,8 @@ class Character(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     hp = Column(Integer)
-    global_position = Column(String)  # Stored as "x,y"
-    local_position = Column(String)  # Stored as "x,y"
+    global_position = Column(String)  #"x,y"
+    local_position = Column(String)  #"x,y"
     sprite = Column(String, default="./assets/sprites/character.png")
     # Relationships
     inventory = relationship("Item", backref="character")
@@ -29,10 +29,10 @@ class NPC(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     hp = Column(Integer)
-    global_position = Column(String)  # Stored as "x,y"
-    local_position = Column(String)  # Stored as "x,y"
+    global_position = Column(String)  #"x,y"
+    local_position = Column(String)  #"x,y"
     sprite = Column(String, default="./assets/default.png")
-    hostile = Column(Boolean, default=False)  # Add this line
+    hostile = Column(Boolean, default=False)
 
 class Item(Base):
     __tablename__ = 'items'

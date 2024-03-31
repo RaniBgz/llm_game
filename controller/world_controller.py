@@ -20,7 +20,6 @@ class WorldController:
 
     def run(self):
         clock = pygame.time.Clock()
-        moving_left = moving_right = moving_up = moving_down = False
 
         while True:
             clock.tick(view_cst.FPS)  # Limit the frame rate
@@ -28,24 +27,6 @@ class WorldController:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        moving_left = True
-                    elif event.key == pygame.K_RIGHT:
-                        moving_right = True
-                    elif event.key == pygame.K_UP:
-                        moving_up = True
-                    elif event.key == pygame.K_DOWN:
-                        moving_down = True
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT:
-                        moving_left = False
-                    elif event.key == pygame.K_RIGHT:
-                        moving_right = False
-                    elif event.key == pygame.K_UP:
-                        moving_up = False
-                    elif event.key == pygame.K_DOWN:
-                        moving_down = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
