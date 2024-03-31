@@ -93,8 +93,9 @@ class WorldController:
 
         if is_wrapped:
             print(f"Character wrapped to {self.character_global_pos_x}, {self.character_global_pos_y}! Updating local map...")
-            self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
             self.model.character.global_position = (self.character_global_pos_x, self.character_global_pos_y)
+            self.world_map.set_player_coords(self.model.character.global_position[0], self.model.character.global_position[1])
+            self.world_map.add_entity(self.model.character, self.model.character.global_position)
             self.view.initialize_local_map(self.character_global_pos_x, self.character_global_pos_y)
             self.view.load_entities()
         self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)

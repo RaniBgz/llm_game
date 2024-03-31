@@ -11,6 +11,8 @@ class WorldView:
         self.screen = screen
         self.npcs = []
 
+        self.character_rect = None
+
         self.popup_surface = None
         self.popup_rect = None
         self.show_popup = False
@@ -32,6 +34,7 @@ class WorldView:
         self.load_entities()
 
     def load_entities(self):
+        print(f"Loading entities")
         for entity in self.entities:
             if isinstance(entity, model.character.Character):
                 self.initialize_character(entity)
