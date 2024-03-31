@@ -1,4 +1,4 @@
-from model.maps.map import Map
+from model.map.map import Map
 
 # Model (This would eventually hold game data and logic)
 

@@ -11,6 +11,7 @@ class NPC(Entity):
         self.global_position = global_position
         self.local_position = local_position
         self.hostile = hostile
+        self.dead = False
 
     def get_id(self):
         return self.id

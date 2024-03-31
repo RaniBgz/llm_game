@@ -1,5 +1,5 @@
 from model.entity import Entity
-from model.quests.objective import Objective
+from model.quest.objective import Objective
 import uuid
 
 class Quest:

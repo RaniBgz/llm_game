@@ -1,7 +1,7 @@
 import sys
 import pygame, random
 from view import view_constants as view_cst
-from model.maps.world_map import WorldMap
+from model.map.world_map import WorldMap
 import model.character
 import model.npc
 
@@ -39,7 +39,10 @@ class WorldView:
             if isinstance(entity, model.character.Character):
                 self.initialize_character(entity)
             if isinstance(entity, model.npc.NPC):
-                self.initialize_npc(entity)
+                if entity.dead:
+                    continue
+                else:
+                    self.initialize_npc(entity)
 
     def initialize_character(self, character):
         print(f"Loading Character: {character.name} at {character.local_position}")
@@ -130,6 +133,13 @@ class WorldView:
                 close_button_rect = pygame.Rect(self.dialogue_rect.topright[0] - 20, self.dialogue_rect.topright[1], 20, 20)
                 if close_button_rect.collidepoint(event.pos):
                     self.show_dialogue = False
+
+    def kill_npc(self, npc):
+        for i, (npc_obj, npc_image, npc_rect) in enumerate(self.npcs):
+            if npc_obj == npc:
+                self.npcs.pop(i)
+                npc_obj.dead = True
+                break
 
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)

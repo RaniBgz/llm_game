@@ -1,7 +1,7 @@
 """ Defines the character class that is used to define """
 from model.entity import Entity
 import json
-from model.quests.quest import Quest
+from model.quest.quest import Quest
 from model.item import Item
 
 

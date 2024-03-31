@@ -7,8 +7,8 @@ from sqlalchemy.orm import sessionmaker, relationship
 from model.character import Character
 from model.npc import NPC
 from model.item import Item
-from model.quests.quest import Quest
-from model.quests.objective import Objective, KillObjective, LocationObjective, RetrievalObjective
+from model.quest.quest import Quest
+from model.quest.objective import Objective, KillObjective, LocationObjective, RetrievalObjective
 
 engine = create_engine('postgresql+psycopg2://rani:ranidb@localhost/llmgame')
 Base = declarative_base()

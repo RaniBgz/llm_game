@@ -1,7 +1,7 @@
 import sys
 import pygame
 from view import view_constants as view_cst
-from model.maps.world_map import WorldMap
+from model.map.world_map import WorldMap
 
 class WorldController:
     def __init__(self, model, view):
@@ -107,7 +107,11 @@ class WorldController:
                     self.view.create_npc_info_box(npc, npc_rect)
                     self.view.show_popup = True
                 elif button == pygame.BUTTON_LEFT:
-                    self.view.create_dialogue_box(npc, npc_rect)
-                    self.view.show_dialogue = True
-                    # Left-click on NPC, perform other actions
-                    print(f"Interacting with NPC: {npc.name}")
+                    if(npc.hostile):
+                        print("Left-clicked on hostile NPC")
+                        self.view.kill_npc(npc)
+                    else:
+                        print(f"Interacting with NPC: {npc.name}")
+                        self.view.create_dialogue_box(npc, npc_rect)
+                        self.view.show_dialogue = True
+

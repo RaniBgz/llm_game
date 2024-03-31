@@ -1,4 +1,4 @@
-from model.maps.map import Map
+from model.map.map import Map
 from view import view_constants as vcst
 
 class LocalMap(Map):

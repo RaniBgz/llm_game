@@ -1,4 +1,4 @@
-from model.maps.local_map import LocalMap
+from model.map.local_map import LocalMap
 
 class WorldMap():
     _instance = None

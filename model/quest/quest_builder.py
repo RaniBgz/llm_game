@@ -1,5 +1,5 @@
-from model.quests.quest import Quest
-from model.quests.objective import KillObjective
+from model.quest.quest import Quest
+from model.quest.objective import KillObjective
 
 class QuestBuilder():
     def __init__(self):
