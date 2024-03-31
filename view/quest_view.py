@@ -23,7 +23,7 @@ class QuestView:
         for quest in quests:
             if quest.active:
                 color = view_cst.RED
-            if quest.completed:
+            elif quest.completed:
                 color = view_cst.GREEN
             else:
                 color = view_cst.TEXT_COLOR

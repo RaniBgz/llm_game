@@ -121,9 +121,9 @@ class WorldController:
                                         print(f"Objective {objective.id} for quest {quest.id} is now complete")
                                         quest.objectives.remove(objective)
                                         if len(quest.objectives) == 0:
-                                            quest.complete = True
+                                            quest.completed = True
                                             quest.active = False
-                                        print(f"Quest {quest.id} is now complete")
+                                            print(f"Quest {quest.id} is now complete")
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.create_dialogue_box(npc, npc_rect)
