@@ -25,6 +25,7 @@ class WorldView:
         self.initialize_local_map(global_position[0], global_position[1])
 
     def initialize_local_map(self, x, y):
+        print(f"Initializing local map at {x}, {y}")
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.entities = self.local_map.entities
         self.npcs = []  # Clear the NPC list to start fresh

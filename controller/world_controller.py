@@ -44,20 +44,29 @@ class WorldController:
 
     def move_character(self, keys_pressed):
         x_change = y_change = 0
-        speed = view_cst.TILE_WIDTH // view_cst.MOVEMENT_SPEED  # Calculate speed based on desired tiles per second
 
         if keys_pressed[pygame.K_LEFT]:
             x_change = -view_cst.TILE_WIDTH
+            self.model.character.local_position = (self.model.character.local_position[0] - 1,
+                                                   self.model.character.local_position[1])
         if keys_pressed[pygame.K_RIGHT]:
             x_change = view_cst.TILE_WIDTH
+            self.model.character.local_position = (self.model.character.local_position[0] + 1,
+                                                   self.model.character.local_position[1])
         if keys_pressed[pygame.K_UP]:
             y_change = -view_cst.TILE_HEIGHT
+            self.model.character.local_position = (self.model.character.local_position[0],
+                                                   self.model.character.local_position[1] - 1)
         if keys_pressed[pygame.K_DOWN]:
             y_change = view_cst.TILE_HEIGHT
+            self.model.character.local_position = (self.model.character.local_position[0],
+                                                    self.model.character.local_position[1] + 1)
 
         # Move the character and check boundaries
+        print(f"Character local position is: {self.model.character.local_position}")
         self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
+
     def wrap_character(self):
         is_wrapped = False
         if self.view.character_rect.left < 0:
@@ -81,6 +90,7 @@ class WorldController:
 
         if is_wrapped:
             print(f"Character wrapped to {self.character_global_pos_x}, {self.character_global_pos_y}! Updating local map...")
+            self.model.character.global_position = (self.character_global_pos_x, self.character_global_pos_y)
             self.view.initialize_local_map(self.character_global_pos_x, self.character_global_pos_y)
             self.view.load_entities()
         x, y = self.world_map.get_player_coords()
