@@ -20,9 +20,8 @@ class WorldController:
 
     def run(self):
         clock = pygame.time.Clock()
-
         while True:
-            clock.tick(view_cst.FPS)  # Limit the frame rate
+            clock.tick(view_cst.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -32,8 +31,8 @@ class WorldController:
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
                     else:
-                        #TODO: shouldn't this be in the controller?
                         #TODO: internal workflows and window transitions may be handled in an abstract and generalized way
+                        #TODO: may be better to handle events somewhere else than in the view
                         self.view.handle_dialogue_events(event)
                         self.view.handle_popup_events(event)
                         self.handle_npc_interaction(event.pos, event.button)
@@ -42,7 +41,6 @@ class WorldController:
             keys_pressed = pygame.key.get_pressed()
             self.move_character(keys_pressed)
             self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
-            # self.view.display_popup()
 
     def move_character(self, keys_pressed):
         x_change = y_change = 0
