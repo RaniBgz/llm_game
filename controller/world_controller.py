@@ -88,6 +88,8 @@ class WorldController:
             is_wrapped = True
 
         if is_wrapped:
+            self.view.reset_popup()
+            self.view.reset_dialogue()
             print(f"Character wrapped to {self.model.character.global_position[0]}, {self.model.character.global_position[1]}. Updating local map...")
             self.world_map.add_entity(self.model.character, self.model.character.global_position)
             self.view.initialize_local_map(self.model.character.global_position[0], self.model.character.global_position[1])

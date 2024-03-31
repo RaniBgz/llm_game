@@ -76,6 +76,10 @@ class WorldView:
         # Position the popup window at the bottom of the screen
         self.dialogue_rect = self.dialogue_surface.get_rect(topleft=(10, 3*view_cst.HEIGHT//4-10))
 
+    def reset_dialogue(self):
+        self.dialogue_surface = None
+        self.dialogue_rect = None
+        self.show_dialogue = False
 
     def create_npc_info_box(self, npc, npc_rect):
         #TODO: see how to dynamically adjust the size of the popup window
@@ -106,10 +110,10 @@ class WorldView:
         # Position the popup window next to the NPC
         self.popup_rect = self.popup_surface.get_rect(midleft=(npc_rect.midright[0] + 10, npc_rect.midright[1]))
 
-    def display_popup(self):
-        if self.show_popup:
-            print(f"Displaying popup at {self.popup_rect.topleft}")
-            self.screen.blit(self.popup_surface, self.popup_rect)
+    def reset_popup(self):
+        self.popup_surface = None
+        self.popup_rect = None
+        self.show_popup = False
 
     def handle_popup_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
