@@ -22,7 +22,6 @@ class Game:
     def initialize_world(self):
         self.model.world_map = WorldMap.get_instance()
         self.model.world_map.build_map(20, 20)
-        self.model.world_map.set_player_coords(0, 0)
 
     #TODO: Have a way to lookup quests
     #TODO: add entities_dict back to local map and start linking view with entities

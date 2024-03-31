@@ -15,8 +15,6 @@ class WorldController:
 
         self.local_map = self.world_map.get_local_map_at(self.character_global_pos_x, self.character_global_pos_y)
         self.entities = self.local_map.entities
-        # self.view.load_entities()
-        # self.view.load_entities_dict()
 
     def run(self):
         clock = pygame.time.Clock()
@@ -28,7 +26,7 @@ class WorldController:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
-                        self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
+                        self.model.character.global_position = (self.character_global_pos_x, self.character_global_pos_y)
                         return
                     else:
                         #TODO: internal workflows and window transitions may be handled in an abstract and generalized way
@@ -69,7 +67,6 @@ class WorldController:
 
     def wrap_character(self):
         is_wrapped = False
-        #TODO: Fix local coordinates when switching map
         if self.view.character_rect.left < 0:
             self.view.character_rect.right = view_cst.WIDTH
             self.character_global_pos_x = self.character_global_pos_x - 1
@@ -94,7 +91,6 @@ class WorldController:
         if is_wrapped:
             print(f"Character wrapped to {self.character_global_pos_x}, {self.character_global_pos_y}! Updating local map...")
             self.model.character.global_position = (self.character_global_pos_x, self.character_global_pos_y)
-            self.world_map.set_player_coords(self.model.character.global_position[0], self.model.character.global_position[1])
             self.world_map.add_entity(self.model.character, self.model.character.global_position)
             self.view.initialize_local_map(self.character_global_pos_x, self.character_global_pos_y)
             self.view.load_entities()

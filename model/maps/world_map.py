@@ -39,14 +39,6 @@ class WorldMap():
         local_map = self.map_grid[(x, y)]
         return local_map.entities
 
-
-    def set_player_coords(self, x, y):
-        self.player_x = x
-        self.player_y = y
-
-    def get_player_coords(self):
-        return self.player_x, self.player_y
-
     def add_npc_to_map(self, x, y, npc):
         local_map = self.get_local_map_at(x, y)
         if local_map:
