@@ -10,10 +10,14 @@ class WorldView:
     def __init__(self, screen, global_position):
         self.screen = screen
         self.npcs = []
+
         self.popup_surface = None
         self.popup_rect = None
-        self.popup_text = None
         self.show_popup = False
+
+        self.dialogue_surface = None
+        self.dialogue_rect = None
+        self.show_dialogue = False
 
         self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
@@ -50,7 +54,26 @@ class WorldView:
             npc.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
         self.npcs.append((npc, npc_image, npc_rect))
 
-    def create_popup(self, npc, npc_rect):
+    def create_dialogue_box(self, npc, npc_rect):
+        dialogue_box_width, dialogue_box_height = view_cst.WIDTH - 20, view_cst.HEIGHT//4
+        self.dialogue_surface = pygame.Surface((dialogue_box_width, dialogue_box_height))
+        self.dialogue_surface.fill(view_cst.POPUP_BG_COLOR)
+
+        text = "Test dialogue"
+        self.dialogue_text = pygame.font.SysFont("Arial", 16).render(text, True, view_cst.TEXT_COLOR)
+        self.dialogue_surface.blit(self.dialogue_text, (10, 10))
+
+        # Add a close button
+        close_button_text = pygame.font.SysFont("Arial", 16).render("X", True, view_cst.TEXT_COLOR)
+        close_button_rect = close_button_text.get_rect(topright=(dialogue_box_width - 10, 10))
+        pygame.draw.rect(self.dialogue_surface, view_cst.POPUP_BG_COLOR, close_button_rect, 1)
+        self.dialogue_surface.blit(close_button_text, close_button_rect)
+
+        # Position the popup window at the bottom of the screen
+        self.dialogue_rect = self.dialogue_surface.get_rect(topleft=(10, 3*view_cst.HEIGHT//4-10))
+
+
+    def create_npc_info_box(self, npc, npc_rect):
         #TODO: see how to dynamically adjust the size of the popup window
         popup_width, popup_height = 200, 100
         self.popup_surface = pygame.Surface((popup_width, popup_height))
@@ -58,8 +81,8 @@ class WorldView:
 
         # Add text information about the NPC
         npc_name = f"Name: {npc.name}"
-        self.popup_text = pygame.font.SysFont("Arial", 16).render(npc_name, True, view_cst.TEXT_COLOR)
-        self.popup_surface.blit(self.popup_text, (10, 10))  # Blit the text at (10, 10) on the popup surface
+        npc_name_text = pygame.font.SysFont("Arial", 16).render(npc_name, True, view_cst.TEXT_COLOR)
+        self.popup_surface.blit(npc_name_text, (10, 10))  # Blit the text at (10, 10) on the popup surface
 
         npc_hp = f"HP: {npc.hp}"
         npc_hp_text = pygame.font.SysFont("Arial", 16).render(npc_hp, True, view_cst.TEXT_COLOR)
@@ -92,6 +115,14 @@ class WorldView:
                 if close_button_rect.collidepoint(event.pos):
                     self.show_popup = False
 
+    def handle_dialogue_events(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Check if the close button was clicked
+            if self.dialogue_rect and self.dialogue_rect.collidepoint(event.pos):
+                close_button_rect = pygame.Rect(self.dialogue_rect.topright[0] - 20, self.dialogue_rect.topright[1], 20, 20)
+                if close_button_rect.collidepoint(event.pos):
+                    self.show_dialogue = False
+
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
@@ -103,6 +134,8 @@ class WorldView:
         # Blit the pop-up surface after rendering all other elements
         if self.show_popup:
             self.screen.blit(self.popup_surface, self.popup_rect)
+        if self.show_dialogue:
+            self.screen.blit(self.dialogue_surface, self.dialogue_rect)
         pygame.display.flip()
 
     def display_coordinates(self, x, y):

@@ -51,6 +51,9 @@ class WorldController:
                         self.world_map.set_player_coords(self.character_global_pos_x, self.character_global_pos_y)
                         return
                     else:
+                        #TODO: shouldn't this be in the controller?
+                        #TODO: internal workflows and window transitions may be handled in an abstract and generalized way
+                        self.view.handle_dialogue_events(event)
                         self.view.handle_popup_events(event)
                         self.handle_npc_interaction(event.pos, event.button)
                     pass
@@ -58,7 +61,7 @@ class WorldController:
             keys_pressed = pygame.key.get_pressed()
             self.move_character(keys_pressed)
             self.view.display_world(self.character_global_pos_x, self.character_global_pos_y)
-            self.view.display_popup()
+            # self.view.display_popup()
 
     def move_character(self, keys_pressed):
         x_change = y_change = 0
@@ -112,8 +115,10 @@ class WorldController:
                 if button == pygame.BUTTON_RIGHT:
                     # Right-click on NPC, show popup
                     print("Right-clicked on NPC")
-                    self.view.create_popup(npc, npc_rect)
+                    self.view.create_npc_info_box(npc, npc_rect)
                     self.view.show_popup = True
                 elif button == pygame.BUTTON_LEFT:
+                    self.view.create_dialogue_box(npc, npc_rect)
+                    self.view.show_dialogue = True
                     # Left-click on NPC, perform other actions
                     print(f"Interacting with NPC: {npc.name}")
