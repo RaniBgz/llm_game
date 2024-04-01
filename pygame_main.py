@@ -47,11 +47,11 @@ class Game:
                 quest = self.model.quest_builder.add_talk_to_npc_objective_to_quest(quest, npc.id)
                 self.model.character.add_quest(quest)
                 pass
-            elif quest.name == "Retrieve the Steak":
-                quest.active = True
-                item = self.model.find_item_by_name("Steak")
-                quest = self.model.quest_builder.add_retrieval_objective_to_quest(quest, item.id)
-                self.model.character.add_quest(quest)
+            # elif quest.name == "Retrieve the Steak":
+            #     quest.active = True
+            #     item = self.model.find_item_by_name("Steak")
+            #     quest = self.model.quest_builder.add_retrieval_objective_to_quest(quest, item.id)
+            #     self.model.character.add_quest(quest)
             else:
                 quest.active = False
 

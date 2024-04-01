@@ -31,12 +31,12 @@ class WorldController:
                     else:
                         #TODO: internal workflows and window transitions may be handled in an abstract and generalized way
                         #TODO: may be better to handle events somewhere else than in the view
-                        self.view.handle_dialogue_events(event)
-                        self.view.handle_popup_events(event)
+                        self.view.handle_events(event)
                         self.handle_npc_interaction(event.pos, event.button)
                     pass
 
             keys_pressed = pygame.key.get_pressed()
+
             self.move_character(keys_pressed)
             self.view.display_world(self.model.character.global_position[0],
                                     self.model.character.global_position[1])
@@ -61,8 +61,6 @@ class WorldController:
             self.model.character.local_position = (self.model.character.local_position[0],
                                                     self.model.character.local_position[1] + 1)
 
-        # Move the character and check boundaries
-        # print(f"Character local position is: {self.model.character.local_position}")
         self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
 
@@ -86,7 +84,6 @@ class WorldController:
         elif self.view.character_rect.bottom > view_cst.HEIGHT:
             self.view.character_rect.top = 0
             self.model.character.global_position = (self.model.character.global_position[0], self.model.character.global_position[1] - 1)
-            # self.character_global_pos_y = self.character_global_pos_y - 1
             self.model.character.local_position = (self.model.character.local_position[0], 0)
             is_wrapped = True
 
@@ -107,8 +104,8 @@ class WorldController:
                 if button == pygame.BUTTON_RIGHT:
                     # Right-click on NPC, show popup
                     print("Right-clicked on NPC")
+                    self.view.show_npc_popup = True
                     self.view.create_npc_info_box(npc, npc_rect)
-                    self.view.show_popup = True
                 elif button == pygame.BUTTON_LEFT:
                     if(npc.hostile):
                         print("Left-clicked on hostile NPC")
@@ -126,8 +123,8 @@ class WorldController:
                                             print(f"Quest {quest.id} is now complete")
                     else:
                         print(f"Interacting with NPC: {npc.name}")
-                        self.view.create_dialogue_box(npc, npc_rect)
                         self.view.show_dialogue = True
+                        self.view.create_dialogue_box(npc, "test dialogue")
                         for quest in self.model.character.quests:
                             for objective in quest.objectives:
                                 if isinstance(objective, model.quest.objective.TalkToNPCObjective):
