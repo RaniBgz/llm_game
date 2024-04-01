@@ -110,7 +110,11 @@ def convert_sqlalchemy_npc_to_game_npc(sqlalchemy_npc):
 def convert_sqlalchemy_item_to_game_item(sqlalchemy_item):
     """Converts a SQLAlchemy Item instance to a game model Item instance."""
     # Assuming the game model Item constructor takes an id and character_id
-    return Item(name=sqlalchemy_item.name, description=sqlalchemy_item.description)
+    return Item(name=sqlalchemy_item.name,
+                description=sqlalchemy_item.description,
+                global_position=tuple(map(int, sqlalchemy_item.global_position.split(','))),
+                local_position=tuple(map(int, sqlalchemy_item.local_position.split(','))),
+                sprite=sqlalchemy_item.sprite)
 
 
 def convert_sqlalchemy_quest_to_game_quest(sqlalchemy_quest):

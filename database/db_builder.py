@@ -11,6 +11,7 @@ engine = create_engine('postgresql+psycopg2://rani:ranidb@localhost/llmgame')
 Base = declarative_base()
 
 #TODO: will need methods to update some attributes of an object
+#TODO: How to handle quests and objective. May not need to store objectives since they are instantiated at launch
 
 class Character(Base):
     __tablename__ = 'characters'
@@ -39,6 +40,9 @@ class Item(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
+    global_position = Column(String)  #"x,y"
+    local_position = Column(String)  #"x,y"
+    sprite = Column(String, default="./assets/default.png")
     character_id = Column(Integer, ForeignKey('characters.id'))
 
 class Quest(Base):
@@ -137,12 +141,16 @@ def load_database():
 
     # Add 5 Items
     items = [
-        Item(name="Dagger", description="A common iron dagger", character_id=character.id),
-        # Assuming Item has a character_id but not linked directly to character's inventory
-        Item(name="Shield", description="A common wooden shield", character_id=character.id),
-        Item(name="Health Potion", description="A weak health potion",character_id=character.id),
-        Item(name="Mana Potion", description="A weak mana potion",character_id=character.id),
-        Item(name="Steak", description="Omnomnom", character_id=character.id),
+        Item(name="Dagger", description="A common iron dagger", sprite="./assets/sprites/items/dagger.png", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", character_id=character.id),
+        Item(name="Shield", description="A common wooden shield", sprite="./assets/sprites/items/shield.png", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", character_id=character.id),
+        Item(name="Health Potion", description="A weak health potion", sprite="./assets/sprites/items/health_potion.png", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}",character_id=character.id),
+        Item(name="Mana Potion", description="A weak mana potion", sprite="./assets/sprites/items/mana_potion.png", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}",character_id=character.id),
+        Item(name="Mushroom", description="Good in an omelette", sprite="./assets/sprites/items/mushroom.png", global_position="2,2",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", character_id=character.id),
     ]
     session.add_all(items)
 
@@ -159,10 +167,10 @@ def load_database():
     quest3 = Quest(name="Kill the Skeleton", description="Kill the Skeleton", active=False)
     quest3.objectives.append(KillObjective(target_id=3))
 
-    quest4 = Quest(name="Locate Area (4,4)", description="Location Objective", active=False)
+    quest4 = Quest(name="Locate Area (4,4)", description="Visit the (4,4) area on the map", active=False)
     quest4.objectives.append(LocationObjective(target_location="4,4"))
 
-    quest5 = Quest(name="Retrieve the Steak", description="Retrieval Objective", active=False)
+    quest5 = Quest(name="Retrieve the Steak", description="Retrieve the Steak", active=False)
     quest5.objectives.append(RetrievalObjective(target_item_id=1))
 
     session.add_all([quest0, quest1, quest2, quest3, quest4, quest5])

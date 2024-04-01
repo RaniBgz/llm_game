@@ -21,7 +21,7 @@ class InventoryView:
          # Display items
          y = 50  # Start below the title
          for item in inventory:
-             item_text = self.font.render(f"- {item.name}", True, (0, 0, 0))
+             item_text = self.font.render(f"{item.name}", True, (0, 0, 0))
              self.screen.blit(item_text, (20, y))
              y += 30  # Space between items
 
