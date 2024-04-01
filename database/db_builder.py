@@ -156,13 +156,13 @@ def load_database():
     quest2 = Quest(name="Kill the Goblin", description="Kill the Goblin", active=False)
     quest2.objectives.append(KillObjective(target_id=2))
 
-    quest3 = Quest(name="Kill the Skeleton", description="Kill the Goblin", active=False)
+    quest3 = Quest(name="Kill the Skeleton", description="Kill the Skeleton", active=False)
     quest3.objectives.append(KillObjective(target_id=3))
 
-    quest4 = Quest(name="Locate", description="Location Objective", active=False)
-    quest4.objectives.append(LocationObjective(target_location="13,13"))
+    quest4 = Quest(name="Locate Area (4,4)", description="Location Objective", active=False)
+    quest4.objectives.append(LocationObjective(target_location="4,4"))
 
-    quest5 = Quest(name="Retrieve", description="Retrieval Objective", active=False)
+    quest5 = Quest(name="Retrieve the Steak", description="Retrieval Objective", active=False)
     quest5.objectives.append(RetrievalObjective(target_item_id=1))
 
     session.add_all([quest0, quest1, quest2, quest3, quest4, quest5])

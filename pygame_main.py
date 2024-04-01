@@ -25,16 +25,28 @@ class Game:
     #TODO: Have a way to lookup quests
     #TODO: NPC retrieval by name? Handle multiple NPCs with same name? Subclass NPC?
 
+    #TODO: Test one Objective of each type
+    #TODO: Test a quest with multiple objective
+    #TODO: Standardize UI elements
+    #TODO: Work on dialogue
+
+    #This will possibly become a scenario builder
     def initialize_quests(self):
         quests = retrieve_quests()
         for quest in quests:
             if quest.name == "Kill the Plant":
                 quest.active = True
                 npc = self.model.find_npc_by_name("Plant")
-                quest = self.model.quest_builder.build_kill_quest(quest, npc.id)
+                quest = self.model.quest_builder.add_kill_objective_to_quest(quest, npc.id)
                 print(f"Quest created for npc {npc.id} with name {npc.name}")
                 self.model.character.add_quest(quest)
                 # quest.objectives.append(QuestBuilder.build_kill_objective(1))
+            elif quest.name == "Talk to the Elder":
+                quest.active = True
+                npc = self.model.find_npc_by_name("Elder")
+                quest = self.model.quest_builder.add_talk_to_npc_objective_to_quest(quest, npc.id)
+                self.model.character.add_quest(quest)
+                pass
             else:
                 quest.active = False
 
