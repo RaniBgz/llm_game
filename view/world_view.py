@@ -4,6 +4,7 @@ from view import view_constants as view_cst
 from model.map.world_map import WorldMap
 import model.character
 import model.npc
+import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
 
@@ -12,6 +13,7 @@ class WorldView:
     def __init__(self, screen, global_position):
         self.screen = screen
         self.npcs = []
+        self.items = []
 
         self.show_npc_popup = False
         self.npc_info_box = None
@@ -31,6 +33,7 @@ class WorldView:
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.entities = self.local_map.entities
         self.npcs = []  # Clear the NPC list to start fresh
+        self.items = []
         self.load_entities()
 
     def load_entities(self):
@@ -43,6 +46,9 @@ class WorldView:
                     continue
                 else:
                     self.initialize_npc(entity)
+            if isinstance(entity, model.item.Item):
+                if entity.in_world:
+                    self.initialize_item(entity)
 
     def initialize_character(self, character):
         print(f"Loading Character: {character.name} at {character.local_position}")
@@ -51,6 +57,15 @@ class WorldView:
         self.character_rect = self.character_image.get_rect(center=(
             character.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
             character.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
+
+    def initialize_item(self, item):
+        print(f"Loading Item: {item.name} at {item.local_position}")
+        item_image = pygame.image.load(item.sprite).convert_alpha()
+        item_image = pygame.transform.scale(item_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT//2))
+        item_rect = item_image.get_rect(center=(
+            item.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
+            item.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
+        self.items.append((item, item_image, item_rect))
 
     def initialize_npc(self, npc):
         print(f"Loading NPC: {npc.name} at {npc.local_position}")
@@ -100,8 +115,10 @@ class WorldView:
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.screen.blit(self.character_image, self.character_rect)
-        for i in range(len(self.npcs)):
+        for i in range(len(self.npcs)): #Display NPCs
             self.screen.blit(self.npcs[i][1], self.npcs[i][2])
+        for i in range(len(self.items)): #Display Items
+            self.screen.blit(self.items[i][1], self.items[i][2])
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
         # Blit the pop-up surface after rendering all other elements

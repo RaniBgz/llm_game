@@ -13,7 +13,6 @@ class WorldController:
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.model.character.global_position[0],
                                                          self.model.character.global_position[1])
-        self.entities = self.local_map.entities
 
     def run(self):
         clock = pygame.time.Clock()

@@ -54,6 +54,7 @@ class Scenario:
         #Building Retrieval Quests
         for item in self.game_data.items:
             if item not in self.game_data.character.inventory:
+                item.set_in_world(True)
                 name = f"Retrieve the {item.name}"
                 description = f"Find and Retrieve the {item.name} by left-clicking on it."
                 quest = self.quest_builder.build_retrieval_quest(name, description, item.id)

@@ -32,4 +32,7 @@ class Item(Entity):
     def get_local_y(self):
         return self.local_position[1]
 
+    def set_in_world(self, in_world):
+        self.in_world = in_world
+
 
