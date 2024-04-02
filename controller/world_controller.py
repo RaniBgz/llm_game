@@ -29,8 +29,6 @@ class WorldController:
                                                                 self.model.character.global_position[1])
                         return
                     else:
-                        #TODO: internal workflows and window transitions may be handled in an abstract and generalized way
-                        #TODO: may be better to handle events somewhere else than in the view
                         self.view.handle_events(event)
                         self.handle_npc_interaction(event.pos, event.button)
                     pass

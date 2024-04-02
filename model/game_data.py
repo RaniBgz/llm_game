@@ -2,16 +2,31 @@ from model.map.map import Map
 from model.quest.quest_builder import QuestBuilder
 from model.map.world_map import WorldMap
 
-# Model (This would eventually hold game data and logic)
-
-
-class GameData:  # Placeholder for now
+#TODO: Should the game data take as input a map? (map dimensions for now)
+class GameData:
     def __init__(self):
+        print("GameData initialized")
         self.character = None
         self.world_map = WorldMap.get_instance()
+        self.initialize_world()
         self.quest_builder = QuestBuilder()
         self.npcs = []
         self.items = []
+
+    def initialize_world(self):
+        self.world_map.build_map(20, 20)
+
+    def add_npc(self, npc):
+        self.npcs.append(npc)
+        self.world_map.add_entity(npc, npc.global_position)
+
+    def add_item(self, item):
+        self.items.append(item)
+        self.world_map.add_entity(item, item.global_position)
+
+    def set_character(self, character):
+        self.character = character
+        self.world_map.add_entity(character, character.global_position)
 
     def find_npc_by_id(self, id):
         for npc in self.npcs:
