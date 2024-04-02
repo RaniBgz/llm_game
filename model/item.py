@@ -7,7 +7,7 @@ class Item(Entity):
         super().__init__()
         self.name = name
         self.description = description
-        self.sprite = None
+        self.sprite = sprite
         self.global_position = global_position
         self.local_position = local_position
         self.in_world = False

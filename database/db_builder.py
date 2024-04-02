@@ -11,7 +11,7 @@ engine = create_engine('postgresql+psycopg2://rani:ranidb@localhost/llmgame')
 Base = declarative_base()
 
 #TODO: will need methods to update some attributes of an object
-#TODO: How to handle quests and objective. May not need to store objectives since they are instantiated at launch
+#TODO: How to handle quests and objective. May not need to store objectives since th
 
 class Character(Base):
     __tablename__ = 'characters'
@@ -21,9 +21,6 @@ class Character(Base):
     global_position = Column(String)  #"x,y"
     local_position = Column(String)  #"x,y"
     sprite = Column(String, default="./assets/sprites/character.png")
-    # Relationships
-    inventory = relationship("Item", backref="character")
-    quests = relationship("Quest", backref="character")
 
 class NPC(Base):
     __tablename__ = 'npcs'
@@ -31,7 +28,7 @@ class NPC(Base):
     name = Column(String)
     hp = Column(Integer)
     global_position = Column(String)  #"x,y"
-    local_position = Column(String)  #"x,y"
+    local_position = Column(String)  #"x,y
     sprite = Column(String, default="./assets/default.png")
     hostile = Column(Boolean, default=False)
 
@@ -43,72 +40,6 @@ class Item(Base):
     global_position = Column(String)  #"x,y"
     local_position = Column(String)  #"x,y"
     sprite = Column(String, default="./assets/default.png")
-    character_id = Column(Integer, ForeignKey('characters.id'))
-
-class Quest(Base):
-    __tablename__ = 'quests'
-    id = Column(Integer, primary_key=True)
-    character_id = Column(Integer, ForeignKey('characters.id'))
-    name = Column(String)
-    description = Column(String)
-    active = Column(Boolean)
-    # Relationship with objectives
-    objectives = relationship("Objective", backref="quest")
-
-
-class Objective(Base):
-    __tablename__ = 'objectives'
-    id = Column(Integer, primary_key=True)
-    quest_id = Column(Integer, ForeignKey('quests.id'))  # Foreign key to Quest
-    type = Column(String(50))
-    __mapper_args__ = {
-        'polymorphic_identity': 'objective',
-        'polymorphic_on': type,
-    }
-
-    def check_completion(self, player):
-        raise NotImplementedError("Subclasses must implement check_completion method.")
-
-class KillObjective(Objective):
-    __mapper_args__ = {
-        'polymorphic_identity': 'kill'
-    }
-    target_id = Column(Integer)  # Assuming target ID is an integer
-
-    def check_completion(self, player):
-        # Implementation specific to KillObjective
-        pass
-
-class LocationObjective(Objective):
-    __mapper_args__ = {
-        'polymorphic_identity': 'location'
-    }
-    target_location = Column(String)  # Storing location as a string, but could be more complex
-
-    def check_completion(self, player):
-        # Implementation specific to LocationObjective
-        pass
-
-class RetrievalObjective(Objective):
-    __mapper_args__ = {
-        'polymorphic_identity': 'retrieval'
-    }
-    target_item_id = Column(Integer)  # Assuming item ID is an integer
-
-    def check_completion(self, player):
-        # Implementation specific to RetrievalObjective
-        pass
-
-class TalkToNPCObjective(Objective):
-    __mapper_args__ = {
-        'polymorphic_identity': 'talk_to_npc'
-    }
-    target_npc_id = Column(Integer)  # Assuming item ID is an integer
-
-    def check_completion(self, player):
-        # Implementation specific to RetrievalObjective
-        pass
-
 
 def load_database():
     print(f"Adding instances to the database")
@@ -141,39 +72,18 @@ def load_database():
 
     # Add 5 Items
     items = [
-        Item(name="Dagger", description="A common iron dagger", sprite="./assets/sprites/items/dagger.png", global_position="0,0",
-             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", character_id=character.id),
-        Item(name="Shield", description="A common wooden shield", sprite="./assets/sprites/items/shield.png", global_position="0,0",
-             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", character_id=character.id),
-        Item(name="Health Potion", description="A weak health potion", sprite="./assets/sprites/items/health_potion.png", global_position="0,0",
-             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}",character_id=character.id),
-        Item(name="Mana Potion", description="A weak mana potion", sprite="./assets/sprites/items/mana_potion.png", global_position="0,0",
-             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}",character_id=character.id),
-        Item(name="Mushroom", description="Good in an omelette", sprite="./assets/sprites/items/mushroom.png", global_position="2,2",
-             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", character_id=character.id),
+        Item(name="Dagger", description="A common iron dagger", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/dagger.png"),
+        Item(name="Shield", description="A common wooden shield", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/shield.png"),
+        Item(name="Health Potion", description="A weak health potion", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/health_potion.png"),
+        Item(name="Mana Potion", description="A weak mana potion", global_position="0,0",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/mushroom.png"),
+        Item(name="Mushroom", description="Good in an omelette", global_position="2,2",
+             local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", sprite="./assets/sprites/items/mushroom.png"),
     ]
     session.add_all(items)
-
-    # Add 3 Quests with different Objectives
-    quest0 = Quest(name="Talk to the Elder", description="Talk to the Elder", active=True)
-    quest0.objectives.append(TalkToNPCObjective(target_npc_id=1))
-
-    quest1 = Quest(name="Kill the Plant", description="Kill the Plant", active=False)
-    quest1.objectives.append(KillObjective(target_id=1))
-
-    quest2 = Quest(name="Kill the Goblin", description="Kill the Goblin", active=False)
-    quest2.objectives.append(KillObjective(target_id=2))
-
-    quest3 = Quest(name="Kill the Skeleton", description="Kill the Skeleton", active=False)
-    quest3.objectives.append(KillObjective(target_id=3))
-
-    quest4 = Quest(name="Locate Area (4,4)", description="Visit the (4,4) area on the map", active=False)
-    quest4.objectives.append(LocationObjective(target_location="4,4"))
-
-    quest5 = Quest(name="Retrieve the Steak", description="Retrieve the Steak", active=False)
-    quest5.objectives.append(RetrievalObjective(target_item_id=1))
-
-    session.add_all([quest0, quest1, quest2, quest3, quest4, quest5])
 
     # Commit everything to the database
     session.commit()

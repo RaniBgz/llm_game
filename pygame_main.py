@@ -2,15 +2,8 @@ import pygame
 from view.main_menu_view import MainMenuView
 from controller.main_menu_controller import MainMenuController
 from model.game_data import GameData
-from model.character import Character
-from model.npc import NPC
-from model.item import Item
-from model.quest.quest import Quest
 from model.settings import Settings
 from view import view_constants as view_cst
-from model.map.world_map import WorldMap
-from model.quest.quest_builder import QuestBuilder
-from database.db_retriever import retrieve_characters, retrieve_npcs, retrieve_items, retrieve_quests, retrieve_objectives
 from model.scenario.scenario import Scenario
 
 class Game:
