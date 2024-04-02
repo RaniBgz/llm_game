@@ -2,14 +2,16 @@ import pygame
 from view.ui.popup_box import PopupBox
 from view import view_constants as view_cst
 class NPCInfoBox(PopupBox):
-    def __init__(self, screen, npc, npc_rect):
+
+    def __init__(self, screen):
         width, height = 200, 100
         super().__init__(screen, width, height)
+        self.npc = None
+        self.npc_rect = None
+
+    def create_npc_info(self, npc, npc_rect):
         self.npc = npc
         self.rect.midleft = (npc_rect.midright[0] + 10, npc_rect.midright[1])
-        self.create_npc_info()
-
-    def create_npc_info(self):
         font = pygame.font.SysFont("Arial", 16)
         self.surface.fill(view_cst.POPUP_BG_COLOR)
 

@@ -18,14 +18,9 @@ class WorldView:
         self.npcs = []
         self.items = []
 
-        self.show_npc_popup = False
-        self.npc_info_box = None
-
-        self.show_dialogue = False
-        self.dialogue_box = None
-
-        self.show_item_popup = False
-        self.item_info_box = None
+        self.npc_info_box = NPCInfoBox(screen)
+        self.dialogue_box = DialogueBox(screen)
+        self.item_info_box = ItemInfoBox(screen)
 
         self.character_rect = None
 
@@ -87,45 +82,32 @@ class WorldView:
 
     def create_npc_info_box(self, npc, npc_rect):
         print(f"Creating NPC info box for {npc.name}")
-        self.npc_info_box = NPCInfoBox(self.screen, npc, npc_rect)
+        self.npc_info_box.create_npc_info(npc, npc_rect)
         self.npc_info_box.show = True
 
     def create_dialogue_box(self, npc, dialogue_text):
         print(f"Creating dialogue box for {npc.name}")
-        self.dialogue_box = DialogueBox(self.screen, npc, dialogue_text)
+        self.dialogue_box.create_dialogue(npc, dialogue_text)
         self.dialogue_box.show = True
 
     def create_item_info_box(self, item, item_rect):
         print(f"Creating item info box for {item.name}")
-        self.item_info_box = ItemInfoBox(self.screen, item, item_rect)
+        self.item_info_box.create_item_info(item, item_rect)
         self.item_info_box.show = True
 
     def reset_dialogue(self):
-        self.show_dialogue = False
+        self.dialogue_box.show = False
 
     def reset_npc_popup(self):
-        self.show_npc_popup = False
+        self.npc_info_box.show = False
 
     def reset_item_popup(self):
-        self.show_item_popup = False
-
+        self.item_info_box.show = False
 
     def handle_popup_events(self, event):
-        if self.npc_info_box:
-            if self.npc_info_box.handle_events(event):
-                self.npc_info_box = None
-                self.show_npc_popup = False
-
-        if self.item_info_box:
-            if self.item_info_box.handle_events(event):
-                self.item_info_box = None
-                self.show_item_popup = False
-
-        #TODO: That might be moved somewhere else
-        if self.dialogue_box:
-            if self.dialogue_box.handle_events(event):
-                self.dialogue_box = None
-                self.show_dialogue = False
+        self.npc_info_box.handle_events(event)
+        self.dialogue_box.handle_events(event)
+        self.item_info_box.handle_events(event)
 
     def handle_game_menu_events(self, event):
         return_code = self.game_menu.handle_events(event)
@@ -159,18 +141,9 @@ class WorldView:
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
         self.game_menu.display()
-        # Handling popups
-        if self.show_npc_popup:
-            self.npc_info_box.display()
-            print(f"Displaying NPC info box")
-            # self.screen.blit(self.popup_surface, self.popup_rect)
-        if self.show_dialogue:
-            print(f"Displaying dialogue")
-            self.dialogue_box.display()
-            # self.screen.blit(self.dialogue_surface, self.dialogue_rect)
-        if self.show_item_popup:
-            print(f"Displaying item info box")
-            self.item_info_box.display()
+        self.dialogue_box.display()
+        self.item_info_box.display()
+        self.npc_info_box.display()
         pygame.display.flip()
 
     def display_coordinates(self, x, y):

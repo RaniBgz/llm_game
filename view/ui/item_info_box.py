@@ -4,14 +4,16 @@ from view import view_constants as view_cst
 from view.ui import utils
 
 class ItemInfoBox(PopupBox):
-    def __init__(self, screen, item, item_rect):
+
+    def __init__(self, screen):
         width, height = 200, 100
         super().__init__(screen, width, height)
+        self.item = None
+        self.item_rect = None
+
+    def create_item_info(self, item, item_rect):
         self.item = item
         self.rect.midleft = (item_rect.midright[0] + 10, item_rect.midright[1])
-        self.create_item_info()
-
-    def create_item_info(self):
         font = pygame.font.SysFont("Arial", 16)
         self.surface.fill(view_cst.POPUP_BG_COLOR)
 
@@ -31,15 +33,6 @@ class ItemInfoBox(PopupBox):
                 self.surface.blit(wrapped_line, (10, y))
                 y += wrapped_line.get_height()
 
-        # item_description = f"{self.item.description}"
-        # item_description_text = font.render(item_description, True, view_cst.TEXT_COLOR)
-        # self.surface.blit(item_description_text, (10, 30))
-
         #TODO: Add value to items
-
-        # npc_hostile = "Hostile" if self.npc.hostile else "Friendly"
-        # txt_color = view_cst.RED if self.npc.hostile else view_cst.GREEN
-        # npc_hostile_text = font.render(npc_hostile, True, txt_color)
-        # self.surface.blit(npc_hostile_text, (10, 50))
 
         self.create_close_button(font, view_cst.TEXT_COLOR)

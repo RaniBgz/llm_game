@@ -87,7 +87,7 @@ class WorldController:
 
     def wrap_character(self):
         is_wrapped = False
-        print(f"Character local position: {self.game_data.character.local_position}")
+        # print(f"Character local position: {self.game_data.character.local_position}")
         if self.view.character_rect.left < 0:
             self.view.character_rect.right = view_cst.WIDTH
             self.game_data.character.global_position = (self.game_data.character.global_position[0] - 1, self.game_data.character.global_position[1])
