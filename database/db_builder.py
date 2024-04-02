@@ -80,7 +80,7 @@ def load_database():
              local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/health_potion.png"),
         Item(name="Mana Potion", description="A weak mana potion", global_position="0,0",
              local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", sprite="./assets/sprites/items/mushroom.png"),
-        Item(name="Mushroom", description="Good in an omelette", global_position="2,2",
+        Item(name="Mushroom", description="Good in an omelette", global_position="1,0",
              local_position=f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", sprite="./assets/sprites/items/mushroom.png"),
     ]
     session.add_all(items)

@@ -128,6 +128,16 @@ class WorldView:
                 npc_obj.dead = True
                 break
 
+    def pickup_item(self, item):
+        print(f"Removing item {item.name} from world")
+        print(f"There are {len(self.items)} items in the world")
+        for i, (item_obj, item_image, item_rect) in enumerate(self.items):
+            print(f"Checking item {item_obj.name}")
+            if item_obj == item:
+                self.items.pop(i)
+                item_obj.in_world = False
+                break
+
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
