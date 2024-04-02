@@ -33,16 +33,39 @@ class Scenario:
             if item.global_position == self.game_data.character.global_position:
                 self.game_data.character.add_item_to_inventory(item)
 
-    # def initialize_default_quests(self):
-    #     for npc in self.game_data.npcs:
-    #         if npc.hostile:
-    #             quest = self.quest_builder.build_kill_quest(npc.id)
-    #             self.game_data.character.add_quest(quest)
-    #         elif not npc.hostile:
-    #             quest = self.quest_builder.build_talk_to_npc_quest(npc.id)
-    #             self.game_data.character.add_quest(quest)
-    #
-    #     for
+    #TODO: Handle creation of multi-objective quests
+    def initialize_default_quests(self):
+        for npc in self.game_data.npcs:
+            # Building Kill Quests
+            if npc.hostile:
+                name = f"Kill the {npc.name}"
+                description = f"Find and Kill the {npc.name} by left-clicking on it."
+                quest = self.quest_builder.build_kill_quest(name, description, npc.id)
+                self.game_data.add_quest(quest) #Ading the quest in the general list of quests in the game
+                self.game_data.character.add_quest(quest) #Specifically assigning the quest to the character
+            # Building Talk to NPC Quests
+            elif not npc.hostile:
+                name = f"Talk to the {npc.name}"
+                description = f"Find and Talk to the {npc.name} by left-clicking on it."
+                quest = self.quest_builder.build_talk_to_npc_quest(name, description, npc.id)
+                self.game_data.add_quest(quest)
+                self.game_data.character.add_quest(quest)
+
+        #Building Retrieval Quests
+        for item in self.game_data.items:
+            if item not in self.game_data.character.inventory:
+                name = f"Retrieve the {item.name}"
+                description = f"Find and Retrieve the {item.name} by left-clicking on it."
+                quest = self.quest_builder.build_retrieval_quest(name, description, item.id)
+                self.game_data.add_quest(quest)
+                self.game_data.character.add_quest(quest)
+
+        #Building Location Quest
+        name = f"Go to position (4, 4)"
+        description = f"Explore the map and find the position (4, 4)."
+        quest = self.quest_builder.build_location_quest(name, description, (4, 4))
+        self.game_data.add_quest(quest)
+        self.game_data.character.add_quest(quest)
 
 
     def initialize_entities(self):

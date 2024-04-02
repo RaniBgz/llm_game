@@ -24,6 +24,9 @@ class GameData:
         self.items.append(item)
         self.world_map.add_entity(item, item.global_position)
 
+    def add_quest(self, quest):
+        self.quests.append(quest)
+
     def set_character(self, character):
         self.character = character
         self.world_map.add_entity(character, character.global_position)
