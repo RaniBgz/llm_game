@@ -84,17 +84,55 @@ class WorldController:
             self.model.character.global_position = (self.model.character.global_position[0], self.model.character.global_position[1] - 1)
             self.model.character.local_position = (self.model.character.local_position[0], 0)
             is_wrapped = True
-
+        '''Changing local map'''
         if is_wrapped:
+            #TODO: Check here if the character is visiting an objective location
             self.view.reset_popup()
             self.view.reset_dialogue()
             print(f"Character wrapped to {self.model.character.global_position[0]}, {self.model.character.global_position[1]}. Updating local map...")
             self.world_map.add_entity(self.model.character, self.model.character.global_position)
             self.view.initialize_local_map(self.model.character.global_position[0], self.model.character.global_position[1])
             self.view.load_entities()
+            self.check_location_objective_completion()
         self.local_map = self.world_map.get_local_map_at(self.model.character.global_position[0], self.model.character.global_position[1])
         self.view.local_map = self.local_map
         self.view.display_world(self.model.character.global_position[0], self.model.character.global_position[1])
+
+    def check_location_objective_completion(self):
+        for quest in self.model.character.quests:
+            for objective in quest.objectives:
+                if isinstance(objective, model.quest.objective.LocationObjective):
+                    if objective.target_location == self.model.character.global_position:
+                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
+                        quest.objectives.remove(objective)
+                        if len(quest.objectives) == 0:
+                            quest.completed = True
+                            quest.active = False
+                            print(f"Quest {quest.id} is now complete")
+
+    def check_kill_objective_completion(self, npc):
+        for quest in self.model.character.quests:
+            for objective in quest.objectives:
+                if isinstance(objective, model.quest.objective.KillObjective):
+                    if objective.target_id == npc.id:
+                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
+                        quest.objectives.remove(objective)
+                        if len(quest.objectives) == 0:
+                            quest.completed = True
+                            quest.active = False
+                            print(f"Quest {quest.id} is now complete")
+
+    def check_talk_to_npc_objective_completion(self, npc):
+        for quest in self.model.character.quests:
+            for objective in quest.objectives:
+                if isinstance(objective, model.quest.objective.TalkToNPCObjective):
+                    if objective.target_npc_id == npc.id:
+                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
+                        quest.objectives.remove(objective)
+                        if len(quest.objectives) == 0:
+                            quest.completed = True
+                            quest.active = False
+                            print(f"Quest {quest.id} is now complete")
 
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
@@ -108,30 +146,13 @@ class WorldController:
                     if(npc.hostile):
                         print("Left-clicked on hostile NPC")
                         self.view.kill_npc(npc)
-                        #TODO: Expand and encapsulate this logic in a separate function
-                        for quest in self.model.character.quests:
-                            for objective in quest.objectives:
-                                if isinstance(objective, model.quest.objective.KillObjective):
-                                    if objective.target_id == npc.id:
-                                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                                        quest.objectives.remove(objective)
-                                        if len(quest.objectives) == 0:
-                                            quest.completed = True
-                                            quest.active = False
-                                            print(f"Quest {quest.id} is now complete")
+                        self.check_kill_objective_completion(npc)
+
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.show_dialogue = True
                         self.view.create_dialogue_box(npc, "test dialogue")
-                        for quest in self.model.character.quests:
-                            for objective in quest.objectives:
-                                if isinstance(objective, model.quest.objective.TalkToNPCObjective):
-                                    if objective.target_npc_id == npc.id:
-                                        print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                                        quest.objectives.remove(objective)
-                                        if len(quest.objectives) == 0:
-                                            quest.completed = True
-                                            quest.active = False
-                                            print(f"Quest {quest.id} is now complete")
+                        self.check_talk_to_npc_objective_completion(npc)
+
 
 
