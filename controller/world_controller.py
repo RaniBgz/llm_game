@@ -87,6 +87,7 @@ class WorldController:
 
     def wrap_character(self):
         is_wrapped = False
+        print(f"Character local position: {self.game_data.character.local_position}")
         if self.view.character_rect.left < 0:
             self.view.character_rect.right = view_cst.WIDTH
             self.game_data.character.global_position = (self.game_data.character.global_position[0] - 1, self.game_data.character.global_position[1])
@@ -102,7 +103,7 @@ class WorldController:
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] + 1)
             self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES - 1)
             is_wrapped = True
-        elif self.view.character_rect.bottom > view_cst.HEIGHT:
+        elif self.view.character_rect.bottom > view_cst.HEIGHT-view_cst.MENU_BUTTON_HEIGHT:
             self.view.character_rect.top = 0
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] - 1)
             self.game_data.character.local_position = (self.game_data.character.local_position[0], 0)
