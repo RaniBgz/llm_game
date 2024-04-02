@@ -17,6 +17,7 @@ class MainMenuView:
         self.quit_text = self.quit_font.render("Quit", True, view_cst.TEXT_COLOR)
         self.quit_rect = self.quit_text.get_rect(center=(view_cst.WIDTH / 2, view_cst.HEIGHT / 2 + 50))
 
+
     def display_menu(self):
         self.screen.fill(view_cst.WHITE)
         self.screen.blit(self.title_text, self.title_rect)

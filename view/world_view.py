@@ -8,6 +8,8 @@ import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
 from view.ui.item_info_box import ItemInfoBox
+from view.ui.game_menu import GameMenu
+from view.main_game_view import MainGameView
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
@@ -31,6 +33,9 @@ class WorldView:
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
         self.initialize_local_map(global_position[0], global_position[1])
+
+        self.game_menu = GameMenu(screen, pygame.font.SysFont("Arial", 25))
+
 
     def initialize_local_map(self, x, y):
         print(f"Initializing local map at {x}, {y}")
@@ -105,21 +110,27 @@ class WorldView:
         self.show_item_popup = False
 
 
-    def handle_events(self, event):
+    def handle_popup_events(self, event):
         if self.npc_info_box:
             if self.npc_info_box.handle_events(event):
                 self.npc_info_box = None
                 self.show_npc_popup = False
 
+        if self.item_info_box:
+            if self.item_info_box.handle_events(event):
+                self.item_info_box = None
+                self.show_item_popup = False
+
+        #TODO: That might be moved somewhere else
         if self.dialogue_box:
             if self.dialogue_box.handle_events(event):
                 self.dialogue_box = None
                 self.show_dialogue = False
 
-        if self.item_info_box:
-            if self.item_info_box.handle_events(event):
-                self.item_info_box = None
-                self.show_item_popup = False
+    def handle_game_menu_events(self, event):
+        return_code = self.game_menu.handle_events(event)
+        print("Return code: ", return_code)
+        return return_code
 
     def kill_npc(self, npc):
         for i, (npc_obj, npc_image, npc_rect) in enumerate(self.npcs):
@@ -140,7 +151,6 @@ class WorldView:
 
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
-        self.local_map = WorldMap.get_instance().get_local_map_at(x, y)
         self.screen.blit(self.character_image, self.character_rect)
         for i in range(len(self.npcs)): #Display NPCs
             self.screen.blit(self.npcs[i][1], self.npcs[i][2])
@@ -148,7 +158,8 @@ class WorldView:
             self.screen.blit(self.items[i][1], self.items[i][2])
         self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
-        # Blit the pop-up surface after rendering all other elements
+        self.game_menu.display()
+        # Handling popups
         if self.show_npc_popup:
             self.npc_info_box.display()
             print(f"Displaying NPC info box")

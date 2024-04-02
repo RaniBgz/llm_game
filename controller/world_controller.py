@@ -2,13 +2,18 @@ import sys
 import pygame
 
 import model.quest.objective
-from model.quest.objective import KillObjective
 from view import view_constants as view_cst
 from model.map.world_map import WorldMap
+from view.quest_view import QuestView
+from view.inventory_view import InventoryView
+from view.map_view import MapView
+from controller.quest_controller import QuestController
+from controller.inventory_controller import InventoryController
+from controller.map_controller import MapController
 
 class WorldController:
-    def __init__(self, model, view):
-        self.game_data = model
+    def __init__(self, game_data, view):
+        self.game_data = game_data
         self.view = view
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
@@ -28,7 +33,9 @@ class WorldController:
                                                                     self.game_data.character.global_position[1])
                         return
                     else:
-                        self.view.handle_events(event)
+                        self.view.handle_popup_events(event)
+                        return_code = self.view.handle_game_menu_events(event)
+                        self.open_menu(return_code)
                         self.handle_npc_interaction(event.pos, event.button)
                         self.handle_item_interaction(event.pos, event.button)
                     pass
@@ -38,6 +45,22 @@ class WorldController:
             self.move_character(keys_pressed)
             self.view.display_world(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])
+
+    def open_menu(self, return_code):
+        if return_code == view_cst.QUEST_MENU:
+            quest_view = QuestView(self.view.screen)
+            quest_controller = QuestController(self.game_data, quest_view)
+            quest_controller.run()
+        elif return_code == view_cst.INVENTORY_MENU:
+            inventory_view = InventoryView(self.view.screen)
+            inventory_controller = InventoryController(self.game_data, inventory_view)
+            inventory_controller.run()  # Run the inventory loop
+        elif return_code == view_cst.MAP_MENU:
+            map_view = MapView(self.view.screen)
+            map_controller = MapController(self.game_data, map_view)
+            map_controller.run()
+        else:
+            return
 
     def move_character(self, keys_pressed):
         x_change = y_change = 0
@@ -98,6 +121,7 @@ class WorldController:
         self.view.local_map = self.local_map
         self.view.display_world(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
 
+    #TODO: If moving this away from the World Controller, make sure to pass the parameters needed
     def check_location_objective_completion(self):
         for quest in self.game_data.character.quests:
             for objective in quest.objectives:
@@ -178,4 +202,4 @@ class WorldController:
                     print(f"Interacting with Item: {item.name}")
                     self.view.pickup_item(item)
                     self.game_data.character.inventory.append(item)
-                    # self.check_retrieval_objective_completion(item)
+                    self.check_retrieval_objective_completion(item)

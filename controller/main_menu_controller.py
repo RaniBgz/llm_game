@@ -2,6 +2,8 @@ import sys
 import pygame
 from view.main_game_view import MainGameView
 from controller.main_game_controller import MainGameController
+from view.world_view import WorldView
+from controller.world_controller import WorldController
 
 class MainMenuController:
     def __init__(self, model, view):
@@ -25,7 +27,10 @@ class MainMenuController:
 
     def start_game(self):
         # Transition to the main game
-        game_view = MainGameView(self.view.screen)  # Reuse the screen
-        game_controller = MainGameController(self.model, game_view)
-        game_controller.run()
+        world_view = WorldView(self.view.screen, self.model.character.global_position)
+        world_controller = WorldController(self.model, world_view)
+        world_controller.run()
+        # game_view = MainGameView(self.view.screen)  # Reuse the screen
+        # game_controller = MainGameController(self.model, game_view)
+        # game_controller.run()
         # ... Logic to transition to MainGameController

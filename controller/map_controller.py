@@ -2,8 +2,8 @@ import sys
 import pygame
 
 class MapController:
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, game_data, view):
+        self.game_data = game_data
         self.view = view
 
     def run(self):
