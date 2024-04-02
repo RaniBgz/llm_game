@@ -7,6 +7,7 @@ import model.npc
 import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
+from view.ui.item_info_box import ItemInfoBox
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
@@ -20,6 +21,9 @@ class WorldView:
 
         self.show_dialogue = False
         self.dialogue_box = None
+
+        self.show_item_popup = False
+        self.item_info_box = None
 
         self.character_rect = None
 
@@ -86,11 +90,19 @@ class WorldView:
         self.dialogue_box = DialogueBox(self.screen, npc, dialogue_text)
         self.dialogue_box.show = True
 
+    def create_item_info_box(self, item, item_rect):
+        print(f"Creating item info box for {item.name}")
+        self.item_info_box = ItemInfoBox(self.screen, item, item_rect)
+        self.item_info_box.show = True
+
     def reset_dialogue(self):
         self.show_dialogue = False
 
-    def reset_popup(self):
+    def reset_npc_popup(self):
         self.show_npc_popup = False
+
+    def reset_item_popup(self):
+        self.show_item_popup = False
 
 
     def handle_events(self, event):
@@ -103,6 +115,11 @@ class WorldView:
             if self.dialogue_box.handle_events(event):
                 self.dialogue_box = None
                 self.show_dialogue = False
+
+        if self.item_info_box:
+            if self.item_info_box.handle_events(event):
+                self.item_info_box = None
+                self.show_item_popup = False
 
     def kill_npc(self, npc):
         for i, (npc_obj, npc_image, npc_rect) in enumerate(self.npcs):
@@ -130,6 +147,9 @@ class WorldView:
             print(f"Displaying dialogue")
             self.dialogue_box.display()
             # self.screen.blit(self.dialogue_surface, self.dialogue_rect)
+        if self.show_item_popup:
+            print(f"Displaying item info box")
+            self.item_info_box.display()
         pygame.display.flip()
 
     def display_coordinates(self, x, y):

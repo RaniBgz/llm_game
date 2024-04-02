@@ -37,3 +37,5 @@ class PopupBox:
 
     def set_position(self, position):
         self.rect.topleft = position
+
+    #TODO: will need some work for flexible positioning

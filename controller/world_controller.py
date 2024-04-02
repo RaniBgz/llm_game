@@ -30,6 +30,7 @@ class WorldController:
                     else:
                         self.view.handle_events(event)
                         self.handle_npc_interaction(event.pos, event.button)
+                        self.handle_item_interaction(event.pos, event.button)
                     pass
 
             keys_pressed = pygame.key.get_pressed()
@@ -86,7 +87,8 @@ class WorldController:
         '''Changing local map'''
         if is_wrapped:
             #TODO: Check here if the character is visiting an objective location
-            self.view.reset_popup()
+            self.view.reset_npc_popup()
+            self.view.reset_item_popup()
             self.view.reset_dialogue()
             print(f"Character wrapped to {self.model.character.global_position[0]}, {self.model.character.global_position[1]}. Updating local map...")
             self.world_map.add_entity(self.model.character, self.model.character.global_position)
@@ -153,5 +155,11 @@ class WorldController:
                         self.view.create_dialogue_box(npc, "test dialogue")
                         self.check_talk_to_npc_objective_completion(npc)
 
-
-
+    def handle_item_interaction(self, pos, button):
+        for item, item_image, item_rect in self.view.items:
+            if item_rect.collidepoint(pos):
+                if button == pygame.BUTTON_RIGHT:
+                    # Right-click on Item, show popup
+                    print("Right-clicked on Item")
+                    self.view.show_item_popup = True
+                    self.view.create_item_info_box(item, item_rect)
