@@ -9,7 +9,6 @@ class GameData:
         self.character = None
         self.world_map = WorldMap.get_instance()
         self.initialize_world()
-        self.quest_builder = QuestBuilder()
         self.npcs = []
         self.items = []
 

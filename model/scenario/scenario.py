@@ -2,11 +2,13 @@
 
 from database.db_retriever import retrieve_characters, retrieve_npcs, retrieve_items
 from model.game_data import GameData
+from model.quest.quest_builder import QuestBuilder
 
 class Scenario:
     def __init__(self, name, game_data):
         self.name = name
         self.game_data = game_data
+        self.quest_builder = QuestBuilder()
 
     def build_scenario(self):
         if self.name == "default":
@@ -16,10 +18,13 @@ class Scenario:
 
     def build_default_scenario(self):
         self.initialize_entities()
+        self.initialize_default_quests()
         pass
 
-    def build_quests(self, quest_builder):
+    def build_test_scenario(self):
+        self.initialize_entities()
         pass
+
 
 
     def initialize_entities(self):
@@ -33,6 +38,34 @@ class Scenario:
             self.game_data.add_npc(npc)
         for item in items:
             self.game_data.add_item(item)
+
+    def initialize_default_quests(self):
+        pass
+
+        # self.initialize_quests()
+
+    # def initialize_quests(self):
+    #     quests = retrieve_quests()
+    #     for quest in quests:
+    #         if quest.name == "Kill the Plant":
+    #             quest.active = True
+    #             npc = self.game_data.find_npc_by_name("Plant")
+    #             quest = self.game_data.quest_builder.add_kill_objective_to_quest(quest, npc.id)
+    #             print(f"Quest created for npc {npc.id} with name {npc.name}")
+    #             self.game_data.character.add_quest(quest)
+    #         elif quest.name == "Talk to the Elder":
+    #             quest.active = True
+    #             npc = self.game_data.find_npc_by_name("Elder")
+    #             quest = self.game_data.quest_builder.add_talk_to_npc_objective_to_quest(quest, npc.id)
+    #             self.game_data.character.add_quest(quest)
+    #             pass
+    #         # elif quest.name == "Retrieve the Steak":
+    #         #     quest.active = True
+    #         #     item = self.model.find_item_by_name("Steak")
+    #         #     quest = self.model.quest_builder.add_retrieval_objective_to_quest(quest, item.id)
+    #         #     self.model.character.add_quest(quest)
+    #         else:
+    #             quest.active = False
 
 
 if __name__ == '__main__':
