@@ -7,6 +7,12 @@ class QuestBuilder():
     def __init__(self):
         pass
 
+    def build_kill_quest(self, name, description, target_id, quest_id=None):
+        quest = Quest(name, description)
+        kill_objective = KillObjective(target_id)
+        quest.objectives.append(kill_objective)
+        return quest
+
     def add_kill_objective_to_quest(self, quest, target_id):
         kill_objective = KillObjective(target_id)
         quest.objectives.append(kill_objective)

@@ -16,8 +16,10 @@ class Scenario:
         elif self.name == "test":
             self.build_test_scenario()
 
+    #TODO: In the future, a scenario could be built from a file.
     def build_default_scenario(self):
         self.initialize_entities()
+        self.initialize_default_inventory()
         self.initialize_default_quests()
         pass
 
@@ -25,6 +27,22 @@ class Scenario:
         self.initialize_entities()
         pass
 
+    #TODO: For now, inventory is determined by the position of the items in the DB. In the future it could be determined by the scenario
+    def initialize_default_inventory(self):
+        for item in self.game_data.items:
+            if item.global_position == self.game_data.character.global_position:
+                self.game_data.character.add_item_to_inventory(item)
+
+    # def initialize_default_quests(self):
+    #     for npc in self.game_data.npcs:
+    #         if npc.hostile:
+    #             quest = self.quest_builder.build_kill_quest(npc.id)
+    #             self.game_data.character.add_quest(quest)
+    #         elif not npc.hostile:
+    #             quest = self.quest_builder.build_talk_to_npc_quest(npc.id)
+    #             self.game_data.character.add_quest(quest)
+    #
+    #     for
 
 
     def initialize_entities(self):
@@ -38,9 +56,6 @@ class Scenario:
             self.game_data.add_npc(npc)
         for item in items:
             self.game_data.add_item(item)
-
-    def initialize_default_quests(self):
-        pass
 
         # self.initialize_quests()
 

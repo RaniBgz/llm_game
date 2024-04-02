@@ -11,6 +11,7 @@ class GameData:
         self.initialize_world()
         self.npcs = []
         self.items = []
+        self.quests = []
 
     def initialize_world(self):
         self.world_map.build_map(20, 20)
@@ -49,4 +50,16 @@ class GameData:
         for item in self.items:
             if item.name == name:
                 return item
+        return None
+
+    def find_quest_by_id(self, id):
+        for quest in self.quests:
+            if quest.id == id:
+                return quest
+        return None
+
+    def find_quest_by_name(self, name):
+        for quest in self.quests:
+            if quest.name == name:
+                return quest
         return None
