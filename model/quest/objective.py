@@ -1,8 +1,10 @@
 import uuid
 
 class Objective:
-    def __init__(self):
+    def __init__(self, name, description):
         self.id = uuid.uuid4()
+        self.name = name
+        self.description = description
         pass
 
     def check_completion(self, player):
@@ -10,8 +12,8 @@ class Objective:
 
 
 class KillObjective(Objective):
-    def __init__(self, target_id):
-        super().__init__()
+    def __init__(self, name, description, target_id):
+        super().__init__(name, description)
         self.target_id = target_id
 
     def check_completion(self):
@@ -21,8 +23,8 @@ class KillObjective(Objective):
 
 
 class LocationObjective(Objective):
-    def __init__(self, target_location):
-        super().__init__()
+    def __init__(self, name, description, target_location):
+        super().__init__(name, description)
         self.target_location = target_location
 
     def check_completion(self, player):
@@ -31,8 +33,8 @@ class LocationObjective(Objective):
 
 
 class RetrievalObjective(Objective):
-    def __init__(self, target_item_id):
-        super().__init__()
+    def __init__(self, name, description, target_item_id):
+        super().__init__(name, description)
         self.target_item_id = target_item_id
 
     def check_completion(self, player):
@@ -40,8 +42,8 @@ class RetrievalObjective(Objective):
         pass
 
 class TalkToNPCObjective(Objective):
-    def __init__(self, target_npc_id):
-        super().__init__()
+    def __init__(self, name, description, target_npc_id):
+        super().__init__(name, description)
         self.target_npc_id = target_npc_id
 
     def check_completion(self, player):

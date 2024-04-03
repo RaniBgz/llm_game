@@ -10,8 +10,8 @@ class Game:
     def __init__(self, screen_width, screen_height):
         self.screen = None  # Initialize screen later in setup
         self.game_data = GameData() #Initializes GameData and WorldMap. Builds World Map
-        # self.scenario = Scenario("default", self.game_data)
-        self.scenario = Scenario("complex_quest", self.game_data)
+        self.scenario = Scenario("default", self.game_data)
+        # self.scenario = Scenario("complex_quest", self.game_data)
         self.settings = Settings(screen_width, screen_height)
 
     #TODO: Build default scenario
