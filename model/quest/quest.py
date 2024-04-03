@@ -31,7 +31,11 @@ class Quest:
                 self.current_objective += 1
 
     def check_all_objectives_completed(self):
-        return all(objective.completed for objective in self.objectives)
+        for objective in self.objectives:
+            if not objective.completed:
+                return False
+        self.completed = True
+        return True
 
     def add_objective(self, objective):
         self.objectives.append(objective)
