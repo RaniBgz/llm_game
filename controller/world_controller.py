@@ -41,7 +41,6 @@ class WorldController:
                     pass
 
             keys_pressed = pygame.key.get_pressed()
-
             self.move_character(keys_pressed)
             self.view.display_world(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])

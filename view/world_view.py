@@ -133,12 +133,12 @@ class WorldView:
 
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
+        self.screen.blit(self.back_button_text, self.back_button_rect)
         self.screen.blit(self.character_image, self.character_rect)
         for i in range(len(self.npcs)): #Display NPCs
             self.screen.blit(self.npcs[i][1], self.npcs[i][2])
         for i in range(len(self.items)): #Display Items
             self.screen.blit(self.items[i][1], self.items[i][2])
-        self.screen.blit(self.back_button_text, self.back_button_rect)
         self.display_coordinates(x, y)
         self.game_menu.display()
         self.dialogue_box.display()

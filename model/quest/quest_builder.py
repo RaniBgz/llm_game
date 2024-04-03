@@ -47,3 +47,8 @@ class QuestBuilder():
         location_objective = LocationObjective(target_location)
         quest.objectives.append(location_objective)
         return quest
+
+    def add_retrieval_objective_to_quest(self, quest, target_item_id):
+        retrieval_objective = RetrievalObjective(target_item_id)
+        quest.objectives.append(retrieval_objective)
+        return quest

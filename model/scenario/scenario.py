@@ -13,6 +13,11 @@ class Scenario:
     def build_scenario(self):
         if self.name == "default":
             self.build_default_scenario()
+        elif self.name == "complex_quest":
+            self.build_complex_quest_scenario()
+        elif self.name == "ordered_quest":
+            pass
+            # self.build_ordered_quest_scenario()
         elif self.name == "test":
             self.build_test_scenario()
 
@@ -20,7 +25,15 @@ class Scenario:
     def build_default_scenario(self):
         self.initialize_entities()
         self.initialize_default_inventory()
+        self.initialize_items_in_world()
         self.initialize_default_quests()
+        pass
+
+    def build_complex_quest_scenario(self):
+        self.initialize_entities()
+        self.initialize_default_inventory()
+        self.initialize_items_in_world()
+        self.initialize_complex_quest()
         pass
 
     def build_test_scenario(self):
@@ -32,6 +45,29 @@ class Scenario:
         for item in self.game_data.items:
             if item.global_position == self.game_data.character.global_position:
                 self.game_data.character.add_item_to_inventory(item)
+
+    def initialize_items_in_world(self):
+        for item in self.game_data.items:
+            if item not in self.game_data.character.inventory:
+                item.set_in_world(True) #Items are in the world if they are not in the inventory
+
+    def initialize_complex_quest(self):
+        '''Initializing a quest with several steps'''
+        npc = self.game_data.find_npc_by_name("Elder")
+        goblin = self.game_data.find_npc_by_name("Goblin")
+        skeleton = self.game_data.find_npc_by_name("Skeleton")
+        position = (2,2)
+        mushroom = self.game_data.find_item_by_name("Mushroom")
+        name = f"Initiation Quest"
+        description = f"Talk to the Elder to start your journey."
+        quest = self.quest_builder.build_talk_to_npc_quest(name, description, npc.id)
+        self.quest_builder.add_kill_objective_to_quest(quest, goblin.id)
+        self.quest_builder.add_kill_objective_to_quest(quest, skeleton.id)
+        self.quest_builder.add_retrieval_objective_to_quest(quest, mushroom.id)
+        self.quest_builder.add_location_objective_to_quest(quest, position)
+        self.game_data.add_quest(quest)
+        self.game_data.character.add_quest(quest)
+
 
     #TODO: Handle creation of multi-objective quests
     def initialize_default_quests(self):
@@ -54,7 +90,6 @@ class Scenario:
         #Building Retrieval Quests
         for item in self.game_data.items:
             if item not in self.game_data.character.inventory:
-                item.set_in_world(True)
                 name = f"Retrieve the {item.name}"
                 description = f"Find and Retrieve the {item.name} by left-clicking on it."
                 quest = self.quest_builder.build_retrieval_quest(name, description, item.id)
@@ -80,31 +115,6 @@ class Scenario:
             self.game_data.add_npc(npc)
         for item in items:
             self.game_data.add_item(item)
-
-        # self.initialize_quests()
-
-    # def initialize_quests(self):
-    #     quests = retrieve_quests()
-    #     for quest in quests:
-    #         if quest.name == "Kill the Plant":
-    #             quest.active = True
-    #             npc = self.game_data.find_npc_by_name("Plant")
-    #             quest = self.game_data.quest_builder.add_kill_objective_to_quest(quest, npc.id)
-    #             print(f"Quest created for npc {npc.id} with name {npc.name}")
-    #             self.game_data.character.add_quest(quest)
-    #         elif quest.name == "Talk to the Elder":
-    #             quest.active = True
-    #             npc = self.game_data.find_npc_by_name("Elder")
-    #             quest = self.game_data.quest_builder.add_talk_to_npc_objective_to_quest(quest, npc.id)
-    #             self.game_data.character.add_quest(quest)
-    #             pass
-    #         # elif quest.name == "Retrieve the Steak":
-    #         #     quest.active = True
-    #         #     item = self.model.find_item_by_name("Steak")
-    #         #     quest = self.model.quest_builder.add_retrieval_objective_to_quest(quest, item.id)
-    #         #     self.model.character.add_quest(quest)
-    #         else:
-    #             quest.active = False
 
 
 if __name__ == '__main__':
