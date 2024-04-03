@@ -66,3 +66,26 @@ class GameData:
             if quest.name == name:
                 return quest
         return None
+
+    def respawn_mobs(self):
+        for npc in self.npcs:
+            if npc.hostile:
+                if npc.dead:
+                    npc.respawn()
+    def respawn_npcs(self):
+        #To be implemented, for now, friendly npcs can't be killed
+        pass
+
+    def reset_quests(self):
+        print(f"Len quests: {len(self.quests)}")
+        for quest in self.quests:
+            for objective in quest.objectives:
+                objective.set_not_completed()
+            quest.set_not_completed()
+
+    def reset_items(self):
+        for item in self.items:
+            item.reset_item()
+            if item.in_world:
+                self.character.remove_item_from_inventory(item)
+                self.world_map.add_entity(item, item.global_position)

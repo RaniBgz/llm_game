@@ -26,7 +26,9 @@ class SettingsView:
 
         # Buttons
         self.buttons = []
+        self.selected_button_index = None
         self.create_buttons()
+        self.button_clicked = False
 
     def create_buttons(self):
         button_width = view_cst.WIDTH // 3  # Fixed width for all buttons
@@ -53,8 +55,47 @@ class SettingsView:
         self.screen.blit(self.title_text, self.title_rect)
         self.screen.blit(self.back_button_text, self.back_button_rect)
 
-        for button in self.buttons:
-            self.screen.blit(button[0], button[1])
-            self.screen.blit(button[2], button[3])
+        for i, button in enumerate(self.buttons):
+            button_surface, button_rect, text, text_rect = button
+            if i == self.selected_button_index:
+                button_surface.fill(self.button_hover_color)
+            else:
+                button_surface.fill(self.button_color)
+            pygame.draw.rect(button_surface, self.button_border_color, button_surface.get_rect(), self.button_border_width)
+            self.screen.blit(button_surface, button_rect)
+            self.screen.blit(text, text_rect)
 
         pygame.display.flip()
+
+    def handle_events(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            clicked_button = self.handle_button_click(event)
+            return clicked_button
+        elif event.type == pygame.MOUSEBUTTONUP:
+            self.reset_selected_button()
+
+    def handle_button_click(self, event):
+        if self.back_button_rect.collidepoint(event.pos):
+            self.selected_button_index = None
+            self.button_clicked = False
+        else:
+            for i, button in enumerate(self.buttons):
+                _, button_rect, _, _ = button
+                if button_rect.collidepoint(event.pos):
+                    self.selected_button_index = i
+                    print(f"Selected button index: {self.selected_button_index}")
+                    self.button_clicked = True
+                    return self.selected_button_index
+                    # break
+            else:
+                self.selected_button_index = None
+                self.button_clicked = False
+
+    def is_button_clicked(self):
+        return self.button_clicked
+
+    def reset_selected_button(self):
+        self.selected_button_index = None
+
+    def get_selected_button_index(self):
+        return self.selected_button_index

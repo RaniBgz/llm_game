@@ -48,3 +48,11 @@ class Quest:
 
     def set_inactive(self):
         self.active = False
+
+    def set_completed(self):
+        self.completed = True
+
+    def set_not_completed(self):
+        self.completed = False
+        if self.ordered:
+            self.current_objective = 0

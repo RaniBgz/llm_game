@@ -23,7 +23,6 @@ class Character(Entity):
         if item in self.inventory:
             self.inventory.remove(item)
 
-
     def add_quest(self, quest):
         self.quests.append(quest)
 

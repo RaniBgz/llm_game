@@ -1,8 +1,8 @@
 import pygame, sys
 
 class SettingsController:
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, game_data, view):
+        self.game_data = game_data
         self.view = view
 
     def run(self):
@@ -14,21 +14,29 @@ class SettingsController:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
                         return
-                    elif self.view.respawn_mobs_button_rect.collidepoint(event.pos):
-                        self.handle_respawn_mobs()
-                    elif self.view.reset_quests_button_rect.collidepoint(event.pos):
-                        self.handle_reset_quests()
-                    elif self.view.reset_items_button_rect.collidepoint(event.pos):
-                        self.handle_reset_items()
-
+                    else:
+                        button_index = self.view.handle_events(event)
+                        if button_index is not None:
+                            self.handle_selected_button(button_index)
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    self.view.reset_selected_button()
                 self.view.display_settings()
 
+    def handle_selected_button(self, button_index):
+        print(f"Selected button index: {button_index}")
+        if button_index == 0:  # Respawn Mobs
+            print(f"Clicked respawn mobs button")
+            self.handle_respawn_mobs()
+        elif button_index == 1:  # Reset Quests
+            self.handle_reset_quests()
+        elif button_index == 2:  # Reset Items
+            self.handle_reset_items()
+
     def handle_respawn_mobs(self):
-        # Add logic to respawn mobs
-        pass
+        self.game_data.respawn_mobs()
 
     def handle_reset_quests(self):
-        # Add logic to reset quests
+        self.game_data.reset_quests()
         pass
 
     def handle_reset_items(self):

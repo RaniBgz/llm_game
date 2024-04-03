@@ -23,3 +23,6 @@ class NPC(Entity):
 
     def set_sprite(self, sprite):
         self.sprite = sprite
+
+    def respawn(self):
+        self.dead = False
