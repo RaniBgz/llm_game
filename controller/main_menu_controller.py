@@ -30,7 +30,3 @@ class MainMenuController:
         world_view = WorldView(self.view.screen, self.model.character.global_position)
         world_controller = WorldController(self.model, world_view)
         world_controller.run()
-        # game_view = MainGameView(self.view.screen)  # Reuse the screen
-        # game_controller = MainGameController(self.model, game_view)
-        # game_controller.run()
-        # ... Logic to transition to MainGameController

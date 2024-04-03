@@ -35,3 +35,4 @@ MOVEMENT_SPEED = 10
 QUEST_MENU = "quests"
 INVENTORY_MENU = "inventory"
 MAP_MENU = "map"
+SETTINGS_MENU = "settings"

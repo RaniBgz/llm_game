@@ -7,9 +7,11 @@ from model.map.world_map import WorldMap
 from view.quest_view import QuestView
 from view.inventory_view import InventoryView
 from view.map_view import MapView
+from view.settings_view import SettingsView
 from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
+from controller.settings_controller import SettingsController
 
 class WorldController:
     def __init__(self, game_data, view):
@@ -58,6 +60,10 @@ class WorldController:
             map_view = MapView(self.view.screen)
             map_controller = MapController(self.game_data, map_view)
             map_controller.run()
+        elif return_code == view_cst.SETTINGS_MENU:
+            settings_view = SettingsView(self.view.screen)
+            settings_controller = SettingsController(self.game_data, settings_view)
+            settings_controller.run()
         else:
             return
 
