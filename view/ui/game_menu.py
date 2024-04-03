@@ -14,7 +14,8 @@ class GameMenu:
         self.menu_items = [
             "Quests",
             "Inventory",
-            "Map"
+            "Map",
+            "Settings"
         ]
         self.create_menu_buttons()
 

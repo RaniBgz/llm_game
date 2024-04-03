@@ -1,35 +1,22 @@
+import abc
 import pygame
 from view import view_constants as view_cst
 
-class PopupBox:
+class PopupBox(abc.ABC):
     def __init__(self, screen, width, height):
+        print(f"In popup constructor")
         self.screen = screen
         self.width = width
         self.height = height
         self.surface = pygame.Surface((width, height))
         self.rect = self.surface.get_rect()
-        self.create_close_button(pygame.font.SysFont("Arial", 16), view_cst.TEXT_COLOR)
+        self.exit_font = pygame.font.SysFont("Arial", 32)
+        # self.close_button_rect = None
         self.show = False
 
-    def create_close_button(self, font, color):
-        close_button_text = font.render("X", True, color)
-        close_button_rect = close_button_text.get_rect(topright=(self.width - 10, 10))
-        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, close_button_rect, 1)
-        self.surface.blit(close_button_text, close_button_rect)
-        return close_button_rect
-
+    @abc.abstractmethod
     def handle_events(self, event):
-        print(f"Handling events for {self.__class__.__name__}")
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                print(f"Popup box clicked at {event.pos}")
-                close_button_rect = pygame.Rect(self.rect.topright[0] - 20, self.rect.topright[1], 20, 20)
-                # close_button_rect = self.create_close_button(pygame.font.SysFont("Arial", 16), view_cst.TEXT_COLOR)
-                if close_button_rect.collidepoint(event.pos):
-                    self.show = False
-                    return True
-        return False
-
+        pass
 
     def display(self):
         if self.show:
@@ -37,5 +24,3 @@ class PopupBox:
 
     def set_position(self, position):
         self.rect.topleft = position
-
-    #TODO: will need some work for flexible positioning
