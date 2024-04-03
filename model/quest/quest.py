@@ -11,13 +11,36 @@ class Quest:
         self.active = active
         self.completed = completed
         if ordered:
-            current_objective = 0
+            self.current_objective = 0
         else:
-            current_objective = -1
+            self.current_objective = -1
         self.objectives = []
 
-    def set_active(self, active):
-        self.active = active
+    def get_current_objective(self):
+        if self.ordered:
+            return self.objectives[self.current_objective]
+        else:
+            return self.objectives[0]
+
+    def point_to_next_objective(self):
+        if self.ordered:
+            if self.current_objective == len(self.objectives)-1:
+                self.completed = True
+                return False
+            else:
+                self.current_objective += 1
+
+    def check_all_objectives_completed(self):
+        return all(objective.completed for objective in self.objectives)
+
+    def add_objective(self, objective):
+        self.objectives.append(objective)
+
+    def remove_objective(self, objective):
+        self.objectives.remove(objective)
+
+    def set_active(self):
+        self.active = True
 
     def set_inactive(self):
         self.active = False

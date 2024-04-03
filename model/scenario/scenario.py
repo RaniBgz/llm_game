@@ -70,14 +70,14 @@ class Scenario:
         quest = self.quest_builder.initialize_ordered_quest(name, description)
         self.quest_builder.add_talk_to_npc_objective_to_quest(
             "Talk to the Elder", "Left click on the Elder", quest, npc.id)
-        self.quest_builder.add_kill_objective_to_quest(
-            "Kill the Goblin", "Left click on the Goblin", quest, goblin.id)
+        # self.quest_builder.add_kill_objective_to_quest(
+        #     "Kill the Goblin", "Left click on the Goblin", quest, goblin.id)
         self.quest_builder.add_kill_objective_to_quest(
             "Kill the Skeleton", "Left click on the Skeleton",quest, skeleton.id)
-        self.quest_builder.add_retrieval_objective_to_quest(
-            "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
+        # self.quest_builder.add_retrieval_objective_to_quest(
+        #     "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
         self.quest_builder.add_location_objective_to_quest(
-            "Visit the position (4,4)", "Use the coordinates in the top left, and reach position (4,4) on the map", quest, position)
+            "Visit the position (2,2)", "Use the coordinates in the top left, and reach position (2,2) on the map", quest, position)
         self.game_data.add_quest(quest)
         self.game_data.character.add_quest(quest)
 
@@ -93,14 +93,14 @@ class Scenario:
         quest = self.quest_builder.initialize_unordered_quest(name, description)
         self.quest_builder.add_talk_to_npc_objective_to_quest(
             "Talk to the Elder", "Left click on the Elder", quest, npc.id)
-        self.quest_builder.add_kill_objective_to_quest(
-            "Kill the Goblin", "Left click on the Goblin", quest, goblin.id)
+        # self.quest_builder.add_kill_objective_to_quest(
+        #     "Kill the Goblin", "Left click on the Goblin", quest, goblin.id)
         self.quest_builder.add_kill_objective_to_quest(
             "Kill the Skeleton", "Left click on the Skeleton",quest, skeleton.id)
-        self.quest_builder.add_retrieval_objective_to_quest(
-            "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
+        # self.quest_builder.add_retrieval_objective_to_quest(
+        #     "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
         self.quest_builder.add_location_objective_to_quest(
-            "Visit the position (4,4)", "Use the coordinates in the top left, and reach position (4,4) on the map", quest, position)
+            "Visit the position (2,2)", "Use the coordinates in the top left, and reach position (2,2) on the map", quest, position)
         self.game_data.add_quest(quest)
         self.game_data.character.add_quest(quest)
 
