@@ -39,6 +39,7 @@ class Item(Entity):
         self.in_world = in_world
 
     def reset_item(self):
+        print(f"Initial state: {self.initial_state}")
         self.global_position = self.initial_state["global_position"]
         self.local_position = self.initial_state["local_position"]
         self.in_world = self.initial_state["in_world"]

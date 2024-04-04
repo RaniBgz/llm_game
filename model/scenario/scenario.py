@@ -18,6 +18,8 @@ class Scenario:
         elif self.name == "ordered_quest":
             self.build_ordered_quest_scenario()
             # self.build_ordered_quest_scenario()
+        elif self.name == "multiple_quests":
+            self.build_multiple_quests_scenario()
         elif self.name == "test":
             self.build_test_scenario()
 
@@ -43,6 +45,15 @@ class Scenario:
         self.initialize_ordered_quest()
         pass
 
+    def build_multiple_quests_scenario(self):
+        self.initialize_entities()
+        self.initialize_default_inventory()
+        self.initialize_items_in_world()
+        self.initialize_simple_quest()
+        self.initialize_complex_quest()
+        self.initialize_ordered_quest()
+        pass
+
     def build_test_scenario(self):
         self.initialize_entities()
         pass
@@ -63,7 +74,7 @@ class Scenario:
         npc = self.game_data.find_npc_by_name("Elder")
         goblin = self.game_data.find_npc_by_name("Goblin")
         skeleton = self.game_data.find_npc_by_name("Skeleton")
-        position = (2,2)
+        position = (1,1)
         mushroom = self.game_data.find_item_by_name("Mushroom")
         name = f"Ordered Initiation Quest"
         description = f"Go through the initiation quest to prove your worth."
@@ -77,7 +88,7 @@ class Scenario:
         # self.quest_builder.add_retrieval_objective_to_quest(
         #     "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
         self.quest_builder.add_location_objective_to_quest(
-            "Visit the position (2,2)", "Use the coordinates in the top left, and reach position (2,2) on the map", quest, position)
+            "Visit the position (1,1)", "Use the coordinates in the top left, and reach position (1,1) on the map", quest, position)
         self.game_data.add_quest(quest)
         self.game_data.character.add_quest(quest)
 
@@ -86,7 +97,7 @@ class Scenario:
         npc = self.game_data.find_npc_by_name("Elder")
         goblin = self.game_data.find_npc_by_name("Goblin")
         skeleton = self.game_data.find_npc_by_name("Skeleton")
-        position = (2,2)
+        position = (1,1)
         mushroom = self.game_data.find_item_by_name("Mushroom")
         name = f"Unordered Initiation Quest"
         description = f"Talk to the Elder to start your journey."
@@ -100,10 +111,18 @@ class Scenario:
         # self.quest_builder.add_retrieval_objective_to_quest(
         #     "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
         self.quest_builder.add_location_objective_to_quest(
-            "Visit the position (2,2)", "Use the coordinates in the top left, and reach position (2,2) on the map", quest, position)
+            "Visit the position (1,1)", "Use the coordinates in the top left, and reach position (1,1) on the map", quest, position)
         self.game_data.add_quest(quest)
         self.game_data.character.add_quest(quest)
 
+    def initialize_simple_quest(self):
+        '''Initializing a simple quest'''
+        goblin = self.game_data.find_npc_by_name("Goblin")
+        name = f"KIll the Goblin"
+        description = f"Locate and kill the Goblin by left-clicking on it."
+        quest = self.quest_builder.build_kill_quest(name, description, goblin.id)
+        self.game_data.add_quest(quest)
+        self.game_data.character.add_quest(quest)
 
     #TODO: Handle creation of multi-objective quests
     def initialize_default_quests(self):

@@ -40,5 +40,6 @@ class SettingsController:
         pass
 
     def handle_reset_items(self):
+        self.game_data.reset_items()
         # Add logic to reset items
         pass
