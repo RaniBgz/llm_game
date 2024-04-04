@@ -118,7 +118,7 @@ class Scenario:
     def initialize_simple_quest(self):
         '''Initializing a simple quest'''
         goblin = self.game_data.find_npc_by_name("Goblin")
-        name = f"KIll the Goblin"
+        name = f"Kill the Goblin"
         description = f"Locate and kill the Goblin by left-clicking on it."
         quest = self.quest_builder.build_kill_quest(name, description, goblin.id)
         self.game_data.add_quest(quest)

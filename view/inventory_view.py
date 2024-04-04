@@ -7,7 +7,8 @@ class InventoryView:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont("Arial", 20)
-        self.exit_button_text = self.font.render("X", True, view_cst.TEXT_COLOR)
+        self.exit_font = pygame.font.SysFont("Arial", 30)
+        self.exit_button_text = self.exit_font.render("X", True, view_cst.TEXT_COLOR)
         self.exit_button_rect = self.exit_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))  # Top right corner
 
     def display_inventory(self, inventory):

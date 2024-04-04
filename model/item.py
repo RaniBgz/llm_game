@@ -3,7 +3,7 @@ from model.entity import Entity
 default_sprite = "./assets/default.png"
 
 class Item(Entity):
-    def __init__(self, name, description, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), in_world=False,):
+    def __init__(self, name, description, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), in_world=False):
         super().__init__()
         self.name = name
         self.description = description
@@ -13,7 +13,7 @@ class Item(Entity):
                               "in_world": in_world}
         self.global_position = global_position
         self.local_position = local_position
-        self.in_world = False
+        self.in_world = in_world
 
     '''Setters for global and local positions of the item.'''
     def set_global_position(self, x, y):

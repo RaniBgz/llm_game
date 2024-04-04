@@ -9,7 +9,8 @@ class MapView:
         self.screen = screen
         self.map_image = pygame.image.load(map_path).convert_alpha()
         self.map_image = pygame.transform.scale(self.map_image, (view_cst.WIDTH, view_cst.HEIGHT))
-        self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
+        self.exit_font = pygame.font.SysFont("Arial", 30)
+        self.back_button_text = self.exit_font.render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
     def display_map(self):

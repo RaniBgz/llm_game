@@ -6,7 +6,7 @@ class MainMenuView:
     def __init__(self, screen):
         self.screen = screen
         self.title_font = pygame.font.SysFont("Arial", 50)
-        self.title_text = self.title_font.render("Chronicles of the Lost Empire: The Return of The Wizard", True, view_cst.TEXT_COLOR)
+        self.title_text = self.title_font.render("Game Title", True, view_cst.TEXT_COLOR)
         self.title_rect = self.title_text.get_rect(center=(view_cst.WIDTH / 2, view_cst.HEIGHT / 4))
 
         self.play_font = pygame.font.SysFont("Arial", 30)

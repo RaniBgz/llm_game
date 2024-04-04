@@ -24,7 +24,8 @@ class WorldView:
 
         self.character_rect = None
 
-        self.back_button_text = pygame.font.SysFont("Arial", 20).render("Back", True, view_cst.TEXT_COLOR)
+        self.exit_font = pygame.font.SysFont("Arial", 30)
+        self.back_button_text = self.exit_font.render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
         self.initialize_local_map(global_position[0], global_position[1])
