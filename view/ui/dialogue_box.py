@@ -10,9 +10,10 @@ class DialogueBox(PopupBox):
         self.exit_font = pygame.font.SysFont("Arial", 32)
         self.button_font = pygame.font.SysFont("Arial", 24)
 
-    def create_dialogue(self, npc, dialogue_text, dialogue_index, total_dialogues):
+    def create_dialogue(self, dialogue_text, dialogue_index, total_dialogues):
         self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
         self.surface.fill(view_cst.POPUP_BG_COLOR)
+        print(f"Dialogue text: {dialogue_text}")
         dialogue_rendered = self.font.render(dialogue_text, True, view_cst.TEXT_COLOR)
         self.surface.blit(dialogue_rendered, (10, 10))
         print(f"Blitting dialogue")

@@ -168,9 +168,25 @@ class Scenario:
 
     def initialize_dialogue(self):
         # dialogue = ["Hello, young adventurer. This is my first dialogue.", "This is my second dialogue.", "This is my third dialogue."]
-        self.game_data.find_npc_by_name("Elder").add_dialogue("Hello, young adventurer. This is my first dialogue.")
-        self.game_data.find_npc_by_name("Elder").add_dialogue("This is my second dialogue.")
-        self.game_data.find_npc_by_name("Elder").add_dialogue("This is my third dialogue.")
+        dialogue_text_1 = ["Hey guys!", "Oh, Big Gulps, huh?", "Aaalright!", "Welp, see ya later!"]
+        dialogue_text_2 = ["My name is Maximus Decimus Meridius, commander of the Armies of the North, General of the Felix Legions, Loyal servant to the true emperor, Marcus Aurelius.", "Father to a murdered son, husband to a murdered wife. And I will have my vengeance, in this life or the next."]
+        dialogue_text_3 = ["Are you not entertained?"]
+        dialogue_text_4 = ["Strength and honor."]
+
+        dialogue_1 = self.quest_builder.build_dialogue(dialogue_text_1, "dialogue")
+        dialogue_2 = self.quest_builder.build_dialogue(dialogue_text_2, "dialogue")
+        dialogue_3 = self.quest_builder.build_dialogue(dialogue_text_3, "dialogue")
+        dialogue_4 = self.quest_builder.build_dialogue(dialogue_text_4, "dialogue")
+
+
+        self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_1)
+        self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_2)
+        self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_3)
+        self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_4)
+
+        # self.game_data.find_npc_by_name("Elder").add_dialogue("Hello, young adventurer. This is my first dialogue.")
+        # self.game_data.find_npc_by_name("Elder").add_dialogue("This is my second dialogue.")
+        # self.game_data.find_npc_by_name("Elder").add_dialogue("This is my third dialogue.")
 
 
     def initialize_entities(self):

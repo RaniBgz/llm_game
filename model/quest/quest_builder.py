@@ -1,5 +1,6 @@
 from model.quest.quest import Quest
 from model.quest.objective import KillObjective, LocationObjective, RetrievalObjective, TalkToNPCObjective
+from model.dialogue import Dialogue
 
 '''Links quests to objectives'''
 
@@ -61,3 +62,7 @@ class QuestBuilder():
         retrieval_objective = RetrievalObjective(name, description, target_item_id)
         quest.add_objective(retrieval_objective)
         return quest
+
+    def build_dialogue(self, text, dialogue_type):
+        dialogue = Dialogue(text, dialogue_type)
+        return dialogue

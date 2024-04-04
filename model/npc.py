@@ -1,14 +1,8 @@
 from model.entity import Entity
+from model.dialogue import Dialogue
 
 default_sprite = "./assets/default.png"
 
-class Dialogue:
-    def __init__(self, text, next_dialogue=None):
-        self.text = text
-        self.next_dialogue = next_dialogue
-
-    def get_next_dialogue(self):
-        return self.next_dialogue
 
 class NPC(Entity):
     def __init__(self, name, hp, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), hostile=False):
