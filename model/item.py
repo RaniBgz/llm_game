@@ -8,12 +8,12 @@ class Item(Entity):
         self.name = name
         self.description = description
         self.sprite = sprite
-        self.initial_state = {"global_position": global_position,
-                              "local_position": local_position,
-                              "in_world": in_world}
         self.global_position = global_position
         self.local_position = local_position
         self.in_world = in_world
+        self.initial_state = {"global_position": global_position,
+                              "local_position": local_position,
+                              "in_world": in_world}
 
     '''Setters for global and local positions of the item.'''
     def set_global_position(self, x, y):

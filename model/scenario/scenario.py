@@ -108,8 +108,8 @@ class Scenario:
         #     "Kill the Goblin", "Left click on the Goblin", quest, goblin.id)
         self.quest_builder.add_kill_objective_to_quest(
             "Kill the Skeleton", "Left click on the Skeleton",quest, skeleton.id)
-        # self.quest_builder.add_retrieval_objective_to_quest(
-        #     "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
+        self.quest_builder.add_retrieval_objective_to_quest(
+            "Retrieve the Mushroom", "Locate and pick up the Mushroom", quest, mushroom.id)
         self.quest_builder.add_location_objective_to_quest(
             "Visit the position (1,1)", "Use the coordinates in the top left, and reach position (1,1) on the map", quest, position)
         self.game_data.add_quest(quest)
