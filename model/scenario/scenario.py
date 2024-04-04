@@ -17,9 +17,10 @@ class Scenario:
             self.build_complex_quest_scenario()
         elif self.name == "ordered_quest":
             self.build_ordered_quest_scenario()
-            # self.build_ordered_quest_scenario()
         elif self.name == "multiple_quests":
             self.build_multiple_quests_scenario()
+        elif self.name == "dialogue_test":
+            self.build_dialogue_test_scenario()
         elif self.name == "test":
             self.build_test_scenario()
 
@@ -52,6 +53,13 @@ class Scenario:
         self.initialize_simple_quest()
         self.initialize_complex_quest()
         self.initialize_ordered_quest()
+        pass
+
+    def build_dialogue_test_scenario(self):
+        self.initialize_entities()
+        self.initialize_default_inventory()
+        self.initialize_items_in_world()
+        self.initialize_dialogue()
         pass
 
     def build_test_scenario(self):
@@ -157,6 +165,12 @@ class Scenario:
         quest = self.quest_builder.build_location_quest(name, description, (4, 4))
         self.game_data.add_quest(quest)
         self.game_data.character.add_quest(quest)
+
+    def initialize_dialogue(self):
+        # dialogue = ["Hello, young adventurer. This is my first dialogue.", "This is my second dialogue.", "This is my third dialogue."]
+        self.game_data.find_npc_by_name("Elder").add_dialogue("Hello, young adventurer. This is my first dialogue.")
+        self.game_data.find_npc_by_name("Elder").add_dialogue("This is my second dialogue.")
+        self.game_data.find_npc_by_name("Elder").add_dialogue("This is my third dialogue.")
 
 
     def initialize_entities(self):

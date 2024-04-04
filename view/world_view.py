@@ -86,8 +86,14 @@ class WorldView:
         self.npc_info_box.create_npc_info(npc, npc_rect)
         self.npc_info_box.show = True
 
+    def get_dialogue_box(self):
+        return self.dialogue_box
+
+
     def create_dialogue_box(self, npc, dialogue_text):
         print(f"Creating dialogue box for {npc.name}")
+
+
         self.dialogue_box.create_dialogue(npc, dialogue_text)
         self.dialogue_box.show = True
 
@@ -113,9 +119,8 @@ class WorldView:
         if self.item_info_box.show:
             self.item_info_box.handle_events(event)
 
-        # self.npc_info_box.handle_events(event)
-        # self.dialogue_box.handle_events(event)
-        # self.item_info_box.handle_events(event)
+    def handle_dialogue_events(self, event):
+        return self.dialogue_box.handle_events(event)
 
     def handle_game_menu_events(self, event):
         return_code = self.game_menu.handle_events(event)

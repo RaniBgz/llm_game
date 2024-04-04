@@ -12,6 +12,7 @@ from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
 from controller.settings_controller import SettingsController
+from controller.dialogue_controller import DialogueController
 
 class WorldController:
     def __init__(self, game_data, view):
@@ -232,7 +233,12 @@ class WorldController:
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.show_dialogue = True
-                        self.view.create_dialogue_box(npc, "test dialogue")
+                        dialogue_box = self.view.get_dialogue_box()
+                        self.dialogue_controller = DialogueController(
+                            self.view.screen, dialogue_box, npc, self.game_data.character)
+                        self.dialogue_controller.start_dialogue()
+                        #TODO: Here dialoguecontroller should be initialized
+                        # self.view.create_dialogue_box(npc, "test dialogue")
                         self.check_talk_to_npc_objective_completion(npc)
 
     def handle_item_interaction(self, pos, button):
