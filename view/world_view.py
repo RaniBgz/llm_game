@@ -10,6 +10,7 @@ from view.ui.dialogue_box import DialogueBox
 from view.ui.item_info_box import ItemInfoBox
 from view.ui.game_menu import GameMenu
 from view.main_game_view import MainGameView
+from controller.dialogue_controller import DialogueController
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
@@ -90,11 +91,12 @@ class WorldView:
         return self.dialogue_box
 
 
-    def create_dialogue_box(self, npc, dialogue_text):
+    def create_dialogue_box(self, npc, character):
         print(f"Creating dialogue box for {npc.name}")
-
-
-        self.dialogue_box.create_dialogue(npc, dialogue_text)
+        self.dialogue_controller = DialogueController(
+            self.screen, self.dialogue_box, npc, character)
+        self.dialogue_controller.start_dialogue()
+        # self.dialogue_box.create_dialogue(npc, dialogue_text)
         self.dialogue_box.show = True
 
     def create_item_info_box(self, item, item_rect):
@@ -114,10 +116,10 @@ class WorldView:
     def handle_popup_events(self, event):
         if self.npc_info_box.show:
             self.npc_info_box.handle_events(event)
-        if self.dialogue_box.show:
-            self.dialogue_box.handle_events(event)
         if self.item_info_box.show:
             self.item_info_box.handle_events(event)
+        if self.dialogue_box.show:
+            self.dialogue_box.handle_events(event)
 
     def handle_dialogue_events(self, event):
         return self.dialogue_box.handle_events(event)

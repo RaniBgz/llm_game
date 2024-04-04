@@ -37,6 +37,7 @@ class WorldController:
                         return
                     else:
                         self.view.handle_popup_events(event)
+                        self.view.handle_dialogue_events(event)
                         return_code = self.view.handle_game_menu_events(event)
                         self.open_menu(return_code)
                         self.handle_npc_interaction(event.pos, event.button)
@@ -233,10 +234,7 @@ class WorldController:
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.show_dialogue = True
-                        dialogue_box = self.view.get_dialogue_box()
-                        self.dialogue_controller = DialogueController(
-                            self.view.screen, dialogue_box, npc, self.game_data.character)
-                        self.dialogue_controller.start_dialogue()
+                        self.view.create_dialogue_box(npc, self.game_data.character)
                         #TODO: Here dialoguecontroller should be initialized
                         # self.view.create_dialogue_box(npc, "test dialogue")
                         self.check_talk_to_npc_objective_completion(npc)

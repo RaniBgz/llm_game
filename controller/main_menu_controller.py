@@ -17,9 +17,11 @@ class MainMenuController:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.view.play_rect.collidepoint(event.pos):
+                    if self.view.play_button.rect.collidepoint(event.pos):
+                        print(f"Rect position: {self.view.play_button.rect.topleft}")
                         self.start_game()
-                    elif self.view.quit_rect.collidepoint(event.pos):  # Add quit handling
+                    elif self.view.quit_button.rect.collidepoint(event.pos):  # Add quit handling
+                        print(f"Rect position: {self.view.quit_button.rect.topleft}")
                         pygame.quit()
                         sys.exit()
 
