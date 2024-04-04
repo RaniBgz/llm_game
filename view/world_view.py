@@ -119,10 +119,9 @@ class WorldView:
         if self.item_info_box.show:
             self.item_info_box.handle_events(event)
         if self.dialogue_box.show:
-            self.dialogue_box.handle_events(event)
+            self.dialogue_controller.handle_events(event)
+            # self.dialogue_box.handle_events(event)
 
-    def handle_dialogue_events(self, event):
-        return self.dialogue_box.handle_events(event)
 
     def handle_game_menu_events(self, event):
         return_code = self.game_menu.handle_events(event)

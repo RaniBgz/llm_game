@@ -37,6 +37,12 @@ class DialogueBox(PopupBox):
         self.prev_button_rect = pygame.Rect(prev_button_rect)
         self.next_button_rect = pygame.Rect(next_button_rect)
 
+        print(f"Prev button rect width: {self.prev_button_rect.width}")
+        print(f"Prev button rect height: {self.prev_button_rect.height}")
+
+        self.prev_button_rect = self.surface.get_rect(bottomleft=(10, self.rect.topleft[1] + self.height - 10))
+        self.next_button_rect = self.surface.get_rect(bottomright=(self.width - 10, self.rect.topleft[1] + self.height - 10))
+
         if dialogue_index == 0:
             self.prev_button_rect = None
         if dialogue_index == total_dialogues - 1:

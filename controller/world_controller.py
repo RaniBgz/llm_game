@@ -37,7 +37,6 @@ class WorldController:
                         return
                     else:
                         self.view.handle_popup_events(event)
-                        self.view.handle_dialogue_events(event)
                         return_code = self.view.handle_game_menu_events(event)
                         self.open_menu(return_code)
                         self.handle_npc_interaction(event.pos, event.button)
