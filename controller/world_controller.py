@@ -2,8 +2,10 @@ import sys
 import pygame
 
 import model.quest.objective
-from view import view_constants as view_cst
 from model.map.world_map import WorldMap
+from model.dialogue import Dialogue
+from model.dialogue_manager import DialogueManager
+from view import view_constants as view_cst
 from view.quest_view import QuestView
 from view.inventory_view import InventoryView
 from view.map_view import MapView
@@ -233,6 +235,9 @@ class WorldController:
                     else:
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.show_dialogue = True
+                        dialogue_manager = DialogueManager(npc, self.game_data.character)
+                        #TODO: Call logic to get the right dialogue
+                        #TODO: Pass dialogue here
                         self.view.create_dialogue_box(npc, self.game_data.character)
                         #TODO: Here dialoguecontroller should be initialized
                         # self.view.create_dialogue_box(npc, "test dialogue")
