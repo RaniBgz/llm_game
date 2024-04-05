@@ -1,6 +1,10 @@
 import pygame
 import random
+from model.dialogue import Dialogue
 
+#TODO: Revamp all of this to make it much simpler to access: the right dialogue, the right index in the dialogue, and update between text
+#TODO: The Dialoge Controller may have too much information. It only needs to know the current Dialogue.
+#TODO: Need to add logic "en amont" to check if the dialogue is a quest or a chat, and find out if the NPC has a (non-given) quest to give.
 class DialogueController:
     def __init__(self, screen, dialogue_box, npc, character):
         self.character = character
@@ -16,8 +20,7 @@ class DialogueController:
 
     def start_dialogue(self):
         self.sub_dialogue_index = self.npc.dialogue[self.dialogue_index].current_text_index
-        current_text_index = self.npc.dialogue[self.dialogue_index].current_text_index
-        dialogue_text = self.dialogues[self.dialogue_index].text[current_text_index]
+        dialogue_text = self.dialogues[self.dialogue_index].text[self.sub_dialogue_index]
         self.dialogue_box.create_dialogue(dialogue_text, self.sub_dialogue_index, self.total_dialogues)
 
     def handle_events(self, event):
@@ -32,6 +35,7 @@ class DialogueController:
             elif self.dialogue_box.next_button_rect and self.dialogue_box.next_button_rect.collidepoint(event.pos):
                 # self.current_dialogue_index = min(self.current_dialogue_index + 1, self.total_dialogues - 1)
                 self.npc.dialogue[self.dialogue_index].point_to_next_text()
+                self.sub_dialogue_index = self.npc.dialogue[self.dialogue_index].current_text_index
                 print(f"Current dialogue index: {self.npc.dialogue[self.dialogue_index].current_text_index}")
                 self.start_dialogue()
 
