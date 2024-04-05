@@ -91,10 +91,10 @@ class WorldView:
         return self.dialogue_box
 
 
-    def create_dialogue_box(self, npc, character):
+    def create_dialogue_box(self, npc, character, dialogue):
         print(f"Creating dialogue box for {npc.name}")
         self.dialogue_controller = DialogueController(
-            self.screen, self.dialogue_box, npc, character)
+            self.screen, self.dialogue_box, npc, character, dialogue)
         self.dialogue_controller.start_dialogue()
         # self.dialogue_box.create_dialogue(npc, dialogue_text)
         self.dialogue_box.show = True

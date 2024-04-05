@@ -6,22 +6,19 @@ from model.dialogue import Dialogue
 #TODO: The Dialoge Controller may have too much information. It only needs to know the current Dialogue.
 #TODO: Need to add logic "en amont" to check if the dialogue is a quest or a chat, and find out if the NPC has a (non-given) quest to give.
 class DialogueController:
-    def __init__(self, screen, dialogue_box, npc, character):
-        self.character = character
+    def __init__(self, screen, dialogue_box, npc, character, dialogue):
         self.screen = screen
         self.dialogue_box = dialogue_box
         self.npc = npc
-        self.dialogues = npc.dialogue
-        print(f"Dialogues: {self.dialogues}")
-        print(f"Dialogue 0: {self.dialogues[0].text}")
+        self.character = character
+        self.dialogue = dialogue
         self.dialogue_index = 0
-        self.sub_dialogue_index = 0
-        self.total_dialogues = len(self.dialogues)
+        self.dialogue_length = self.dialogue.get_dialogue_length()
 
     def start_dialogue(self):
-        self.sub_dialogue_index = self.npc.dialogue[self.dialogue_index].current_text_index
-        dialogue_text = self.dialogues[self.dialogue_index].text[self.sub_dialogue_index]
-        self.dialogue_box.create_dialogue(dialogue_text, self.sub_dialogue_index, self.total_dialogues)
+        self.dialogue_index = self.dialogue.current_text_index
+        dialogue_text = self.dialogue.get_current_dialogue()
+        self.dialogue_box.create_dialogue(dialogue_text, self.dialogue_index, self.dialogue_length)
 
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -29,6 +26,7 @@ class DialogueController:
                 self.dialogue_box.show = False
             elif self.dialogue_box.prev_button_rect and self.dialogue_box.prev_button_rect.collidepoint(event.pos):
                 # self.current_dialogue_index = max(self.current_dialogue_index - 1, 0)
+                self.dialogue.point_to_previous_text()
                 self.npc.dialogue[self.dialogue_index].point_to_previous_text()
                 print(f"Current dialogue index: {self.npc.dialogue[self.dialogue_index].current_text_index}")
                 self.start_dialogue()

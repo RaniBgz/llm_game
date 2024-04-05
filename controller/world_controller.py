@@ -233,14 +233,12 @@ class WorldController:
                         self.check_kill_objective_completion(npc)
 
                     else:
+                        #TODO: Keep refining dialogue system
                         print(f"Interacting with NPC: {npc.name}")
                         self.view.show_dialogue = True
                         dialogue_manager = DialogueManager(npc, self.game_data.character)
-                        #TODO: Call logic to get the right dialogue
-                        #TODO: Pass dialogue here
-                        self.view.create_dialogue_box(npc, self.game_data.character)
-                        #TODO: Here dialoguecontroller should be initialized
-                        # self.view.create_dialogue_box(npc, "test dialogue")
+                        dialogue = dialogue_manager.get_dialogue()
+                        self.view.create_dialogue_box(npc, self.game_data.character, dialogue)
                         self.check_talk_to_npc_objective_completion(npc)
 
     def handle_item_interaction(self, pos, button):
