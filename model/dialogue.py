@@ -8,20 +8,17 @@ class Dialogue:
         self.text = []
         for text_chunk in text:
             self.text.append(text_chunk)
+        self.dialogue_length = self.get_dialogue_length()
         self.dialogue_type = dialogue_type
         self.current_text_index = 0
 
     def point_to_next_text(self):
-        if self.current_text_index < len(self.text) - 1:
-            self.current_text_index += 1
-        else:
-            self.current_text_index = len(self.text) - 1
+        if self.current_text_index < self.dialogue_length - 1:
+            self.current_text_index = self.current_text_index + 1
 
     def point_to_previous_text(self):
         if self.current_text_index > 0:
-            self.current_text_index -= 1
-        else:
-            self.current_text_index = 0
+            self.current_text_index = self.current_text_index - 1
 
     def get_current_dialogue(self):
         return self.text[self.current_text_index]

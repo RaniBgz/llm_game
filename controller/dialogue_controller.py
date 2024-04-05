@@ -12,12 +12,13 @@ class DialogueController:
         self.npc = npc
         self.character = character
         self.dialogue = dialogue
-        self.dialogue_index = 0
+        # self.dialogue_index = 0
         self.dialogue_length = self.dialogue.get_dialogue_length()
 
     def start_dialogue(self):
         self.dialogue_index = self.dialogue.current_text_index
         dialogue_text = self.dialogue.get_current_dialogue()
+        print(f"Dialogue index is {self.dialogue_index} and dialogue length is {self.dialogue_length}")
         self.dialogue_box.create_dialogue(dialogue_text, self.dialogue_index, self.dialogue_length)
 
     def handle_events(self, event):
@@ -25,18 +26,14 @@ class DialogueController:
             if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
                 self.dialogue_box.show = False
             elif self.dialogue_box.prev_button_rect and self.dialogue_box.prev_button_rect.collidepoint(event.pos):
-                # self.current_dialogue_index = max(self.current_dialogue_index - 1, 0)
+                print("Position clicked: ", event.pos)
+                print(f"Dialogue index before pointing to previous text: {self.dialogue.current_text_index}")
                 self.dialogue.point_to_previous_text()
-                self.npc.dialogue[self.dialogue_index].point_to_previous_text()
-                print(f"Current dialogue index: {self.npc.dialogue[self.dialogue_index].current_text_index}")
+                print(f"Dialogue index after pointing to previous text: {self.dialogue.current_text_index}")
                 self.start_dialogue()
-            elif self.dialogue_box.next_button_rect and self.dialogue_box.next_button_rect.collidepoint(event.pos):
-                # self.current_dialogue_index = min(self.current_dialogue_index + 1, self.total_dialogues - 1)
-                self.npc.dialogue[self.dialogue_index].point_to_next_text()
-                self.sub_dialogue_index = self.npc.dialogue[self.dialogue_index].current_text_index
-                print(f"Current dialogue index: {self.npc.dialogue[self.dialogue_index].current_text_index}")
+            if self.dialogue_box.next_button_rect and self.dialogue_box.next_button_rect.collidepoint(event.pos):
+                print("Position clicked: ", event.pos)
+                print(f"Dialogue index before pointing to next text: {self.dialogue.current_text_index}")
+                self.dialogue.point_to_next_text()
+                print(f"Dialogue index after pointing to next text: {self.dialogue.current_text_index}")
                 self.start_dialogue()
-
-    def pick_random_dialogue(self):
-        self.dialogue_index = random.randint(0, self.total_dialogues - 1)
-        self.start_dialogue()
