@@ -42,3 +42,13 @@ class QuestDialogue:
 
     def add_completion_dialogue(self, dialogue):
         self.dialogue["completion"] = dialogue
+
+    def get_initialization_dialogue(self):
+        return self.dialogue["initialization"]
+
+    def get_waiting_dialogue(self):
+        return self.dialogue["waiting"]
+
+    def get_completion_dialogue(self):
+        return self.dialogue["completion"]
+

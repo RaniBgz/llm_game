@@ -16,6 +16,9 @@ class Quest:
             self.current_objective = -1
         self.objectives = []
 
+    def get_id(self):
+        return self.id
+
     def get_current_objective(self):
         if self.ordered:
             return self.objectives[self.current_objective]

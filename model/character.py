@@ -16,6 +16,18 @@ class Character(Entity):
         self.global_position = global_position
         self.local_position = local_position
 
+    def check_character_has_quest(self, quest_id):
+        for quest in self.quests:
+            if quest.get_id() == quest_id:
+                return True
+        return False
+
+    def get_quest_by_id(self, quest_id):
+        for quest in self.quests:
+            if quest.get_id() == quest_id:
+                return quest
+        return None
+
     def add_item_to_inventory(self, item):
         self.inventory.append(item)
 
@@ -35,25 +47,3 @@ class Character(Entity):
         if new_map is not None:
             self.current_map = new_map
             self.location = None  # Reset the character's location on the new map
-
-
-    # def __dict__(self):
-    #     data = super().__dict__()
-    #     data['inventory'] = [item.__dict__() for item in self.inventory]
-    #     data['quests'] = [quest.__dict__() for quest in self.quests]
-    #     return data
-    # def save_character(character, filename):
-    #     with open(filename, 'w') as file:
-    #         json.dump(character.__dict__(), file)
-    #
-    # def load_character(filename):
-    #     with open(filename, 'r') as file:
-    #         data = json.load(file)
-    #         character = Character(**data)
-    #         for item_data in data['inventory']:
-    #             item = Item(**item_data)
-    #             character.add_item_to_inventory(item)
-    #         for quest_data in data['quests']:
-    #             quest = Quest(**quest_data)
-    #             character.add_quest(quest)
-    #         return character

@@ -36,13 +36,9 @@ class NPC(Entity):
     def respawn(self):
         self.dead = False
 
-    def initialize_quest(self, quest, dialogues):
+    def add_quest_with_dialogue(self, quest, dialogue):
         self.quests.append(quest)
         quest_id = quest.get_id()
-        quest_dialogue = QuestDialogue()
-        quest_dialogue.add_initialization_dialogue(dialogues[0])
-        quest_dialogue.add_waiting_dialogue(dialogues[1])
-        quest_dialogue.add_completion_dialogue(dialogues[2])
-        self.quests_dialogue[quest_id] = quest_dialogue
+        self.quests_dialogue[quest_id] = dialogue
         print(f"Quest dialogue: {self.quests_dialogue}")
 

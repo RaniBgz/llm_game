@@ -92,11 +92,14 @@ class Scenario:
         plant = self.game_data.find_npc_by_name("Plant")
         quest_name = f"Kill the Skeleton"
         quest_description = f"Locate and kill the Skeleton by left-clicking on it."
+        quest = self.quest_builder.build_kill_quest(quest_name, quest_description, plant.id)
         quest_initialization_dialogue = self.quest_builder.build_dialogue(["Hey you, come here!", "I saw an annoying plant in the fields north of here.",
                                          "If you can slay the plant, I will give you a reward."])
         quest_waiting_dialogue = self.quest_builder.build_dialogue(["Come back with its leaves as a proof that the deed is done."])
         quest_completion_dialogue = self.quest_builder.build_dialogue(["Hmmm, you may have potential after all. Here is your reward."])
-
+        quest_dialogue = self.quest_builder.create_quest_dialogue(quest_initialization_dialogue, quest_waiting_dialogue, quest_completion_dialogue)
+        self.game_data.add_quest(quest)
+        npc.add_quest_with_dialogue(quest, quest_dialogue)
         pass
 
     def initialize_ordered_quest(self):
