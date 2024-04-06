@@ -21,6 +21,8 @@ class Scenario:
             self.build_multiple_quests_scenario()
         elif self.name == "dialogue_test":
             self.build_dialogue_test_scenario()
+        elif self.name == "quest_dialogue_test":
+            self.build_quest_dialogue_test_scenario()
         elif self.name == "test":
             self.build_test_scenario()
 
@@ -62,6 +64,14 @@ class Scenario:
         self.initialize_dialogue()
         pass
 
+    def build_quest_dialogue_test_scenario(self):
+        self.initialize_entities()
+        self.initialize_default_inventory()
+        self.initialize_items_in_world()
+        self.initialize_dialogue()
+        self.initialize_quest_with_dialogue()
+        pass
+
     def build_test_scenario(self):
         self.initialize_entities()
         pass
@@ -76,6 +86,18 @@ class Scenario:
         for item in self.game_data.items:
             if item not in self.game_data.character.inventory:
                 item.set_in_world(True) #Items are in the world if they are not in the inventory
+
+    def initialize_quest_with_dialogue(self):
+        npc = self.game_data.find_npc_by_name("Elder")
+        plant = self.game_data.find_npc_by_name("Plant")
+        quest_name = f"Kill the Skeleton"
+        quest_description = f"Locate and kill the Skeleton by left-clicking on it."
+        quest_initialization_dialogue = self.quest_builder.build_dialogue(["Hey you, come here!", "I saw an annoying plant in the fields north of here.",
+                                         "If you can slay the plant, I will give you a reward."])
+        quest_waiting_dialogue = self.quest_builder.build_dialogue(["Come back with its leaves as a proof that the deed is done."])
+        quest_completion_dialogue = self.quest_builder.build_dialogue(["Hmmm, you may have potential after all. Here is your reward."])
+
+        pass
 
     def initialize_ordered_quest(self):
         '''Initializing a quest with several steps'''
@@ -173,10 +195,10 @@ class Scenario:
         dialogue_text_3 = ["Are you not entertained?"]
         dialogue_text_4 = ["Strength and honor."]
 
-        dialogue_1 = self.quest_builder.build_dialogue(dialogue_text_1, "dialogue")
-        dialogue_2 = self.quest_builder.build_dialogue(dialogue_text_2, "dialogue")
-        dialogue_3 = self.quest_builder.build_dialogue(dialogue_text_3, "dialogue")
-        dialogue_4 = self.quest_builder.build_dialogue(dialogue_text_4, "dialogue")
+        dialogue_1 = self.quest_builder.build_dialogue(dialogue_text_1)
+        dialogue_2 = self.quest_builder.build_dialogue(dialogue_text_2)
+        dialogue_3 = self.quest_builder.build_dialogue(dialogue_text_3)
+        dialogue_4 = self.quest_builder.build_dialogue(dialogue_text_4)
 
 
         self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_1)

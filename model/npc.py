@@ -1,5 +1,6 @@
 from model.entity import Entity
 from model.dialogue import Dialogue
+from model.dialogue import QuestDialogue
 
 default_sprite = "./assets/default.png"
 
@@ -16,6 +17,7 @@ class NPC(Entity):
         self.dead = False
         self.quests = []
         self.dialogue = []
+        self.quests_dialogue = {}
 
     def get_id(self):
         return self.id
@@ -33,3 +35,14 @@ class NPC(Entity):
 
     def respawn(self):
         self.dead = False
+
+    def initialize_quest(self, quest, dialogues):
+        self.quests.append(quest)
+        quest_id = quest.get_id()
+        quest_dialogue = QuestDialogue()
+        quest_dialogue.add_initialization_dialogue(dialogues[0])
+        quest_dialogue.add_waiting_dialogue(dialogues[1])
+        quest_dialogue.add_completion_dialogue(dialogues[2])
+        self.quests_dialogue[quest_id] = quest_dialogue
+        print(f"Quest dialogue: {self.quests_dialogue}")
+

@@ -14,7 +14,7 @@ class Button(pygame.sprite.Sprite):
         print(f"Button center: {self.rect.center}")
         self.text = text
         self.font = pygame.font.SysFont("Arial", 30)
-        self.text_render = self.font.render(self.text, True, view_cst.DARK_GRAY_2)
+        self.text_render = self.font.render(self.text, True, view_cst.TEXT_COLOR)
         self.text_rect = self.text_render.get_rect()
         self.text_rect.center = self.rect.center
         self.text_rect.y -= 5

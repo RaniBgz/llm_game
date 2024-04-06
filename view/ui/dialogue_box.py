@@ -7,7 +7,7 @@ class DialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
         super().__init__(screen, width, height)
-        self.name_font = pygame.font.SysFont("Arial", 20)
+        self.name_font = pygame.font.SysFont("Arial", 24)
         self.font = pygame.font.SysFont("Arial", 16)
         self.exit_font = pygame.font.SysFont("Arial", 24)
         self.button_font = pygame.font.SysFont("Arial", 24)
@@ -16,12 +16,12 @@ class DialogueBox(PopupBox):
         self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
         self.surface.fill(view_cst.POPUP_BG_COLOR)
 
-        name_rendered = self.name_font.render(npc_name, True, view_cst.TEXT_COLOR)
+        name_rendered = self.name_font.render(npc_name, True, view_cst.COFFEE_BROWN_3)
         name_pos = (10 + self.width // 2 - name_rendered.get_width() // 2, 10)
         self.surface.blit(name_rendered, name_pos)
 
         # Use the wrap_text function to get the lines of dialogue
-        lines = wrap_text(dialogue_text, self.width - 20, view_cst.COFFEE_BROWN_3)
+        lines = wrap_text(dialogue_text, self.width - 20, view_cst.TEXT_COLOR)
         y_offset = 60
         for line_surface in lines:
             # Calculate the x position to center the line
@@ -32,23 +32,13 @@ class DialogueBox(PopupBox):
             self.surface.blit(line_surface, (x_offset, y_offset))
             y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
 
-
-
-        # # self.surface.blit(name_rendered, (10+self.width//2, 10))
-        # print(f"Dialogue text: {dialogue_text}")
-        # dialogue_rendered = self.font.render(dialogue_text, True, view_cst.TEXT_COLOR)
-        # self.surface.blit(dialogue_rendered, (10, 50))
-        # print(f"Blitting dialogue")
-
-
-
         self.create_close_button(self.exit_font, view_cst.TEXT_COLOR)
         self.create_prev_button()
         self.create_next_button()
         self.show = True
 
     def create_prev_button(self):
-        prev_button_text = self.button_font.render("Prev", True, view_cst.TEXT_COLOR)
+        prev_button_text = self.button_font.render("Prev", True, view_cst.DARK_GRAY_2)
         prev_button_rect = prev_button_text.get_rect(bottomleft=(10, self.height - 10))
         pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, prev_button_rect)
         self.prev_button_rect = pygame.Rect(10+10, self.rect.topleft[1] + self.height - 50, 60, 40)
@@ -57,7 +47,7 @@ class DialogueBox(PopupBox):
         self.surface.blit(prev_button_text, prev_button_rect)
 
     def create_next_button(self):
-        next_button_text = self.button_font.render("Next", True, view_cst.TEXT_COLOR)
+        next_button_text = self.button_font.render("Next", True, view_cst.DARK_GRAY_2)
         next_button_rect = next_button_text.get_rect(bottomright=(self.width - 10, self.height - 10))
         pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, next_button_rect)
         self.next_button_rect = pygame.Rect(self.width - 60, self.rect.topleft[1] + self.height - 50, 60, 40)

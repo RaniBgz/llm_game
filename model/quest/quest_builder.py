@@ -63,6 +63,6 @@ class QuestBuilder():
         quest.add_objective(retrieval_objective)
         return quest
 
-    def build_dialogue(self, text, dialogue_type):
-        dialogue = Dialogue(text, dialogue_type)
+    def build_dialogue(self, text):
+        dialogue = Dialogue(text)
         return dialogue

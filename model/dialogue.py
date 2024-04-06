@@ -4,12 +4,11 @@ class Dialogue:
     It has a type: chat or quest
     '''
 
-    def __init__(self, text, dialogue_type):
+    def __init__(self, text):
         self.text = []
         for text_chunk in text:
             self.text.append(text_chunk)
         self.dialogue_length = self.get_dialogue_length()
-        self.dialogue_type = dialogue_type
         self.current_text_index = 0
 
     def point_to_next_text(self):
@@ -25,3 +24,21 @@ class Dialogue:
 
     def get_dialogue_length(self):
         return len(self.text)
+
+
+class QuestDialogue:
+    '''A dialogue is a list of text
+    It has a type: chat or quest
+    '''
+
+    def __init__(self):
+        self.dialogue = {}
+
+    def add_initialization_dialogue(self, dialogue):
+        self.dialogue["initialization"] = dialogue
+
+    def add_waiting_dialogue(self, dialogue):
+        self.dialogue["waiting"] = dialogue
+
+    def add_completion_dialogue(self, dialogue):
+        self.dialogue["completion"] = dialogue
