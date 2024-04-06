@@ -14,7 +14,7 @@ class DialogueManager:
         else:
             print("NPC has no quests, getting dialogue")
             if self.check_npc_has_dialogue():
-                print("NPC has dialogue")
+                print("NPC has dialogue, getting random dialogue")
                 return self.get_random_npc_dialogue()
             else:
                 print("NPC has no dialogue, getting generic dialogue")
@@ -39,4 +39,6 @@ class DialogueManager:
 
     def get_random_npc_dialogue(self):
         random_index = random.randint(0, len(self.npc.dialogue) - 1)
+        print(f"Length of NPC dialogue is {len(self.npc.dialogue)}")
+        print(f"Random index is {random_index}")
         return self.npc.dialogue[random_index]

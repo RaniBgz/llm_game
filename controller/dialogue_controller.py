@@ -18,14 +18,21 @@ class DialogueController:
         self.dialogue_index = self.dialogue.current_text_index
         dialogue_text = self.dialogue.get_current_dialogue()
         print(f"Dialogue index is {self.dialogue_index} and dialogue length is {self.dialogue_length}")
-        self.dialogue_box.create_dialogue(dialogue_text, self.dialogue_index, self.dialogue_length)
+        self.dialogue_box.create_dialogue(self.npc.name, dialogue_text)
+
+    def reset_dialogue(self):
+        self.dialogue.current_text_index = 0
+        self.dialogue_length = self.dialogue.get_dialogue_length()
+        self.dialogue_box.show = False
 
     #TODO: Reset things on close
     #TODO: From outside scope, may need to destroy the dialogue controller and other objects
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
-                self.dialogue_box.show = False
+                # self.dialogue_box.show = False
+                self.reset_dialogue()
+
             elif self.dialogue_box.prev_button_rect and self.dialogue_box.prev_button_rect.collidepoint(event.pos):
                 print("Position clicked: ", event.pos)
                 print(f"Dialogue index before pointing to previous text: {self.dialogue.current_text_index}")

@@ -1,22 +1,47 @@
 import pygame
 from view.ui.popup_box import PopupBox
 from view import view_constants as view_cst
+from view.ui.utils import wrap_text
 
 class DialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
         super().__init__(screen, width, height)
+        self.name_font = pygame.font.SysFont("Arial", 20)
         self.font = pygame.font.SysFont("Arial", 16)
-        self.exit_font = pygame.font.SysFont("Arial", 32)
+        self.exit_font = pygame.font.SysFont("Arial", 24)
         self.button_font = pygame.font.SysFont("Arial", 24)
 
-    def create_dialogue(self, dialogue_text, dialogue_index, total_dialogues):
+    def create_dialogue(self, npc_name, dialogue_text):
         self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
         self.surface.fill(view_cst.POPUP_BG_COLOR)
-        print(f"Dialogue text: {dialogue_text}")
-        dialogue_rendered = self.font.render(dialogue_text, True, view_cst.TEXT_COLOR)
-        self.surface.blit(dialogue_rendered, (10, 10))
-        print(f"Blitting dialogue")
+
+        name_rendered = self.name_font.render(npc_name, True, view_cst.TEXT_COLOR)
+        name_pos = (10 + self.width // 2 - name_rendered.get_width() // 2, 10)
+        self.surface.blit(name_rendered, name_pos)
+
+        # Use the wrap_text function to get the lines of dialogue
+        lines = wrap_text(dialogue_text, self.width - 20, view_cst.COFFEE_BROWN_3)
+        y_offset = 60
+        for line_surface in lines:
+            # Calculate the x position to center the line
+            line_width = line_surface.get_width()
+            x_offset = 20 + (self.width - 20 - line_width) // 2  # Adjust to center the line
+
+            # Blit each line of text, incrementing the y_offset for each line
+            self.surface.blit(line_surface, (x_offset, y_offset))
+            y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
+
+
+
+        # # self.surface.blit(name_rendered, (10+self.width//2, 10))
+        # print(f"Dialogue text: {dialogue_text}")
+        # dialogue_rendered = self.font.render(dialogue_text, True, view_cst.TEXT_COLOR)
+        # self.surface.blit(dialogue_rendered, (10, 50))
+        # print(f"Blitting dialogue")
+
+
+
         self.create_close_button(self.exit_font, view_cst.TEXT_COLOR)
         self.create_prev_button()
         self.create_next_button()

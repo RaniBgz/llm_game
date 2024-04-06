@@ -28,6 +28,9 @@ SCI_FI_BLUE = (120,204,226)
 SCI_FI_BLUE_2 = (0, 150, 255)  # A sci-fi inspired blue for text
 SCI_FI_BLUE_3 = (33, 179, 210)
 SCI_FI_BLUE_4 = (0,80,102)  # A darker sci-fi inspired blue for text
+COFFEE_BROWN = (200, 190, 140)  # A coffee brown color for text
+COFFEE_BROWN_2 = (150, 140, 100)  # A darker coffee brown color for text
+COFFEE_BROWN_3 = (111, 78, 55)  # A darker coffee brown color for text
 
 FPS = 16
 MOVEMENT_SPEED = 10

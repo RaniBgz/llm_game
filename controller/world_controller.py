@@ -235,11 +235,12 @@ class WorldController:
                     else:
                         #TODO: Keep refining dialogue system
                         print(f"Interacting with NPC: {npc.name}")
+                        self.check_talk_to_npc_objective_completion(npc)
                         self.view.show_dialogue = True
                         dialogue_manager = DialogueManager(npc, self.game_data.character)
                         dialogue = dialogue_manager.get_dialogue()
                         self.view.create_dialogue_box(npc, self.game_data.character, dialogue)
-                        self.check_talk_to_npc_objective_completion(npc)
+
 
     def handle_item_interaction(self, pos, button):
         for item, item_image, item_rect in self.view.items:
