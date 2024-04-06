@@ -4,23 +4,21 @@ import model.model_constants as model_cst
 
 ''' This class is responsible for only outputting the right dialogue to feed to the DialogueBox/Controller'''
 class DialogueManager:
-    def __init__(self, npc, character):
+    def __init__(self, npc, character, quest):
         self.npc = npc
         self.character = character
+        self.quest = quest
 
     def get_dialogue(self):
-        if self.check_npc_has_quests():
-            print("NPC has quests, picking a quest at random")
-            quest = self.get_random_npc_quest()
-            quest_id = quest.get_id()
-            print(f"Quest name is: {quest.name}")
-            quest_dialogue = self.npc.quests_dialogue[quest.get_id()]
+        if self.quest is not None:
+            print("NPC has a quest.")
+            quest_id = self.quest.get_id()
+            print(f"Quest name is: {self.quest.name}")
+            quest_dialogue = self.npc.quests_dialogue[self.quest.get_id()]
             print(f"Quest dialogue is: {quest_dialogue}")
-            #TODO: Check if the character already has the quest
             if self.character.check_character_has_quest(quest_id):
                 print("Character already has the quest")
-                #TODO: Check if the quest is already active or completed
-                if quest.completed:
+                if self.quest.completed:
                     print("Quest is completed")
                     dialogue = quest_dialogue.get_completion_dialogue()
                     return dialogue, "quest"
@@ -63,8 +61,3 @@ class DialogueManager:
         print(f"Length of NPC dialogue is {len(self.npc.dialogue)}")
         print(f"Random index is {random_index}")
         return self.npc.dialogue[random_index]
-
-    #TODO: Move this logic somewhere else
-    def get_random_npc_quest(self):
-        random_index = random.randint(0, len(self.npc.quests) - 1)
-        return self.npc.quests[random_index]

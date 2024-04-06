@@ -90,8 +90,8 @@ class Scenario:
     def initialize_quest_with_dialogue(self):
         npc = self.game_data.find_npc_by_name("Elder")
         plant = self.game_data.find_npc_by_name("Plant")
-        quest_name = f"Kill the Skeleton"
-        quest_description = f"Locate and kill the Skeleton by left-clicking on it."
+        quest_name = f"Kill the Plant"
+        quest_description = f"Locate and kill the Plant by left-clicking on it."
         quest = self.quest_builder.build_kill_quest(quest_name, quest_description, plant.id)
         quest_initialization_dialogue = self.quest_builder.build_dialogue(["Hey you, come here!", "I saw an annoying plant in the fields north of here.",
                                          "If you can slay the plant, I will give you a reward."])

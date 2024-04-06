@@ -79,6 +79,7 @@ class WorldController:
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
             print("Accepting quest")
+            self.quest_manager.give_quest_to_character(self.quest_manager.current_quest)
         elif return_code == "decline_quest":
             print("Declining quest")
         else:
@@ -139,7 +140,6 @@ class WorldController:
             print(f"Character wrapped to {self.game_data.character.global_position[0]}, {self.game_data.character.global_position[1]}. Updating local map...")
             self.world_map.add_entity(self.game_data.character, self.game_data.character.global_position)
             self.view.initialize_local_map(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
-            # self.check_location_objective_completion()
             self.quest_manager.check_location_objective_completion()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
         self.view.local_map = self.local_map
@@ -157,16 +157,16 @@ class WorldController:
                     if(npc.hostile):
                         print("Left-clicked on hostile NPC")
                         self.view.kill_npc(npc)
-                        # self.check_kill_objective_completion(npc)
                         self.quest_manager.check_kill_objective_completion(npc)
 
                     else:
                         #TODO: Keep refining dialogue system
                         print(f"Interacting with NPC: {npc.name}")
-                        # self.check_talk_to_npc_objective_completion(npc)
                         self.quest_manager.check_talk_to_npc_objective_completion(npc)
                         self.view.show_dialogue = True
-                        dialogue_manager = DialogueManager(npc, self.game_data.character)
+                        quest = self.quest_manager.get_random_npc_quest(npc)
+                        dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
+                        #TODO: In the future, a higher structure will give the right quest to the Dialogue Manager
                         dialogue, dialogue_type = dialogue_manager.get_dialogue()
                         self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
 
@@ -183,5 +183,4 @@ class WorldController:
                     print(f"Interacting with Item: {item.name}")
                     self.view.pickup_item(item)
                     self.game_data.character.inventory.append(item)
-                    # self.check_retrieval_objective_completion(item)
                     self.quest_manager.check_retrieval_objective_completion(item)

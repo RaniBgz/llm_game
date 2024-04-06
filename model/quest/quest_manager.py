@@ -1,9 +1,27 @@
 import model.quest.objective
+import random
 
 class QuestManager():
     def __init__(self, game_data):
         self.game_data = game_data
+        self.current_quest = None
 
+
+    ''' Quest initialization and attribution methods'''
+    def give_quest_to_character(self, quest):
+        self.game_data.character.add_quest(quest)
+        print(f"Quest {quest.id} added to character")
+
+    #TODO: Move this logic somewhere else
+    def get_random_npc_quest(self, npc):
+        if len(npc.quests) == 0:
+            return None
+        else:
+            random_index = random.randint(0, len(npc.quests) - 1)
+            self.current_quest = npc.quests[random_index]
+            return self.current_quest
+
+    ''' Quest completion methods '''
     def check_location_objective_completion(self):
         for quest in self.game_data.character.quests:
             if quest.ordered:
@@ -28,6 +46,7 @@ class QuestManager():
 
     def check_kill_objective_completion(self, npc):
         for quest in self.game_data.character.quests:
+            print(f"Checking quest {quest.id}")
             if quest.ordered:
                 current_objective = quest.get_current_objective()
                 if isinstance(current_objective, model.quest.objective.KillObjective):

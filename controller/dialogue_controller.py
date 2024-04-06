@@ -48,12 +48,12 @@ class DialogueController:
                 print(f"Dialogue index after pointing to next text: {self.dialogue.current_text_index}")
                 self.start_dialogue()
             if self.dialogue_type == "quest":
-                if self.dialogue_box.accept_button_rect and self.dialogue_box.accept_button_rect.collidepoint(event.pos):
+                if getattr(self.dialogue_box, 'accept_button_rect', None) and self.dialogue_box.accept_button_rect.collidepoint(event.pos):
                     print("Accept button clicked")
                     # Add your logic here for accepting the quest
                     self.reset_dialogue()
                     return "accept_quest"
-                elif self.dialogue_box.decline_button_rect and self.dialogue_box.decline_button_rect.collidepoint(event.pos):
+                elif getattr(self.dialogue_box, 'decline_button_rect', None) and  self.dialogue_box.decline_button_rect.collidepoint(event.pos):
                     print("Decline button clicked")
                     # Add your logic here for declining the quest
                     self.reset_dialogue()
