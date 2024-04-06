@@ -21,51 +21,6 @@ class DialogueBox(PopupBox):
         self.create_prev_button()
         self.create_next_button()
         self.show = True
-        # if dialogue_index == 0:
-        #     self.prev_button_rect = None
-        #     self.surface.blit(self.next_button_text, self.next_button_rect)
-        #     print(f"In dialogue index = 0")
-        # elif dialogue_index > 0 and dialogue_index < total_dialogues - 1:
-        #     print(f"In dialogue index > 0 and < total_dialogues - 1")
-        #     # self.create_prev_button(dialogue_index, total_dialogues)
-        #     self.surface.blit(self.prev_button_text, self.prev_button_rect)
-        #     self.surface.blit(self.next_button_text, self.next_button_rect)
-        # elif dialogue_index == total_dialogues - 1:
-        #     self.surface.blit(self.prev_button_text, self.prev_button_rect)
-        #     self.next_button_rect = None
-
-        # self.create_prev_next_buttons(dialogue_index, total_dialogues)
-        # self.show = True
-
-    # def create_prev_next_buttons(self, dialogue_index, total_dialogues):
-    #     prev_button_text = self.button_font.render("Prev", True, view_cst.TEXT_COLOR)
-    #     next_button_text = self.button_font.render("Next", True, view_cst.TEXT_COLOR)
-    #
-    #     prev_button_rect = prev_button_text.get_rect(bottomleft=(10, self.height - 10))
-    #     next_button_rect = next_button_text.get_rect(bottomright=(self.width - 10, self.height - 10))
-    #
-    #     pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, prev_button_rect)
-    #     pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, next_button_rect)
-    #
-    #     # self.prev_button_rect = pygame.Rect(prev_button_rect)
-    #     # self.next_button_rect = pygame.Rect(next_button_rect)
-    #
-    #     # print(f"Prev button rect width: {self.prev_button_rect.width}")
-    #     # print(f"Prev button rect height: {self.prev_button_rect.height}")
-    #
-    #     self.prev_button_rect = self.surface.get_rect(bottomleft=(10, self.rect.topleft[1] + self.height - 10))
-    #     self.next_button_rect = self.surface.get_rect(bottomright=(self.width - 10, self.rect.topleft[1] + self.height - 10))
-    #
-    #     if dialogue_index == 0:
-    #         self.prev_button_rect = None
-    #         self.surface.blit(next_button_text, next_button_rect)
-    #     if dialogue_index == total_dialogues - 1:
-    #         self.next_button_rect = None
-    #         self.surface.blit(prev_button_text, prev_button_rect)
-    #     if dialogue_index > 0 and dialogue_index < total_dialogues - 1:
-    #         self.surface.blit(prev_button_text, prev_button_rect)
-    #         self.surface.blit(next_button_text, next_button_rect)
-
 
     def create_prev_button(self):
         prev_button_text = self.button_font.render("Prev", True, view_cst.TEXT_COLOR)

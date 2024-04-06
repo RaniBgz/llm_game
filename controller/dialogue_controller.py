@@ -12,7 +12,6 @@ class DialogueController:
         self.npc = npc
         self.character = character
         self.dialogue = dialogue
-        # self.dialogue_index = 0
         self.dialogue_length = self.dialogue.get_dialogue_length()
 
     def start_dialogue(self):
@@ -21,6 +20,8 @@ class DialogueController:
         print(f"Dialogue index is {self.dialogue_index} and dialogue length is {self.dialogue_length}")
         self.dialogue_box.create_dialogue(dialogue_text, self.dialogue_index, self.dialogue_length)
 
+    #TODO: Reset things on close
+    #TODO: From outside scope, may need to destroy the dialogue controller and other objects
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
