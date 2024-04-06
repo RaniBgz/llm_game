@@ -1,11 +1,9 @@
 import model.quest.objective
 
 class QuestManager():
-    def __init__(self):
-        self.quests = []
+    def __init__(self, game_data):
+        self.game_data = game_data
 
-
-    #TODO: If moving this away from the World Controller, make sure to pass the parameters needed
     def check_location_objective_completion(self):
         for quest in self.game_data.character.quests:
             if quest.ordered:

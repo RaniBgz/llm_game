@@ -10,7 +10,8 @@ class DialogueBox(PopupBox):
         self.name_font = pygame.font.SysFont("Arial", 24)
         self.font = pygame.font.SysFont("Arial", 16)
         self.exit_font = pygame.font.SysFont("Arial", 24)
-        self.button_font = pygame.font.SysFont("Arial", 24)
+        self.button_font = pygame.font.SysFont("Arial", 20)
+        self.accept_deny_font = pygame.font.SysFont("Arial", 24)
 
     def create_dialogue(self, npc_name, dialogue_text):
         self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
@@ -35,6 +36,7 @@ class DialogueBox(PopupBox):
         self.create_close_button(self.exit_font, view_cst.TEXT_COLOR)
         self.create_prev_button()
         self.create_next_button()
+
         self.show = True
 
     def create_prev_button(self):
@@ -62,11 +64,19 @@ class DialogueBox(PopupBox):
         self.surface.blit(close_button_text, close_button_rect)
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 
+    def create_accept_decline_buttons(self):
+        accept_button_text = self.accept_deny_font.render("Accept", True, view_cst.DARK_GRAY_2)
+        accept_button_rect = accept_button_text.get_rect(bottomleft=(self.width // 3, self.height - 20))
+        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, accept_button_rect)
+        self.accept_button_rect = pygame.Rect(self.width // 3, self.rect.topleft[1] + self.height - 50, 100, 40)
+        self.surface.blit(accept_button_text, accept_button_rect)
+
+        decline_button_text = self.accept_deny_font.render("Decline", True, view_cst.DARK_GRAY_2)
+        decline_button_rect = decline_button_text.get_rect(bottomright=(2 * self.width // 3, self.height - 20))
+        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, decline_button_rect)
+        self.decline_button_rect = pygame.Rect(2 * self.width // 3 - 100, self.rect.topleft[1] + self.height - 50, 100,
+                                               40)
+        self.surface.blit(decline_button_text, decline_button_rect)
 
     def handle_events(self, event):
-        print(f"Handling events for {self.__class__.__name__}")
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            print(f"Popup box clicked at {event.pos}")
-            if self.close_button_rect and self.close_button_rect.collidepoint(event.pos):
-                print(f"Close button clicked at {event.pos}")
-                self.show = False
+        pass

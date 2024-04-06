@@ -23,29 +23,23 @@ class DialogueManager:
                 if quest.completed:
                     print("Quest is completed")
                     dialogue = quest_dialogue.get_completion_dialogue()
-                    return dialogue
+                    return dialogue, "quest"
                 else:
                     print("Quest is not completed")
                     dialogue = quest_dialogue.get_waiting_dialogue()
-                    return dialogue
+                    return dialogue, "quest"
             else:
                 print("Character does not have the quest")
                 dialogue = quest_dialogue.get_initialization_dialogue()
-                return dialogue
-
-            init_dialogue = quest_dialogue.get_initialization_dialogue()
-            print(f"Quest dialogue initialization : {init_dialogue}")
-            for i in range(0, len(init_dialogue.text)):
-                print(f"Quest dialogue initialization text: {init_dialogue.text[i]}")
-
+                return dialogue, "quest"
         else:
             print("NPC has no quests, getting dialogue")
             if self.check_npc_has_dialogue():
                 print("NPC has dialogue, getting random dialogue")
-                return self.get_random_npc_dialogue()
+                return self.get_random_npc_dialogue(), "chat"
             else:
                 print("NPC has no dialogue, getting generic dialogue")
-                return self.get_random_generic_dialogue()
+                return self.get_random_generic_dialogue(), "chat"
                 pass
 
     def check_npc_has_quests(self):

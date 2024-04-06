@@ -3,8 +3,8 @@ import pygame
 
 import model.quest.objective
 from model.map.world_map import WorldMap
-from model.dialogue import Dialogue
 from model.dialogue_manager import DialogueManager
+from model.quest.quest_manager import QuestManager
 from view import view_constants as view_cst
 from view.quest_view import QuestView
 from view.inventory_view import InventoryView
@@ -14,7 +14,7 @@ from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
 from controller.settings_controller import SettingsController
-from controller.dialogue_controller import DialogueController
+
 
 class WorldController:
     def __init__(self, game_data, view):
@@ -23,6 +23,7 @@ class WorldController:
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
+        self.quest_manager = QuestManager(self.game_data)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -39,8 +40,13 @@ class WorldController:
                         return
                     else:
                         self.view.handle_popup_events(event)
-                        return_code = self.view.handle_game_menu_events(event)
-                        self.open_menu(return_code)
+
+                        dialogue_return_code = self.view.handle_dialogue_events(event)
+                        self.handle_dialogue_return(dialogue_return_code)
+
+                        menu_return_code = self.view.handle_game_menu_events(event)
+                        self.open_menu(menu_return_code)
+
                         self.handle_npc_interaction(event.pos, event.button)
                         self.handle_item_interaction(event.pos, event.button)
                     pass
@@ -67,6 +73,14 @@ class WorldController:
             settings_view = SettingsView(self.view.screen)
             settings_controller = SettingsController(self.game_data, settings_view)
             settings_controller.run()
+        else:
+            return
+
+    def handle_dialogue_return(self, return_code):
+        if return_code == "accept_quest":
+            print("Accepting quest")
+        elif return_code == "decline_quest":
+            print("Declining quest")
         else:
             return
 
@@ -125,98 +139,11 @@ class WorldController:
             print(f"Character wrapped to {self.game_data.character.global_position[0]}, {self.game_data.character.global_position[1]}. Updating local map...")
             self.world_map.add_entity(self.game_data.character, self.game_data.character.global_position)
             self.view.initialize_local_map(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
-            self.check_location_objective_completion()
+            # self.check_location_objective_completion()
+            self.quest_manager.check_location_objective_completion()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
         self.view.local_map = self.local_map
         self.view.display_world(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
-
-    #TODO: If moving this away from the World Controller, make sure to pass the parameters needed
-    def check_location_objective_completion(self):
-        for quest in self.game_data.character.quests:
-            if quest.ordered:
-                current_objective = quest.get_current_objective()
-                if isinstance(current_objective, model.quest.objective.LocationObjective):
-                    if current_objective.target_location == self.game_data.character.global_position:
-                        current_objective.set_completed()
-                        print(f"Objective {current_objective.id} for quest {quest.id} is now complete")
-                        if not quest.point_to_next_objective():
-                            quest.set_inactive()
-                            print(f"Quest {quest.id} is now complete")
-            else:
-                for objective in quest.objectives:
-                    if isinstance(objective, model.quest.objective.LocationObjective):
-                        if objective.target_location == self.game_data.character.global_position:
-                            objective.set_completed()
-                            print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                            if quest.check_all_objectives_completed():
-                                quest.set_inactive()
-                                print(f"Quest {quest.id} is now complete")
-
-
-    def check_kill_objective_completion(self, npc):
-        for quest in self.game_data.character.quests:
-            if quest.ordered:
-                current_objective = quest.get_current_objective()
-                if isinstance(current_objective, model.quest.objective.KillObjective):
-                    if current_objective.target_id == npc.id:
-                        current_objective.set_completed()
-                        print(f"Objective {current_objective.id} for quest {quest.id} is now complete")
-                        if not quest.point_to_next_objective():
-                            quest.set_inactive()
-                            print(f"Quest {quest.id} is now complete")
-            else:
-                for objective in quest.objectives:
-                    if isinstance(objective, model.quest.objective.KillObjective):
-                        if objective.target_id == npc.id:
-                            objective.set_completed()
-                            print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                            if quest.check_all_objectives_completed():
-                                quest.set_inactive()
-                                print(f"Quest {quest.id} is now complete")
-
-
-    def check_talk_to_npc_objective_completion(self, npc):
-        for quest in self.game_data.character.quests:
-            if quest.ordered:
-                current_objective = quest.get_current_objective()
-                if isinstance(current_objective, model.quest.objective.TalkToNPCObjective):
-                    if current_objective.target_npc_id == npc.id:
-                        current_objective.set_completed()
-                        print(f"Objective {current_objective.id} for quest {quest.id} is now complete")
-                        if not quest.point_to_next_objective():
-                            quest.set_inactive()
-                            print(f"Quest {quest.id} is now complete")
-            else:
-                for objective in quest.objectives:
-                    if isinstance(objective, model.quest.objective.TalkToNPCObjective):
-                        if objective.target_npc_id == npc.id:
-                            objective.set_completed()
-                            print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                            if quest.check_all_objectives_completed():
-                                quest.set_inactive()
-                                print(f"Quest {quest.id} is now complete")
-
-    def check_retrieval_objective_completion(self, item):
-        for quest in self.game_data.character.quests:
-            if quest.ordered:
-                current_objective = quest.get_current_objective()
-                if isinstance(current_objective, model.quest.objective.RetrievalObjective):
-                    if current_objective.target_item_id == item.id:
-                        current_objective.set_completed()
-                        print(f"Objective {current_objective.id} for quest {quest.id} is now complete")
-                        if not quest.point_to_next_objective():
-                            quest.set_inactive()
-                            print(f"Quest {quest.id} is now complete")
-            else:
-                for objective in quest.objectives:
-                    if isinstance(objective, model.quest.objective.RetrievalObjective):
-                        if objective.target_item_id == item.id:
-                            objective.set_completed()
-                            print(f"Objective {objective.id} for quest {quest.id} is now complete")
-                            if quest.check_all_objectives_completed():
-                                quest.set_inactive()
-                                print(f"Quest {quest.id} is now complete")
-
 
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
@@ -230,16 +157,18 @@ class WorldController:
                     if(npc.hostile):
                         print("Left-clicked on hostile NPC")
                         self.view.kill_npc(npc)
-                        self.check_kill_objective_completion(npc)
+                        # self.check_kill_objective_completion(npc)
+                        self.quest_manager.check_kill_objective_completion(npc)
 
                     else:
                         #TODO: Keep refining dialogue system
                         print(f"Interacting with NPC: {npc.name}")
-                        self.check_talk_to_npc_objective_completion(npc)
+                        # self.check_talk_to_npc_objective_completion(npc)
+                        self.quest_manager.check_talk_to_npc_objective_completion(npc)
                         self.view.show_dialogue = True
                         dialogue_manager = DialogueManager(npc, self.game_data.character)
-                        dialogue = dialogue_manager.get_dialogue()
-                        self.view.create_dialogue_box(npc, self.game_data.character, dialogue)
+                        dialogue, dialogue_type = dialogue_manager.get_dialogue()
+                        self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
 
 
     def handle_item_interaction(self, pos, button):
@@ -254,4 +183,5 @@ class WorldController:
                     print(f"Interacting with Item: {item.name}")
                     self.view.pickup_item(item)
                     self.game_data.character.inventory.append(item)
-                    self.check_retrieval_objective_completion(item)
+                    # self.check_retrieval_objective_completion(item)
+                    self.quest_manager.check_retrieval_objective_completion(item)
