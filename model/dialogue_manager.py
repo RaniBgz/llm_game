@@ -21,15 +21,15 @@ class DialogueManager:
                 if self.quest.completed:
                     print("Quest is completed")
                     dialogue = quest_dialogue.get_completion_dialogue()
-                    return dialogue, "quest"
+                    return dialogue, "quest_completion"
                 else:
                     print("Quest is not completed")
                     dialogue = quest_dialogue.get_waiting_dialogue()
-                    return dialogue, "quest"
+                    return dialogue, "quest_waiting"
             else:
                 print("Character does not have the quest")
                 dialogue = quest_dialogue.get_initialization_dialogue()
-                return dialogue, "quest"
+                return dialogue, "quest_initialization"
         else:
             print("NPC has no quests, getting dialogue")
             if self.check_npc_has_dialogue():

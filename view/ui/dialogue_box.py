@@ -78,5 +78,12 @@ class DialogueBox(PopupBox):
                                                40)
         self.surface.blit(decline_button_text, decline_button_rect)
 
+    def create_end_quest_button(self):
+        end_quest_button_text = self.accept_deny_font.render("End quest", True, view_cst.DARK_GRAY_2)
+        end_quest_button_rect = end_quest_button_text.get_rect(bottomleft=(self.width // 2 -end_quest_button_text.get_width()//2, self.height - 20))
+        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, end_quest_button_rect)
+        self.end_quest_button_rect = pygame.Rect(self.width // 2-end_quest_button_text.get_width()//2, self.rect.topleft[1] + self.height - 50, 100, 40)
+        self.surface.blit(end_quest_button_text, end_quest_button_rect)
+
     def handle_events(self, event):
         pass

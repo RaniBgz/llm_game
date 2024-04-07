@@ -12,14 +12,24 @@ class QuestManager():
         self.game_data.character.add_quest(quest)
         print(f"Quest {quest.id} added to character")
 
+    #FLAW IN THE LOGIC: if several NPCs give out quests, we'll have problems
+    def remove_quest_from_character(self, quest):
+        quest.ended = True
+        self.game_data.character.remove_quest(quest)
+        print(f"Quest {quest.id} removed from character")
+
     #TODO: Move this logic somewhere else
-    def get_random_npc_quest(self, npc):
+    def get_next_npc_quest(self, npc):
         if len(npc.quests) == 0:
             return None
         else:
-            random_index = random.randint(0, len(npc.quests) - 1)
-            self.current_quest = npc.quests[random_index]
-            return self.current_quest
+            for i in range(len(npc.quests)):
+                if npc.quests[i].ended:
+                    npc.quests.pop(i)
+                else:
+                    self.current_quest = npc.quests[i]
+                    return self.current_quest
+            return None
 
     ''' Quest completion methods '''
     def check_location_objective_completion(self):

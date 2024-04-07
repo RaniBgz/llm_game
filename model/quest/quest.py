@@ -3,13 +3,14 @@ from model.quest.objective import Objective
 import uuid
 
 class Quest:
-    def __init__(self, name, description, ordered=False, active=False, completed=False):
+    def __init__(self, name, description, ordered=False, active=False, completed=False, ended=False):
         self.id = uuid.uuid4()
         self.name = name
         self.description = description
         self.ordered = ordered
         self.active = active
         self.completed = completed
+        self.ended = ended
         if ordered:
             self.current_objective = 0
         else:
