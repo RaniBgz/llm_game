@@ -60,3 +60,14 @@ class Quest:
         self.completed = False
         if self.ordered:
             self.current_objective = 0
+
+    def set_ended(self):
+        self.ended = True
+
+    def set_not_ended(self):
+        self.ended = False
+
+    def set_not_completed(self):
+        self.completed = False
+        if self.ordered:
+            self.current_objective = 0
