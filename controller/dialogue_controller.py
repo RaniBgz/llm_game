@@ -33,6 +33,7 @@ class DialogueController:
     #TODO: Reset things on close
     #TODO: From outside scope, may need to destroy the dialogue controller and other objects
     def handle_events(self, event):
+        print(f"In dialogue controller event")
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
                 # self.dialogue_box.show = False

@@ -120,7 +120,9 @@ class WorldView:
             self.item_info_box.handle_events(event)
 
     def handle_dialogue_events(self, event):
+        print(f"Handling dialogue events")
         if self.dialogue_box.show:
+            print(f"Dialogue box is showing")
             return_code = self.dialogue_controller.handle_events(event)
             return return_code
 

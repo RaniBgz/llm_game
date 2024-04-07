@@ -4,21 +4,26 @@ import random
 class QuestManager():
     def __init__(self, game_data):
         self.game_data = game_data
-        self.current_quest = None
-
+        self.current_quests = {}
+        self.current_npc = None
+        self.initialize_current_quests()
 
     ''' Quest initialization and attribution methods'''
-    def give_quest_to_character(self, quest):
+    def give_quest_to_character(self):
+        print(f"Giving quest to character")
+        quest = self.current_quests[self.current_npc][0]
         self.game_data.character.add_quest(quest)
-        print(f"Quest {quest.id} added to character")
+        print(f"Quest {quest.id} given to character")
 
-    #FLAW IN THE LOGIC: if several NPCs give out quests, we'll have problems
-    def remove_quest_from_character(self, quest):
+    #FLAW IN THE LOGIC: if several NPCs give out quests, we'll have problems (may be fixed)
+    #FLAW IN THE LOGIC: does that give quests on a loop?
+    def remove_quest_from_character(self):
+        quest = self.current_quests[self.current_npc][0]
         quest.ended = True
+        self.current_quests[self.current_npc].remove(quest)
         self.game_data.character.remove_quest(quest)
         print(f"Quest {quest.id} removed from character")
 
-    #TODO: Move this logic somewhere else
     def get_next_npc_quest(self, npc):
         if len(npc.quests) == 0:
             return None
@@ -27,9 +32,16 @@ class QuestManager():
                 if npc.quests[i].ended:
                     npc.quests.pop(i)
                 else:
-                    self.current_quest = npc.quests[i]
-                    return self.current_quest
+                    self.current_quests[npc].append(npc.quests[i])
+                    return npc.quests[i]
             return None
+
+    #Okay, this is cool, but NPC need to have quest associated to them (some other logic)
+    #AKA quests in game data are not affected by this
+    def initialize_current_quests(self):
+        for npc in self.game_data.npcs:
+            if len(npc.quests) > 0:
+                self.current_quests[npc] = []
 
     ''' Quest completion methods '''
     def check_location_objective_completion(self):
