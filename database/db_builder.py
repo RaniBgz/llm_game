@@ -77,6 +77,7 @@ def populate_tables(conn):
     # Insert NPCs
     npcs = [
         ('Elder', 1000, '0,0', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
+        ('Enchantress', 200, '0,0', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
         ('Robot', 10000, '0,0', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
         ('Plant', 8, '0,1', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),
         ('Goblin', 10, '0,1', f"{view_cst.H_TILES//2},1", './assets/sprites/npcs/goblin.png', True),

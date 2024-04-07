@@ -100,7 +100,19 @@ class Scenario:
         quest_dialogue = self.quest_builder.create_quest_dialogue(quest_initialization_dialogue, quest_waiting_dialogue, quest_completion_dialogue)
         self.game_data.add_quest(quest)
         npc.add_quest_with_dialogue(quest, quest_dialogue)
-        pass
+
+        npc = self.game_data.find_npc_by_name("Enchantress")
+        mushroom = self.game_data.find_item_by_name("Mushroom")
+        quest_name = f"Retrieve the Mushroom"
+        quest_description = f"Locate and pick up the Mushroom by left-clicking on it."
+        quest = self.quest_builder.build_retrieval_quest(quest_name, quest_description, mushroom.id)
+        quest_initialization_dialogue = self.quest_builder.build_dialogue(["Hello, young adventurer. I have a task for you.",
+                                         "I need a special mushroom for my potions. Can you retrieve it for me? It should not be far away from here"])
+        quest_waiting_dialogue = self.quest_builder.build_dialogue(["I am still waiting for the mushroom."])
+        quest_completion_dialogue = self.quest_builder.build_dialogue(["Thank you for the mushroom. I'm afraid I don't have a reward to give you at the moment."])
+        quest_dialogue = self.quest_builder.create_quest_dialogue(quest_initialization_dialogue, quest_waiting_dialogue, quest_completion_dialogue)
+        self.game_data.add_quest(quest)
+        npc.add_quest_with_dialogue(quest, quest_dialogue)
 
     def initialize_ordered_quest(self):
         '''Initializing a quest with several steps'''

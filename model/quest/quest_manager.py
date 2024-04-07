@@ -22,7 +22,7 @@ class QuestManager():
     #FLAW IN THE LOGIC: does that give quests on a loop?
     def remove_quest_from_character(self):
         quest = self.current_quests[self.current_npc][0]
-        quest.ended = True
+        quest.set_ended()
         self.current_quests[self.current_npc].remove(quest)
         self.game_data.character.remove_quest(quest)
         print(f"Quest {quest.id} removed from character")
@@ -32,11 +32,9 @@ class QuestManager():
             return None
         else:
             for i in range(len(npc.quests)):
-                if npc.quests[i].ended:
-                    npc.quests.pop(i)
-                else:
+                if not npc.quests[i].ended:
                     self.current_quests[npc].append(npc.quests[i])
-                    return npc.quests[i]
+                return npc.quests[i]
             return None
 
     #Okay, this is cool, but NPC need to have quest associated to them (some other logic)

@@ -82,6 +82,7 @@ class GameData:
             for objective in quest.objectives:
                 objective.set_not_completed()
             quest.set_not_completed()
+            quest.set_not_ended()
 
     def reset_items(self):
         for item in self.items:
