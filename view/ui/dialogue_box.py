@@ -34,8 +34,8 @@ class DialogueBox(PopupBox):
             y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
 
         self.create_close_button(self.exit_font, view_cst.TEXT_COLOR)
-        self.create_prev_button()
-        self.create_next_button()
+        # self.create_prev_button()
+        # self.create_next_button()
 
         self.show = True
 

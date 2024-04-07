@@ -171,7 +171,8 @@ class WorldController:
                         self.quest_manager.check_talk_to_npc_objective_completion(npc)
                         self.view.show_dialogue = True
                         quest = self.quest_manager.get_next_npc_quest(npc)
-                        self.quest_manager.current_npc = npc
+                        self.quest_manager.set_current_npc(npc)
+                        # self.quest_manager.current_npc = npc
                         dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
                         #TODO: In the future, a higher structure will give the right quest to the Dialogue Manager
                         dialogue, dialogue_type = dialogue_manager.get_dialogue()

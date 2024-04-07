@@ -25,6 +25,9 @@ class NPC(Entity):
     def add_dialogue(self, dialogue):
         self.dialogue.append(dialogue)
 
+    def get_quest_dialogue(self, quest_id):
+        return self.quests_dialogue[quest_id]
+
     def set_location(self, map, x, y):
         self.current_map = map
         self.x = x

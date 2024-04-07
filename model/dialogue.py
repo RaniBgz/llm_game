@@ -11,6 +11,9 @@ class Dialogue:
         self.dialogue_length = self.get_dialogue_length()
         self.current_text_index = 0
 
+    def get_current_text_index(self):
+        return self.current_text_index
+
     def point_to_next_text(self):
         if self.current_text_index < self.dialogue_length - 1:
             self.current_text_index = self.current_text_index + 1

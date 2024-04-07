@@ -14,7 +14,8 @@ class DialogueManager:
             print("NPC has a quest.")
             quest_id = self.quest.get_id()
             print(f"Quest name is: {self.quest.name}")
-            quest_dialogue = self.npc.quests_dialogue[self.quest.get_id()]
+            # quest_dialogue = self.npc.quests_dialogue[self.quest.get_id()]
+            quest_dialogue = self.npc.get_quest_dialogue(quest_id)
             print(f"Quest dialogue is: {quest_dialogue}")
             if self.character.check_character_has_quest(quest_id):
                 print("Character already has the quest")

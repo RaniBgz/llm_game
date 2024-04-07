@@ -8,6 +8,9 @@ class QuestManager():
         self.current_npc = None
         self.initialize_current_quests()
 
+    def set_current_npc(self, npc):
+        self.current_npc = npc
+
     ''' Quest initialization and attribution methods'''
     def give_quest_to_character(self):
         print(f"Giving quest to character")
