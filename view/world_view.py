@@ -11,6 +11,7 @@ from view.ui.item_info_box import ItemInfoBox
 from view.ui.game_menu import GameMenu
 from view.main_game_view import MainGameView
 from controller.dialogue_controller import DialogueController
+from model.observer import Observer
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
@@ -18,6 +19,8 @@ class WorldView:
         self.screen = screen
         self.npcs = []
         self.items = []
+
+        self.observer = Observer()
 
         self.npc_info_box = NPCInfoBox(screen)
         self.dialogue_box = DialogueBox(screen)
@@ -33,6 +36,10 @@ class WorldView:
 
         self.game_menu = GameMenu(screen, pygame.font.SysFont("Arial", 25))
 
+    def update_character_position(self, x, y):
+        x = x * view_cst.TILE_WIDTH
+        y = y * view_cst.TILE_HEIGHT
+        self.character_rect.move_ip(x, y)
 
     def initialize_local_map(self, x, y):
         print(f"Initializing local map at {x}, {y}")

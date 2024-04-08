@@ -3,11 +3,13 @@ from model.entity import Entity
 import json
 from model.quest.quest import Quest
 from model.item import Item
+from model.subject import Subject
 
 
 class Character(Entity):
     def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0), sprite="./assets/sprites/character/character.png"):
         super().__init__()
+        self.subject = Subject()
         self.name = name
         self.hp = hp
         self.sprite = sprite
@@ -15,6 +17,22 @@ class Character(Entity):
         self.quests = []
         self.global_position = global_position
         self.local_position = local_position
+
+    def attach(self, observer):
+        self.subject.attach(observer)
+
+    def detach(self, observer):
+        self.subject.detach(observer)
+
+    def take_damage(self, damage):
+        self.hp -= damage
+        self.subject.notify()
+
+    def move(self, x_change, y_change):
+        print("Local position: ", self.local_position)
+        self.local_position = (self.local_position[0] + x_change, self.local_position[1] + y_change)
+        print("New local position: ", self.local_position)
+        # self.subject.notify()
 
     def check_character_has_quest(self, quest_id):
         for quest in self.quests:

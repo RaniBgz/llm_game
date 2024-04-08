@@ -25,38 +25,6 @@ class WorldController:
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
 
-
-    # def run(self):
-    #     clock = pygame.time.Clock()
-    #     while True:
-    #         clock.tick(view_cst.FPS)
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 pygame.quit()
-    #                 sys.exit()
-    #             if event.type == pygame.MOUSEBUTTONDOWN:
-    #                 if self.view.back_button_rect.collidepoint(event.pos):
-    #                     self.game_data.character.global_position = (self.game_data.character.global_position[0],
-    #                                                                 self.game_data.character.global_position[1])
-    #                     return
-    #                 else:
-    #                     self.view.handle_popup_events(event)
-    #
-    #                     dialogue_return_code = self.view.handle_dialogue_events(event)
-    #                     self.handle_dialogue_return(dialogue_return_code)
-    #
-    #                     menu_return_code = self.view.handle_game_menu_events(event)
-    #                     self.open_menu(menu_return_code)
-    #
-    #                     self.handle_npc_interaction(event.pos, event.button)
-    #                     self.handle_item_interaction(event.pos, event.button)
-    #                 pass
-    #
-    #
-    #         self.move_character()
-    #         self.view.display_world(self.game_data.character.global_position[0],
-    #                                 self.game_data.character.global_position[1])
-
     def run(self):
         clock = pygame.time.Clock()
         while True:
@@ -65,6 +33,7 @@ class WorldController:
                 self.handle_event(event)
 
             self.move_character()
+            #TODO: Replace with view.render()
             self.view.display_world(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])
             # self.view.render()
@@ -76,23 +45,6 @@ class WorldController:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print(f"Mouse clicked")
             self.handle_mouse_event(event)
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if self.view.back_button_rect.collidepoint(event.pos):
-        #         self.game_data.character.global_position = (self.game_data.character.global_position[0],
-        #                                                     self.game_data.character.global_position[1])
-        #         return
-        #     else:
-        #         self.view.handle_popup_events(event)
-        #
-        #         dialogue_return_code = self.view.handle_dialogue_events(event)
-        #         self.handle_dialogue_return(dialogue_return_code)
-        #
-        #         menu_return_code = self.view.handle_game_menu_events(event)
-        #         self.open_menu(menu_return_code)
-        #
-        #         self.handle_npc_interaction(event.pos, event.button)
-        #         self.handle_item_interaction(event.pos, event.button)
-        #     pass
 
     def handle_mouse_event(self, event):
         pos = event.pos
@@ -178,14 +130,11 @@ class WorldController:
             return
 
     def handle_dialogue_return(self, return_code):
-        print(f"Handling dialogue return")
         if return_code == "accept_quest":
-            print("Quest accepted")
             self.quest_manager.give_quest_to_character()
         elif return_code == "decline_quest":
-            print("Quest declined")
+            pass
         elif return_code == "end_quest":
-            print("Quest ended")
             #TODO: Handle rewards if any
             #TODO: Fix the way the quest lifecycle is handled
             self.quest_manager.remove_quest_from_character()
@@ -197,23 +146,22 @@ class WorldController:
         x_change = y_change = 0
 
         if keys_pressed[pygame.K_LEFT]:
-            x_change = -view_cst.TILE_WIDTH
-            self.game_data.character.local_position = (self.game_data.character.local_position[0] - 1,
-                                                       self.game_data.character.local_position[1])
+            x_change = -1
+            # x_change = -view_cst.TILE_WIDTH
         if keys_pressed[pygame.K_RIGHT]:
-            x_change = view_cst.TILE_WIDTH
-            self.game_data.character.local_position = (self.game_data.character.local_position[0] + 1,
-                                                       self.game_data.character.local_position[1])
+            x_change = 1
+            # x_change = view_cst.TILE_WIDTH
         if keys_pressed[pygame.K_UP]:
-            y_change = -view_cst.TILE_HEIGHT
-            self.game_data.character.local_position = (self.game_data.character.local_position[0],
-                                                       self.game_data.character.local_position[1] - 1)
+            y_change = -1
+            # y_change = -view_cst.TILE_HEIGHT
         if keys_pressed[pygame.K_DOWN]:
-            y_change = view_cst.TILE_HEIGHT
-            self.game_data.character.local_position = (self.game_data.character.local_position[0],
-                                                       self.game_data.character.local_position[1] + 1)
+            y_change = 1
+            # y_change = view_cst.TILE_HEIGHT
 
-        self.view.character_rect.move_ip(x_change, y_change)
+        self.game_data.character.move(x_change, y_change)
+        #TODO: Replace by "update character position", this is not a polite way to move the rectangle
+        self.view.update_character_position(x_change, y_change)
+        # self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
 
     def wrap_character(self):
