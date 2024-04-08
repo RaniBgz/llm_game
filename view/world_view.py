@@ -145,12 +145,11 @@ class WorldView:
                 npc_obj.dead = True
                 break
 
-    def pickup_item(self, item):
+    def remove_item(self, item):
         print(f"Removing item {item.name} from world")
-        print(f"There are {len(self.items)} items in the world")
+        print(f"Length of items in world: {len(self.items)}")
         for i, (item_obj, item_image, item_rect) in enumerate(self.items):
-            print(f"Checking item {item_obj.name}")
-            if item_obj == item:
+            if item_obj.get_id() == item.get_id():
                 self.items.pop(i)
                 item_obj.in_world = False
                 break

@@ -29,9 +29,7 @@ class Character(Entity):
         self.subject.notify()
 
     def move(self, x_change, y_change):
-        print("Local position: ", self.local_position)
         self.local_position = (self.local_position[0] + x_change, self.local_position[1] + y_change)
-        print("New local position: ", self.local_position)
         # self.subject.notify()
 
     def check_character_has_quest(self, quest_id):

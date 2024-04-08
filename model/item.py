@@ -15,6 +15,12 @@ class Item(Entity):
                               "local_position": local_position,
                               "in_world": in_world}
 
+    '''Getter for ID of the item.'''
+    def get_id(self):
+        return self.id
+
+
+
     '''Setters for global and local positions of the item.'''
     def set_global_position(self, x, y):
         self.global_position = (x, y)

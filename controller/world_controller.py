@@ -55,6 +55,7 @@ class WorldController:
                                                         self.game_data.character.global_position[1])
             print(f"Clicked back button")
             return
+
         self.view.handle_popup_events(event)
 
         dialogue_return_code = self.view.handle_dialogue_events(event)
@@ -62,6 +63,7 @@ class WorldController:
 
         menu_return_code = self.view.handle_game_menu_events(event)
         self.open_menu(menu_return_code)
+
         self.handle_npc_interaction(pos, button)
         self.handle_item_interaction(pos, button)
 
@@ -105,9 +107,15 @@ class WorldController:
                     self.view.create_item_info_box(item, item_rect)
                 elif button == pygame.BUTTON_LEFT:
                     print(f"Interacting with Item: {item.name}")
-                    self.view.pickup_item(item)
-                    self.game_data.character.inventory.append(item)
+                    self.pickup_item(item)
+                    # self.view.pickup_item(item)
+                    # self.game_data.character.inventory.append(item)
                     self.quest_manager.check_retrieval_objective_completion(item)
+
+    def pickup_item(self, item):
+        self.game_data.character.add_item_to_inventory(item)
+        self.world_map.remove_entity(item, item.global_position)
+        self.view.remove_item(item)
 
     def open_menu(self, return_code):
         if return_code == view_cst.QUEST_MENU:
@@ -147,21 +155,15 @@ class WorldController:
 
         if keys_pressed[pygame.K_LEFT]:
             x_change = -1
-            # x_change = -view_cst.TILE_WIDTH
         if keys_pressed[pygame.K_RIGHT]:
             x_change = 1
-            # x_change = view_cst.TILE_WIDTH
         if keys_pressed[pygame.K_UP]:
             y_change = -1
-            # y_change = -view_cst.TILE_HEIGHT
         if keys_pressed[pygame.K_DOWN]:
             y_change = 1
-            # y_change = view_cst.TILE_HEIGHT
 
         self.game_data.character.move(x_change, y_change)
-        #TODO: Replace by "update character position", this is not a polite way to move the rectangle
         self.view.update_character_position(x_change, y_change)
-        # self.view.character_rect.move_ip(x_change, y_change)
         self.wrap_character()
 
     def wrap_character(self):
