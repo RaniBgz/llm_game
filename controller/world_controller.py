@@ -20,41 +20,142 @@ class WorldController:
     def __init__(self, game_data, view):
         self.game_data = game_data
         self.view = view
+        self.quest_manager = QuestManager(self.game_data)
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
-        self.quest_manager = QuestManager(self.game_data)
+
+
+    # def run(self):
+    #     clock = pygame.time.Clock()
+    #     while True:
+    #         clock.tick(view_cst.FPS)
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 pygame.quit()
+    #                 sys.exit()
+    #             if event.type == pygame.MOUSEBUTTONDOWN:
+    #                 if self.view.back_button_rect.collidepoint(event.pos):
+    #                     self.game_data.character.global_position = (self.game_data.character.global_position[0],
+    #                                                                 self.game_data.character.global_position[1])
+    #                     return
+    #                 else:
+    #                     self.view.handle_popup_events(event)
+    #
+    #                     dialogue_return_code = self.view.handle_dialogue_events(event)
+    #                     self.handle_dialogue_return(dialogue_return_code)
+    #
+    #                     menu_return_code = self.view.handle_game_menu_events(event)
+    #                     self.open_menu(menu_return_code)
+    #
+    #                     self.handle_npc_interaction(event.pos, event.button)
+    #                     self.handle_item_interaction(event.pos, event.button)
+    #                 pass
+    #
+    #
+    #         self.move_character()
+    #         self.view.display_world(self.game_data.character.global_position[0],
+    #                                 self.game_data.character.global_position[1])
 
     def run(self):
         clock = pygame.time.Clock()
         while True:
             clock.tick(view_cst.FPS)
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.view.back_button_rect.collidepoint(event.pos):
-                        self.game_data.character.global_position = (self.game_data.character.global_position[0],
-                                                                    self.game_data.character.global_position[1])
-                        return
-                    else:
-                        self.view.handle_popup_events(event)
+                self.handle_event(event)
 
-                        dialogue_return_code = self.view.handle_dialogue_events(event)
-                        self.handle_dialogue_return(dialogue_return_code)
-
-                        menu_return_code = self.view.handle_game_menu_events(event)
-                        self.open_menu(menu_return_code)
-
-                        self.handle_npc_interaction(event.pos, event.button)
-                        self.handle_item_interaction(event.pos, event.button)
-                    pass
-
-            keys_pressed = pygame.key.get_pressed()
-            self.move_character(keys_pressed)
+            self.move_character()
             self.view.display_world(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])
+            # self.view.render()
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            print(f"Mouse clicked")
+            self.handle_mouse_event(event)
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     if self.view.back_button_rect.collidepoint(event.pos):
+        #         self.game_data.character.global_position = (self.game_data.character.global_position[0],
+        #                                                     self.game_data.character.global_position[1])
+        #         return
+        #     else:
+        #         self.view.handle_popup_events(event)
+        #
+        #         dialogue_return_code = self.view.handle_dialogue_events(event)
+        #         self.handle_dialogue_return(dialogue_return_code)
+        #
+        #         menu_return_code = self.view.handle_game_menu_events(event)
+        #         self.open_menu(menu_return_code)
+        #
+        #         self.handle_npc_interaction(event.pos, event.button)
+        #         self.handle_item_interaction(event.pos, event.button)
+        #     pass
+
+    def handle_mouse_event(self, event):
+        pos = event.pos
+        button = event.button
+
+        if self.view.back_button_rect.collidepoint(pos):
+            self.game_data.character.global_position = (self.game_data.character.global_position[0],
+                                                        self.game_data.character.global_position[1])
+            print(f"Clicked back button")
+            return
+        self.view.handle_popup_events(event)
+
+        dialogue_return_code = self.view.handle_dialogue_events(event)
+        self.handle_dialogue_return(dialogue_return_code)
+
+        menu_return_code = self.view.handle_game_menu_events(event)
+        self.open_menu(menu_return_code)
+        self.handle_npc_interaction(pos, button)
+        self.handle_item_interaction(pos, button)
+
+
+
+    def handle_npc_interaction(self, pos, button):
+        for npc, npc_image, npc_rect in self.view.npcs:
+            if npc_rect.collidepoint(pos):
+                if button == pygame.BUTTON_RIGHT:
+                    # Right-click on NPC, show popup
+                    print("Right-clicked on NPC")
+                    self.view.show_npc_popup = True
+                    self.view.create_npc_info_box(npc, npc_rect)
+                elif button == pygame.BUTTON_LEFT:
+                    if(npc.hostile):
+                        print("Left-clicked on hostile NPC")
+                        self.view.kill_npc(npc)
+                        self.quest_manager.check_kill_objective_completion(npc)
+
+                    else:
+                        #TODO: Keep refining dialogue system
+                        print(f"Interacting with NPC: {npc.name}")
+                        self.quest_manager.check_talk_to_npc_objective_completion(npc)
+                        self.view.show_dialogue = True
+                        quest = self.quest_manager.get_next_npc_quest(npc)
+                        self.quest_manager.set_current_npc(npc)
+                        # self.quest_manager.current_npc = npc
+                        dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
+                        #TODO: In the future, a higher structure will give the right quest to the Dialogue Manager
+                        dialogue, dialogue_type = dialogue_manager.get_dialogue()
+                        self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
+
+
+    def handle_item_interaction(self, pos, button):
+        for item, item_image, item_rect in self.view.items:
+            if item_rect.collidepoint(pos):
+                if button == pygame.BUTTON_RIGHT:
+                    # Right-click on Item, show popup
+                    print("Right-clicked on Item")
+                    self.view.show_item_popup = True
+                    self.view.create_item_info_box(item, item_rect)
+                elif button == pygame.BUTTON_LEFT:
+                    print(f"Interacting with Item: {item.name}")
+                    self.view.pickup_item(item)
+                    self.game_data.character.inventory.append(item)
+                    self.quest_manager.check_retrieval_objective_completion(item)
 
     def open_menu(self, return_code):
         if return_code == view_cst.QUEST_MENU:
@@ -91,7 +192,8 @@ class WorldController:
         else:
             return
 
-    def move_character(self, keys_pressed):
+    def move_character(self):
+        keys_pressed = pygame.key.get_pressed()
         x_change = y_change = 0
 
         if keys_pressed[pygame.K_LEFT]:
@@ -156,44 +258,3 @@ class WorldController:
         self.view.local_map = self.local_map
         self.view.display_world(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
 
-    def handle_npc_interaction(self, pos, button):
-        for npc, npc_image, npc_rect in self.view.npcs:
-            if npc_rect.collidepoint(pos):
-                if button == pygame.BUTTON_RIGHT:
-                    # Right-click on NPC, show popup
-                    print("Right-clicked on NPC")
-                    self.view.show_npc_popup = True
-                    self.view.create_npc_info_box(npc, npc_rect)
-                elif button == pygame.BUTTON_LEFT:
-                    if(npc.hostile):
-                        print("Left-clicked on hostile NPC")
-                        self.view.kill_npc(npc)
-                        self.quest_manager.check_kill_objective_completion(npc)
-
-                    else:
-                        #TODO: Keep refining dialogue system
-                        print(f"Interacting with NPC: {npc.name}")
-                        self.quest_manager.check_talk_to_npc_objective_completion(npc)
-                        self.view.show_dialogue = True
-                        quest = self.quest_manager.get_next_npc_quest(npc)
-                        self.quest_manager.set_current_npc(npc)
-                        # self.quest_manager.current_npc = npc
-                        dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
-                        #TODO: In the future, a higher structure will give the right quest to the Dialogue Manager
-                        dialogue, dialogue_type = dialogue_manager.get_dialogue()
-                        self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
-
-
-    def handle_item_interaction(self, pos, button):
-        for item, item_image, item_rect in self.view.items:
-            if item_rect.collidepoint(pos):
-                if button == pygame.BUTTON_RIGHT:
-                    # Right-click on Item, show popup
-                    print("Right-clicked on Item")
-                    self.view.show_item_popup = True
-                    self.view.create_item_info_box(item, item_rect)
-                elif button == pygame.BUTTON_LEFT:
-                    print(f"Interacting with Item: {item.name}")
-                    self.view.pickup_item(item)
-                    self.game_data.character.inventory.append(item)
-                    self.quest_manager.check_retrieval_objective_completion(item)
