@@ -2,17 +2,24 @@ Changelog 08/04:
 
 Dialogue and Quests:
 
-The quest & dialogue logic ended up being more complicated than I thought (still not perfect, but it's in a stable state).
-I realized that there were two types of interaction with a NPC:
--It has quests to give
--It doesn't
+The quest & dialogue logic ended up being a bit more complicated than I thought.
+It's actually much simpler than the diagram suggests, lots of atomic choices and interactions.
+
+[DIAGRAM]
+
+I realized that there were two types of interactions with a NPC:
+-NPC has quests to give
+-NPC doesn't have any quests to give 
 
 In the future, there may be trading and other interactions, but I am limiting the scope for now.
 
 The user should see the dialogue in the box, and be able to navigate through it (back and forth)
 For a quest, the right dialogue should be loaded, and the end of the dialogue should give the user a choice: accept or decline the quest.
 
+[DIALOGUE UI BOXES]
+
 This is the basic logic I started with.
+
 
 Dialogue Logic:
 
@@ -36,6 +43,14 @@ I created a QuestDialogue as a dictionary of Dialogues with 3 keys (for now)
 
 Each dialogue can be as long as needed, so this is not capped to just a single message.
 In the future, the dict can be extended with additional keys, or the structure can be changed, depending on what is better.
+
+Here are the modified data structures:
+
+[DATA structures]
+
+
+
+
 
 Getting the right quest:
 
@@ -66,6 +81,8 @@ Then check if the character already has the quest.
 Then check if it is completed or not already.
 That gives us the state of the quest, which allows retrieval of the right quest dialogue.
 
+[FIRST PART OF THE DIAGRAM]
+
 
 Displaying and handling the dialogue:
 
@@ -74,12 +91,18 @@ After that, the DialogueController handles the dialogue by using a DialogueBox.
 It gets the index and length of the dialogue, and depending on these, it displays the previous or next buttons.
 In the case of a quest, it waits for the last piece of dialogue to display the accept/decline buttons.
 
+[SECOND PART OF THE DIAGRAM]
+
 While the dialogue is showing, the controller handles all the events.
 -X closes the dialogue
 -prev/next go back/forward in the dialogue
 -accept/decline/end quests are handled with a return code that is passed back to the WorldController
 
+[THIRD PART]
+
 There, the QuestManager is used to take care of the completion of quests.
+
+[FOURTH PART]
 
 It has a dictionary of "current_quests" indexed by NPC: that allows to handle multiple ongoing quests at once.
 I used to have a single "current_quest" but quickly realized the limitations.
@@ -92,8 +115,36 @@ For this, I added the "ended" boolean to the quest.
 Right now, I decided to keep it simple, and only one simultaneous quest per NPC is handled.
 
 
+
 I summarized how objects interact with each other during the building and playing phase.
+
+[BUILD PHASE]
+
+[GAME PHASE]
+
+
+
 I will have to rework the reset buttons, and start thinking about more "meta" concepts of the game, but I want to get basic LLMs in before I start adding too much complexity to the game.
+
+Next priorities:
+Before going further, I want to take time to refactor the code and track any illogical behaviors, or things that could disrupt the spatial or temporal continuity of the game.
+In the future, LLMs wil generate simple quests, then possibly, series of quests.
+There will have to be some way of representing and handling time and space to feed that as context to the LLM.
+The reset logic has to be flawless (no duplicated entities, no re-initialization quirks...)
+
+The LLM will operate in the "Building" phase, so it is important for the game to be able to be built as it is being played.
+If a LLM generates a scenario, that scenario should be loaded without having to restart the game.
+If new quests are added, they should also be loaded seamlessly, and integrate correctly into the game logic.
+
+
+
+Demo:
+Showing the UI modifications
+Going through the quest lifecycle
+Showing reset
+Addressing some bugs
+
+
 
 
 

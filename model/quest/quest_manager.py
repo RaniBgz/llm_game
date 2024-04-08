@@ -34,7 +34,7 @@ class QuestManager():
             for i in range(len(npc.quests)):
                 if not npc.quests[i].ended:
                     self.current_quests[npc].append(npc.quests[i])
-                return npc.quests[i]
+                    return npc.quests[i]
             return None
 
     #Okay, this is cool, but NPC need to have quest associated to them (some other logic)
