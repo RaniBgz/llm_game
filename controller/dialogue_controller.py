@@ -30,7 +30,10 @@ class DialogueController:
 
     def handle_prev_next_buttons_logic(self):
         if self.dialogue_index == 0:
-            self.dialogue_box.create_next_button()
+            if self.dialogue_length == 1:
+                return
+            else:
+                self.dialogue_box.create_next_button()
         elif self.dialogue_index == self.dialogue_length - 1:
             self.dialogue_box.create_prev_button()
         else:

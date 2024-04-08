@@ -118,21 +118,25 @@ class WorldController:
         is_wrapped = False
         # print(f"Character local position: {self.game_data.character.local_position}")
         if self.view.character_rect.left < 0:
+            self.old_position = self.game_data.character.global_position
             self.view.character_rect.right = view_cst.WIDTH
             self.game_data.character.global_position = (self.game_data.character.global_position[0] - 1, self.game_data.character.global_position[1])
             self.game_data.character.local_position = (view_cst.H_TILES - 1, self.game_data.character.local_position[1])
             is_wrapped = True
         elif self.view.character_rect.right > view_cst.WIDTH:
+            self.old_position = self.game_data.character.global_position
             self.view.character_rect.left = 0
             self.game_data.character.global_position = (self.game_data.character.global_position[0] + 1, self.game_data.character.global_position[1])
             self.game_data.character.local_position = (0, self.game_data.character.local_position[1])
             is_wrapped = True
         elif self.view.character_rect.top < 0:
+            self.old_position = self.game_data.character.global_position
             self.view.character_rect.bottom = view_cst.HEIGHT
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] + 1)
             self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES - 1)
             is_wrapped = True
         elif self.view.character_rect.bottom > view_cst.HEIGHT-view_cst.MENU_BUTTON_HEIGHT:
+            self.old_position = self.game_data.character.global_position
             self.view.character_rect.top = 0
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] - 1)
             self.game_data.character.local_position = (self.game_data.character.local_position[0], 0)
@@ -144,6 +148,7 @@ class WorldController:
             self.view.reset_item_popup()
             self.view.reset_dialogue()
             print(f"Character wrapped to {self.game_data.character.global_position[0]}, {self.game_data.character.global_position[1]}. Updating local map...")
+            self.world_map.remove_entity(self.game_data.character, self.old_position)
             self.world_map.add_entity(self.game_data.character, self.game_data.character.global_position)
             self.view.initialize_local_map(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
             self.quest_manager.check_location_objective_completion()

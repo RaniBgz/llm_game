@@ -1,0 +1,101 @@
+Changelog 08/04:
+
+Dialogue and Quests:
+
+The quest & dialogue logic ended up being more complicated than I thought (still not perfect, but it's in a stable state).
+I realized that there were two types of interaction with a NPC:
+-It has quests to give
+-It doesn't
+
+In the future, there may be trading and other interactions, but I am limiting the scope for now.
+
+The user should see the dialogue in the box, and be able to navigate through it (back and forth)
+For a quest, the right dialogue should be loaded, and the end of the dialogue should give the user a choice: accept or decline the quest.
+
+This is the basic logic I started with.
+
+Dialogue Logic:
+
+I wanted to create the minimal amount of classes/variables to handle the dialogue/quest dialogue logic.
+I defined a Dialogue as
+-A list of text
+-A length
+-An index pointing to the current text.
+
+For the quest dialogue I realized:
+Depending on the stage of the quest you are at, the dialogue displayed should be different.
+
+-Is the NPC about to give out the quest?
+-Is the player in the process of completing the quest, but went back to talk to the NPC again?
+-Has the quest been completed, and is a reward/completion expected?
+
+I created a QuestDialogue as a dictionary of Dialogues with 3 keys (for now)
+-initialization
+-waiting
+-completion
+
+Each dialogue can be as long as needed, so this is not capped to just a single message.
+In the future, the dict can be extended with additional keys, or the structure can be changed, depending on what is better.
+
+Getting the right quest:
+
+When a NPC is clicked, the first check is to see if they have a quest to give.
+The QuestManager has been created for that:
+-Handling the retrieval of the right quest
+-Handling the completion of quests
+
+If the NPC has no quest, we just return None.
+
+
+Getting the right dialogue:
+
+When clicking a NPC, we also have to get the right set of dialogues.
+
+I created the DialogueManager to handle all of that logic.
+
+For now, the scenario gives any NPC a certain list of dialogues.
+I also added some "generic dialogue" so that I don't have to set dialogue for every single NPC.
+
+Assuming the NPC doesn't have any quests:
+If they have dialogue, we return a random dialogue.
+If they don't, we return a random generic dialogue.
+
+If the NPC has a quest, we'll have to retrieve the right dialogue associated with that quest.
+First we have to get the QuestDialogue.
+Then check if the character already has the quest.
+Then check if it is completed or not already.
+That gives us the state of the quest, which allows retrieval of the right quest dialogue.
+
+
+Displaying and handling the dialogue:
+
+After that, the DialogueController handles the dialogue by using a DialogueBox.
+
+It gets the index and length of the dialogue, and depending on these, it displays the previous or next buttons.
+In the case of a quest, it waits for the last piece of dialogue to display the accept/decline buttons.
+
+While the dialogue is showing, the controller handles all the events.
+-X closes the dialogue
+-prev/next go back/forward in the dialogue
+-accept/decline/end quests are handled with a return code that is passed back to the WorldController
+
+There, the QuestManager is used to take care of the completion of quests.
+
+It has a dictionary of "current_quests" indexed by NPC: that allows to handle multiple ongoing quests at once.
+I used to have a single "current_quest" but quickly realized the limitations.
+It uses the current_npc attribute to know who the character is talking to, get the right quest, and end the quest.
+
+The actual "completion" of the quest happens when the objectives are done.
+The "ending" of the quest happens when the player finishes the completion dialogue with the NPC.
+For this, I added the "ended" boolean to the quest.
+
+Right now, I decided to keep it simple, and only one simultaneous quest per NPC is handled.
+
+
+I summarized how objects interact with each other during the building and playing phase.
+I will have to rework the reset buttons, and start thinking about more "meta" concepts of the game, but I want to get basic LLMs in before I start adding too much complexity to the game.
+
+
+
+
+

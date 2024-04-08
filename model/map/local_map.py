@@ -8,3 +8,7 @@ class LocalMap(Map):
 
     def add_entity(self, entity):
         self.entities.append(entity)
+
+    def remove_entity(self, entity):
+        if entity in self.entities:
+            self.entities.remove(entity)

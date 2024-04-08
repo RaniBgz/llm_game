@@ -29,6 +29,11 @@ class WorldMap():
         local_map.add_entity(entity)
         print(f"Added entity {entity.name} to local map at {local_map_coords}")
 
+    def remove_entity(self, entity, local_map_coords):
+        local_map = self.map_grid[local_map_coords]
+        local_map.remove_entity(entity)
+        print(f"Removed entity {entity.name} from local map at {local_map_coords}")
+
     def add_local_map(self, x, y, local_map):
         self.map_grid[(x, y)] = local_map
 
