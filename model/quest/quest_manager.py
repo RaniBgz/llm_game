@@ -46,10 +46,22 @@ class QuestManager():
             self.game_data.character.add_quest(quest)
             # quest.set_started()  # Or adjust the status accordingly
 
+#TODO: for retrieval sub objectives remove the item from the player's inventory
     def handle_quest_completion(self):
         quest = self.current_quests.get(self.current_npc, [])[0]
         quest.set_ended()
+        self.handle_quest_objective_completion(quest)
         self.game_data.character.remove_quest(quest)
+
+
+    def handle_quest_objective_completion(self, quest):
+        for objective in quest.get_objectives():
+            #Take the item away from the player's inventory for retrieval quests
+            if isinstance(objective, model.quest.objective.RetrievalObjective):
+                item = self.game_data.find_item_by_id(objective.target_item_id)
+                if self.game_data.character.check_character_has_item(objective.target_item_id):
+                    self.game_data.character.remove_item_from_inventory(item)
+        pass
 
 
     ''' Quest completion methods '''

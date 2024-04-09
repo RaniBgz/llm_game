@@ -20,6 +20,9 @@ class Quest:
     def get_id(self):
         return self.id
 
+    def get_objectives(self):
+        return self.objectives
+
     def get_current_objective(self):
         if self.ordered:
             return self.objectives[self.current_objective]
