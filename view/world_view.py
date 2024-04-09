@@ -8,7 +8,8 @@ import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
 from view.ui.item_info_box import ItemInfoBox
-from view.ui.game_menu import GameMenu
+from view.ui.game_menu_bar import GameMenuBar
+from controller.game_menu_bar_controller import GameMenuBarController
 from view.main_game_view import MainGameView
 from controller.dialogue_controller import DialogueController
 from model.observer import Observer
@@ -34,7 +35,8 @@ class WorldView:
 
         self.initialize_local_map(global_position[0], global_position[1])
 
-        self.game_menu = GameMenu(screen, pygame.font.SysFont("Arial", 25))
+        self.game_menu_bar = GameMenuBar(screen, pygame.font.SysFont("Arial", 25))
+        self.game_menu_bar_controller = GameMenuBarController(self.game_menu_bar)
 
     def update_character_position(self, x, y):
         x = x * view_cst.TILE_WIDTH
@@ -134,7 +136,7 @@ class WorldView:
             return return_code
 
     def handle_game_menu_events(self, event):
-        return_code = self.game_menu.handle_events(event)
+        return_code = self.game_menu_bar_controller.handle_events(event)
         print("Return code: ", return_code)
         return return_code
 
@@ -166,7 +168,7 @@ class WorldView:
         for i in range(len(self.items)): #Display Items
             self.screen.blit(self.items[i][1], self.items[i][2])
         self.display_coordinates(x, y)
-        self.game_menu.display()
+        self.game_menu_bar.display()
         self.dialogue_box.display()
         self.item_info_box.display()
         self.npc_info_box.display()

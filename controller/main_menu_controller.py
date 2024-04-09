@@ -6,8 +6,8 @@ from view.world_view import WorldView
 from controller.world_controller import WorldController
 
 class MainMenuController:
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, game_data, view):
+        self.game_data = game_data
         self.view = view
 
     def run(self):
@@ -29,6 +29,6 @@ class MainMenuController:
 
     def start_game(self):
         # Transition to the main game
-        world_view = WorldView(self.view.screen, self.model.character.global_position)
-        world_controller = WorldController(self.model, world_view)
+        world_view = WorldView(self.view.screen, self.game_data.character.global_position)
+        world_controller = WorldController(self.game_data, world_view)
         world_controller.run()

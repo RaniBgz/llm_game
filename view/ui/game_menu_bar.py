@@ -7,7 +7,7 @@ from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
 
-class GameMenu:
+class GameMenuBar:
     def __init__(self, screen, font):
         self.screen = screen
         self.font = font
@@ -50,19 +50,3 @@ class GameMenu:
         for button_surface, button_rect, text, text_rect, _ in self.buttons:
             self.screen.blit(button_surface, button_rect)
             self.screen.blit(text, text_rect)
-
-
-    def handle_events(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for button_surface, button_rect, text, text_rect, button_hover_color in self.buttons:
-                if button_rect.collidepoint(event.pos):
-                    # Handle menu item click event
-                    menu_item_clicked = self.menu_items[self.buttons.index((button_surface, button_rect, text, text_rect, button_hover_color))]
-                    if menu_item_clicked == "Quests":
-                        return view_cst.QUEST_MENU
-                    elif menu_item_clicked == "Inventory":
-                        return view_cst.INVENTORY_MENU
-                    elif menu_item_clicked == "Map":
-                        return view_cst.MAP_MENU
-                    elif menu_item_clicked == "Settings":
-                        return view_cst.SETTINGS_MENU

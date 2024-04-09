@@ -53,7 +53,6 @@ class WorldController:
         if self.view.back_button_rect.collidepoint(pos):
             self.game_data.character.global_position = (self.game_data.character.global_position[0],
                                                         self.game_data.character.global_position[1])
-            print(f"Clicked back button")
             return
 
         self.view.handle_popup_events(event)
