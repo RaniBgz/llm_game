@@ -154,6 +154,9 @@ class WorldView:
                 item_obj.in_world = False
                 break
 
+    #TODO: Add render functions
+    #TODO: Think about subcontrollers to handle the logic in parts of the view: killing npcs, removing items, then later health bars, etc.
+
     def display_world(self, x, y):
         self.screen.fill(view_cst.WHITE)
         self.screen.blit(self.back_button_text, self.back_button_rect)

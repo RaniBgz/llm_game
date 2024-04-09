@@ -4,28 +4,26 @@ import random
 class QuestManager():
     def __init__(self, game_data):
         self.game_data = game_data
-        self.current_quests = {}
         self.current_npc = None
-        self.initialize_current_quests()
+        #TODO: For now, only one current quest is handled per NPC
+        self.current_quests = self._build_initial_quest_data()
 
     def set_current_npc(self, npc):
         self.current_npc = npc
 
-    ''' Quest initialization and attribution methods'''
-    def give_quest_to_character(self):
-        print(f"Giving quest to character")
-        quest = self.current_quests[self.current_npc][0]
-        self.game_data.character.add_quest(quest)
-        print(f"Quest {quest.id} given to character")
+    def _build_initial_quest_data(self):
+        current_quests = {}
+        for npc in self.game_data.npcs:
+            next_quest = self._get_next_available_quest(npc)
+            if next_quest:
+                current_quests[npc] = [next_quest]
+        return current_quests
 
-    #FLAW IN THE LOGIC: if several NPCs give out quests, we'll have problems (may be fixed)
-    #FLAW IN THE LOGIC: does that give quests on a loop?
-    def remove_quest_from_character(self):
-        quest = self.current_quests[self.current_npc][0]
-        quest.set_ended()
-        self.current_quests[self.current_npc].remove(quest)
-        self.game_data.character.remove_quest(quest)
-        print(f"Quest {quest.id} removed from character")
+    def _get_next_available_quest(self, npc):
+        for quest in npc.quests:
+            if not quest.ended:
+                return quest
+        return None
 
     def get_next_npc_quest(self, npc):
         if len(npc.quests) == 0:
@@ -37,12 +35,22 @@ class QuestManager():
                     return npc.quests[i]
             return None
 
-    #Okay, this is cool, but NPC need to have quest associated to them (some other logic)
-    #AKA quests in game data are not affected by this
-    def initialize_current_quests(self):
-        for npc in self.game_data.npcs:
-            if len(npc.quests) > 0:
-                self.current_quests[npc] = []
+    def initialize_next_npc_quest(self, npc):
+        next_quest = self._get_next_available_quest(npc)
+        if next_quest:
+            self.current_quests[npc] = [next_quest]
+
+    def handle_quest_giving(self):
+        if self.current_npc and self.current_quests.get(self.current_npc):
+            quest = self.current_quests[self.current_npc].pop(0)  # Remove and hand out
+            self.game_data.character.add_quest(quest)
+            # quest.set_started()  # Or adjust the status accordingly
+
+    def handle_quest_completion(self):
+        quest = self.current_quests.get(self.current_npc, [])[0]
+        quest.set_ended()
+        self.game_data.character.remove_quest(quest)
+
 
     ''' Quest completion methods '''
     def check_location_objective_completion(self):

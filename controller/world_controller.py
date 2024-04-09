@@ -67,7 +67,19 @@ class WorldController:
         self.handle_npc_interaction(pos, button)
         self.handle_item_interaction(pos, button)
 
-
+    def handle_dialogue_return(self, return_code):
+        if return_code == "accept_quest":
+            self.quest_manager.handle_quest_giving()
+            # self.quest_manager.give_quest_to_character()
+        elif return_code == "decline_quest":
+            pass
+        elif return_code == "end_quest":
+            #TODO: Handle rewards if any
+            #TODO: Fix the way the quest lifecycle is handled
+            self.quest_manager.handle_quest_completion()
+            # self.quest_manager.remove_quest_from_character()
+        else:
+            return
 
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
@@ -96,6 +108,32 @@ class WorldController:
                         dialogue, dialogue_type = dialogue_manager.get_dialogue()
                         self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
 
+    # def handle_npc_interaction(self, pos, button):
+    #     for npc, npc_rect in self.view.get_npcs():
+    #         if npc_rect.collidepoint(pos):
+    #             if button == pygame.BUTTON_RIGHT:
+    #                 self.view.show_npc_info(npc, npc_rect)
+    #             elif button == pygame.BUTTON_LEFT:
+    #                 self.handle_npc_dialogue(npc)
+    #                 #TODO: Handle hostile mobs
+    # def handle_npc_dialogue(self, npc):
+    #     if npc.hostile:
+    #         self.quest_manager.check_kill_objective_completion(npc)
+    #     else:
+    #         self.quest_manager.check_talk_to_npc_objective_completion(npc)
+    #         quest = self.quest_manager.get_next_npc_quest(npc)
+    #         self.quest_manager.set_current_npc(npc)
+    #         dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
+    #         dialogue, dialogue_type = dialogue_manager.get_dialogue()
+    #         self.view.show_dialogue(npc, self.game_data.character, dialogue, dialogue_type)
+
+    # def handle_mob_interaction(self, pos, button):
+    #     for mob, mob_rect in self.view.get_mobs():
+    #         if mob_rect.collidepoint(pos):
+    #             if button == pygame.BUTTON_RIGHT:
+    #                 self.view.show_mob_info(mob, mob_rect)
+    #             elif button == pygame.BUTTON_LEFT:
+    #                 self.handle_mob_dialogue(mob)
 
     def handle_item_interaction(self, pos, button):
         for item, item_image, item_rect in self.view.items:
@@ -137,17 +175,7 @@ class WorldController:
         else:
             return
 
-    def handle_dialogue_return(self, return_code):
-        if return_code == "accept_quest":
-            self.quest_manager.give_quest_to_character()
-        elif return_code == "decline_quest":
-            pass
-        elif return_code == "end_quest":
-            #TODO: Handle rewards if any
-            #TODO: Fix the way the quest lifecycle is handled
-            self.quest_manager.remove_quest_from_character()
-        else:
-            return
+
 
     def move_character(self):
         keys_pressed = pygame.key.get_pressed()
