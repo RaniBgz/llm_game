@@ -1,7 +1,5 @@
 import sys
 import pygame
-from view.main_game_view import MainGameView
-from controller.main_game_controller import MainGameController
 from view.world_view import WorldView
 from controller.world_controller import WorldController
 

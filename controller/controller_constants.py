@@ -1,0 +1,6 @@
+MAIN_MENU_STATE = "main_menu"
+WORLD_VIEW_STATE = "world"
+QUEST_VIEW_STATE = "quest"
+INVENTORY_VIEW_STATE = "inventory"
+MAP_VIEW_STATE = "map"
+SETTINGS_VIEW_STATE = "settings"
