@@ -14,12 +14,14 @@ from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
 from controller.settings_controller import SettingsController
+from view.main_menu_view import MainMenuView
 
 
 class WorldController:
-    def __init__(self, game_data, view):
+    def __init__(self, game_data, main_menu_ctrl, view):
         self.game_data = game_data
         self.view = view
+        self.main_menu_controller = main_menu_ctrl
         self.quest_manager = QuestManager(self.game_data)
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
@@ -53,7 +55,7 @@ class WorldController:
         if self.view.back_button_rect.collidepoint(pos):
             self.game_data.character.global_position = (self.game_data.character.global_position[0],
                                                         self.game_data.character.global_position[1])
-            return
+            self.back_to_main_menu()
 
         self.view.handle_popup_events(event)
 
@@ -107,33 +109,6 @@ class WorldController:
                         dialogue, dialogue_type = dialogue_manager.get_dialogue()
                         self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
 
-    # def handle_npc_interaction(self, pos, button):
-    #     for npc, npc_rect in self.view.get_npcs():
-    #         if npc_rect.collidepoint(pos):
-    #             if button == pygame.BUTTON_RIGHT:
-    #                 self.view.show_npc_info(npc, npc_rect)
-    #             elif button == pygame.BUTTON_LEFT:
-    #                 self.handle_npc_dialogue(npc)
-    #                 #TODO: Handle hostile mobs
-    # def handle_npc_dialogue(self, npc):
-    #     if npc.hostile:
-    #         self.quest_manager.check_kill_objective_completion(npc)
-    #     else:
-    #         self.quest_manager.check_talk_to_npc_objective_completion(npc)
-    #         quest = self.quest_manager.get_next_npc_quest(npc)
-    #         self.quest_manager.set_current_npc(npc)
-    #         dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
-    #         dialogue, dialogue_type = dialogue_manager.get_dialogue()
-    #         self.view.show_dialogue(npc, self.game_data.character, dialogue, dialogue_type)
-
-    # def handle_mob_interaction(self, pos, button):
-    #     for mob, mob_rect in self.view.get_mobs():
-    #         if mob_rect.collidepoint(pos):
-    #             if button == pygame.BUTTON_RIGHT:
-    #                 self.view.show_mob_info(mob, mob_rect)
-    #             elif button == pygame.BUTTON_LEFT:
-    #                 self.handle_mob_dialogue(mob)
-
     def handle_item_interaction(self, pos, button):
         for item, item_image, item_rect in self.view.items:
             if item_rect.collidepoint(pos):
@@ -175,6 +150,11 @@ class WorldController:
             return
 
 
+    def back_to_main_menu(self):
+        view = MainMenuView(self.view.screen)
+        self.main_menu_controller.run()
+        # controller = MainMenuController(self.game_data, view)  # Assume model is defined
+        # controller.run()
 
     def move_character(self):
         keys_pressed = pygame.key.get_pressed()
@@ -235,3 +215,29 @@ class WorldController:
         self.view.local_map = self.local_map
         self.view.display_world(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
 
+    # def handle_npc_interaction(self, pos, button):
+    #     for npc, npc_rect in self.view.get_npcs():
+    #         if npc_rect.collidepoint(pos):
+    #             if button == pygame.BUTTON_RIGHT:
+    #                 self.view.show_npc_info(npc, npc_rect)
+    #             elif button == pygame.BUTTON_LEFT:
+    #                 self.handle_npc_dialogue(npc)
+    #                 #TODO: Handle hostile mobs
+    # def handle_npc_dialogue(self, npc):
+    #     if npc.hostile:
+    #         self.quest_manager.check_kill_objective_completion(npc)
+    #     else:
+    #         self.quest_manager.check_talk_to_npc_objective_completion(npc)
+    #         quest = self.quest_manager.get_next_npc_quest(npc)
+    #         self.quest_manager.set_current_npc(npc)
+    #         dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
+    #         dialogue, dialogue_type = dialogue_manager.get_dialogue()
+    #         self.view.show_dialogue(npc, self.game_data.character, dialogue, dialogue_type)
+
+    # def handle_mob_interaction(self, pos, button):
+    #     for mob, mob_rect in self.view.get_mobs():
+    #         if mob_rect.collidepoint(pos):
+    #             if button == pygame.BUTTON_RIGHT:
+    #                 self.view.show_mob_info(mob, mob_rect)
+    #             elif button == pygame.BUTTON_LEFT:
+    #                 self.handle_mob_dialogue(mob)
