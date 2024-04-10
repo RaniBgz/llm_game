@@ -26,15 +26,21 @@ class WorldController:
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
+        self.movement_speed = 10  # tiles per second
+        self.time_to_move_one_tile = 1.0 / self.movement_speed
+        self.accumulated_time = 0.0
+        self.move_direction = (0, 0)
 
     def run(self):
         clock = pygame.time.Clock()
         while True:
             clock.tick(view_cst.FPS)
+            dt = clock.tick(view_cst.FPS) / 1000.0
             for event in pygame.event.get():
                 self.handle_event(event)
 
-            self.move_character()
+            self.update_movement(dt)
+            # self.move_character()
             #TODO: Replace with view.render()
             self.view.display_world(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])
@@ -47,6 +53,27 @@ class WorldController:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             print(f"Mouse clicked")
             self.handle_mouse_event(event)
+        elif event.type == pygame.KEYDOWN:
+            self.handle_key_down(event.key)
+        elif event.type == pygame.KEYUP:
+            self.handle_key_up(event.key)
+
+    def handle_key_down(self, key):
+        if key == pygame.K_LEFT:
+            self.move_direction = (-1, 0)
+        elif key == pygame.K_RIGHT:
+            self.move_direction = (1, 0)
+        elif key == pygame.K_UP:
+            self.move_direction = (0, -1)
+        elif key == pygame.K_DOWN:
+            self.move_direction = (0, 1)
+
+    def handle_key_up(self, key):
+        if (key == pygame.K_LEFT and self.move_direction == (-1, 0)) or \
+           (key == pygame.K_RIGHT and self.move_direction == (1, 0)) or \
+           (key == pygame.K_UP and self.move_direction == (0, -1)) or \
+           (key == pygame.K_DOWN and self.move_direction == (0, 1)):
+            self.move_direction = (0, 0)
 
     def handle_mouse_event(self, event):
         pos = event.pos
@@ -129,6 +156,9 @@ class WorldController:
         self.world_map.remove_entity(item, item.global_position)
         self.view.remove_item(item)
 
+    def back_to_main_menu(self):
+        self.main_menu_controller.run()
+
     def open_menu(self, return_code):
         if return_code == view_cst.QUEST_MENU:
             quest_view = QuestView(self.view.screen)
@@ -149,12 +179,13 @@ class WorldController:
         else:
             return
 
+    def update_movement(self, dt):
+        self.accumulated_time += dt
 
-    def back_to_main_menu(self):
-        view = MainMenuView(self.view.screen)
-        self.main_menu_controller.run()
-        # controller = MainMenuController(self.game_data, view)  # Assume model is defined
-        # controller.run()
+        if self.move_direction != (0, 0):
+            if self.accumulated_time >= self.time_to_move_one_tile:
+                self.move_character()
+                self.accumulated_time = 0.0
 
     def move_character(self):
         keys_pressed = pygame.key.get_pressed()

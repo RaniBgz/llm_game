@@ -32,7 +32,7 @@ COFFEE_BROWN = (200, 190, 140)  # A coffee brown color for text
 COFFEE_BROWN_2 = (150, 140, 100)  # A darker coffee brown color for text
 COFFEE_BROWN_3 = (111, 78, 55)  # A darker coffee brown color for text
 
-FPS = 16
+FPS = 60
 MOVEMENT_SPEED = 10
 
 QUEST_MENU = "quests"
