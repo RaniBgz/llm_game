@@ -12,7 +12,7 @@ from view.ui.game_menu_bar import GameMenuBar
 from controller.game_menu_bar_controller import GameMenuBarController
 from view.main_game_view import MainGameView
 from controller.dialogue_controller import DialogueController
-from model.observer import Observer
+from model.observer.observer import Observer
 
 #TODO: Init character, init all entities of local map in a different function.
 class WorldView:
@@ -21,7 +21,7 @@ class WorldView:
         self.npcs = []
         self.items = []
 
-        self.observer = Observer()
+        # self.observer = Observer()
 
         self.npc_info_box = NPCInfoBox(screen)
         self.dialogue_box = DialogueBox(screen)

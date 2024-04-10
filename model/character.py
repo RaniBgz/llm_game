@@ -3,13 +3,12 @@ from model.entity import Entity
 import json
 from model.quest.quest import Quest
 from model.item import Item
-from model.subject import Subject
+from model.subject.subject import Subject
 
 
 class Character(Entity):
     def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0), sprite="./assets/sprites/character/character.png"):
         super().__init__()
-        self.subject = Subject()
         self.name = name
         self.hp = hp
         self.sprite = sprite

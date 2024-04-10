@@ -4,6 +4,7 @@ from view.main_menu_view import MainMenuView
 from controller.main_menu_controller import MainMenuController
 from view.world_view import WorldView
 from controller.world_controller import WorldController
+from model.observer.game_controller_observer import GameControllerObserver
 
 
 class GameController:
@@ -11,6 +12,7 @@ class GameController:
         self.screen = screen
         self.game_data = game_data
         self.current_state = None
+        self.observer = GameControllerObserver()
 
     def run(self):
         self.change_state("main_menu")
