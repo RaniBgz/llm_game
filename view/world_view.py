@@ -29,9 +29,9 @@ class WorldView:
 
         self.character_rect = None
 
-        self.exit_font = pygame.font.SysFont("Arial", 30)
-        self.back_button_text = self.exit_font.render("Back", True, view_cst.TEXT_COLOR)
-        self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
+        # self.exit_font = pygame.font.SysFont("Arial", 30)
+        # self.back_button_text = self.exit_font.render("Back", True, view_cst.TEXT_COLOR)
+        # self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
         self.initialize_local_map(global_position[0], global_position[1])
 
@@ -159,8 +159,6 @@ class WorldView:
     def render_background(self):
         self.screen.fill(view_cst.WHITE)
 
-    def render_back_button(self):
-        self.screen.blit(self.back_button_text, self.back_button_rect)
 
     def render_character(self):
         self.screen.blit(self.character_image, self.character_rect)
@@ -183,7 +181,6 @@ class WorldView:
 
     def render(self, x, y):
         self.render_background()
-        self.render_back_button()
         self.render_npcs()
         self.render_character()
         self.render_items()

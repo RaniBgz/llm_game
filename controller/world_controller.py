@@ -58,6 +58,8 @@ class WorldController:
             self.handle_key_up(event.key)
 
     def handle_key_down(self, key):
+        if key == pygame.K_ESCAPE:
+            self.back_to_main_menu()
         if key == pygame.K_LEFT:
             self.move_direction = (-1, 0)
         elif key == pygame.K_RIGHT:
@@ -86,11 +88,6 @@ class WorldController:
     def handle_mouse_event(self, event):
         pos = event.pos
         button = event.button
-
-        if self.view.back_button_rect.collidepoint(pos):
-            self.game_data.character.global_position = (self.game_data.character.global_position[0],
-                                                        self.game_data.character.global_position[1])
-            self.back_to_main_menu()
 
         self.view.handle_popup_events(event)
 

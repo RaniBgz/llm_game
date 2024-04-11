@@ -6,21 +6,26 @@ class SettingsController:
         self.view = view
 
     def run(self):
-        while True:
+        running = True
+        while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.view.back_button_rect.collidepoint(event.pos):
-                        return
+                        running = False
                     else:
                         button_index = self.view.handle_events(event)
                         if button_index is not None:
                             self.handle_selected_button(button_index)
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.view.reset_selected_button()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
                 self.view.display_settings()
+
 
     def handle_selected_button(self, button_index):
         print(f"Selected button index: {button_index}")
