@@ -28,7 +28,7 @@ class WorldController:
                                                          self.game_data.character.global_position[1])
         self.movement_speed = 10 # tiles per second
         self.time_to_move_one_tile = view_cst.FPS / self.movement_speed
-        self.time_to_move_one_tile = 0.1
+        self.time_to_move_one_tile = 0.2
         self.accumulated_time = 0.0
         self.move_direction = (0, 0)
 
@@ -37,7 +37,6 @@ class WorldController:
         while True:
             clock.tick(view_cst.FPS)
             dt = clock.tick(view_cst.FPS)*10
-            print(f"dt: {dt}")
             for event in pygame.event.get():
                 self.handle_event(event)
 
@@ -76,7 +75,7 @@ class WorldController:
             self.move_direction = (0, 0)
 
     def update_movement(self, dt):
-        print(f"Accumulated time: {self.accumulated_time}")
+        # print(f"Accumulated time: {self.accumulated_time}")
         self.accumulated_time += dt
 
         if self.move_direction != (0, 0):

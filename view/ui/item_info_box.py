@@ -14,7 +14,15 @@ class ItemInfoBox(PopupBox):
 
     def create_item_info(self, item, item_rect):
         self.item = item
-        self.rect.midleft = (item_rect.midright[0] + 10, item_rect.midright[1])
+
+        screen_width, screen_height = pygame.display.get_surface().get_size()
+        if item_rect.width + item_rect[0] + self.width < screen_width:
+            print("Enough space to the right")
+            self.rect.midleft = (item_rect.midright[0] + 10, item_rect.midright[1])
+        else:
+            print("Not enough space to the right")
+            self.rect.midright = (item_rect.midleft[0] - 10, item_rect.midleft[1])
+
         self.surface.fill(view_cst.POPUP_BG_COLOR)
 
         item_name = f"{self.item.name}"
@@ -27,7 +35,7 @@ class ItemInfoBox(PopupBox):
         item_description_lines = [line.strip() for line in item_description.split('\n')]  # Split into lines
         y = 30
         for line in item_description_lines:
-            wrapped_lines = utils.wrap_text(line, description_width)
+            wrapped_lines = utils.wrap_text(line, description_width, view_cst.TEXT_COLOR)
             for wrapped_line in wrapped_lines:
                 self.surface.blit(wrapped_line, (10, y))
                 y += wrapped_line.get_height()

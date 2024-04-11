@@ -13,7 +13,15 @@ class NPCInfoBox(PopupBox):
 
     def create_npc_info(self, npc, npc_rect):
         self.npc = npc
-        self.rect.midleft = (npc_rect.midright[0] + 10, npc_rect.midright[1])
+        # self.rect.midleft = (npc_rect.midright[0] + 10, npc_rect.midright[1])
+        
+        screen_width, screen_height = pygame.display.get_surface().get_size()
+        if npc_rect.width + npc_rect[0] + self.width < screen_width:
+            print("Enough space to the right")
+            self.rect.midleft = (npc_rect.midright[0] + 10, npc_rect.midright[1])
+        else:
+            print("Not enough space to the right")
+            self.rect.midright = (npc_rect.midleft[0] - 10, npc_rect.midleft[1])
 
         self.surface.fill(view_cst.POPUP_BG_COLOR)
 
