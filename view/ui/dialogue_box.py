@@ -22,7 +22,7 @@ class DialogueBox(PopupBox):
         self.surface.blit(name_rendered, name_pos)
 
         # Use the wrap_text function to get the lines of dialogue
-        lines = wrap_text(dialogue_text, self.width - 20, view_cst.TEXT_COLOR)
+        lines = wrap_text(dialogue_text, self.width - 20, self.font, view_cst.TEXT_COLOR)
         y_offset = 60
         for line_surface in lines:
             # Calculate the x position to center the line

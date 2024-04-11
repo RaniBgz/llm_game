@@ -9,12 +9,13 @@ class NPCInfoBox(PopupBox):
         self.npc = None
         self.npc_rect = None
         self.font = pygame.font.SysFont("Arial", 16)
-        self.exit_font = pygame.font.SysFont("Arial", 32)
+        self.text_font = pygame.font.SysFont("Arial", 12)
+        self.exit_font = pygame.font.SysFont("Arial", 24)
 
     def create_npc_info(self, npc, npc_rect):
         self.npc = npc
         # self.rect.midleft = (npc_rect.midright[0] + 10, npc_rect.midright[1])
-        
+
         screen_width, screen_height = pygame.display.get_surface().get_size()
         if npc_rect.width + npc_rect[0] + self.width < screen_width:
             print("Enough space to the right")

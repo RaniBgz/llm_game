@@ -76,9 +76,10 @@ def populate_tables(conn):
 
     # Insert NPCs
     npcs = [
-        ('Elder', 1000, '0,0', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
-        ('Enchantress', 200, '0,0', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
-        ('Robot', 10000, '0,0', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
+        ('Blacksmith', 50, '0,0', f"{view_cst.H_TILES},{view_cst.V_TILES//2}", './assets/sprites/npcs/blacksmith.png', False),
+        ('Elder', 50, '0,0', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
+        ('Enchantress', 20, '0,0', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
+        ('Robot', 1000, '0,0', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
         ('Plant', 8, '0,1', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),
         ('Goblin', 10, '0,1', f"{view_cst.H_TILES//2},1", './assets/sprites/npcs/goblin.png', True),
         ('Skeleton', 12, '0,1', f"{3*view_cst.H_TILES//4},1", './assets/sprites/npcs/skeleton.png', True),
