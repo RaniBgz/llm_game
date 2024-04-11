@@ -156,25 +156,50 @@ class WorldView:
                 item_obj.in_world = False
                 break
 
+    def render_background(self):
+        self.screen.fill(view_cst.WHITE)
+
+    def render_back_button(self):
+        self.screen.blit(self.back_button_text, self.back_button_rect)
+
+    def render_character(self):
+        self.screen.blit(self.character_image, self.character_rect)
+
+    def render_npcs(self):
+        for i in range(len(self.npcs)):
+            self.screen.blit(self.npcs[i][1], self.npcs[i][2])
+
+    def render_items(self):
+        for i in range(len(self.items)):
+            self.screen.blit(self.items[i][1], self.items[i][2])
+
+    def render_coordinates(self, x, y):
+        self.coord_text = pygame.font.SysFont("Arial", 20).render(f"({x}, {y})", True, view_cst.TEXT_COLOR)
+        self.coord_rect = self.coord_text.get_rect(topleft=(0, 10))
+        self.screen.blit(self.coord_text, self.coord_rect)
+
     #TODO: Add render functions
     #TODO: Think about subcontrollers to handle the logic in parts of the view: killing npcs, removing items, then later health bars, etc.
 
-    def display_world(self, x, y):
-        self.screen.fill(view_cst.WHITE)
-        self.screen.blit(self.back_button_text, self.back_button_rect)
-        self.screen.blit(self.character_image, self.character_rect)
-        for i in range(len(self.npcs)): #Display NPCs
-            self.screen.blit(self.npcs[i][1], self.npcs[i][2])
-        for i in range(len(self.items)): #Display Items
-            self.screen.blit(self.items[i][1], self.items[i][2])
-        self.display_coordinates(x, y)
+    def render(self, x, y):
+        self.render_background()
+        self.render_back_button()
+        self.render_npcs()
+        self.render_character()
+        self.render_items()
+        self.render_coordinates(x, y)
         self.game_menu_bar.display()
         self.dialogue_box.display()
         self.item_info_box.display()
         self.npc_info_box.display()
         pygame.display.flip()
 
-    def display_coordinates(self, x, y):
-        self.coord_text = pygame.font.SysFont("Arial", 20).render(f"({x}, {y})", True, view_cst.TEXT_COLOR)
-        self.coord_rect = self.coord_text.get_rect(topleft=(0, 10))
-        self.screen.blit(self.coord_text, self.coord_rect)
+
+        # self.screen.blit(self.back_button_text, self.back_button_rect)
+        # self.screen.fill(view_cst.WHITE)
+        # self.screen.blit(self.character_image, self.character_rect)
+        # for i in range(len(self.npcs)): #Display NPCs
+        #     self.screen.blit(self.npcs[i][1], self.npcs[i][2])
+        # for i in range(len(self.items)): #Display Items
+        #     self.screen.blit(self.items[i][1], self.items[i][2])
+

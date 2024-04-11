@@ -26,8 +26,9 @@ class WorldController:
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
-        self.movement_speed = 10  # tiles per second
-        self.time_to_move_one_tile = 1.0 / self.movement_speed
+        self.movement_speed = 10 # tiles per second
+        self.time_to_move_one_tile = view_cst.FPS / self.movement_speed
+        self.time_to_move_one_tile = 0.1
         self.accumulated_time = 0.0
         self.move_direction = (0, 0)
 
@@ -35,16 +36,15 @@ class WorldController:
         clock = pygame.time.Clock()
         while True:
             clock.tick(view_cst.FPS)
-            dt = clock.tick(view_cst.FPS) / 1000.0
+            dt = clock.tick(view_cst.FPS)*10
+            print(f"dt: {dt}")
             for event in pygame.event.get():
                 self.handle_event(event)
 
             self.update_movement(dt)
             # self.move_character()
-            #TODO: Replace with view.render()
-            self.view.display_world(self.game_data.character.global_position[0],
+            self.view.render(self.game_data.character.global_position[0],
                                     self.game_data.character.global_position[1])
-            # self.view.render()
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
@@ -74,6 +74,15 @@ class WorldController:
            (key == pygame.K_UP and self.move_direction == (0, -1)) or \
            (key == pygame.K_DOWN and self.move_direction == (0, 1)):
             self.move_direction = (0, 0)
+
+    def update_movement(self, dt):
+        print(f"Accumulated time: {self.accumulated_time}")
+        self.accumulated_time += dt
+
+        if self.move_direction != (0, 0):
+            if self.accumulated_time >= self.time_to_move_one_tile:
+                self.move_character()
+                self.accumulated_time = 0.0
 
     def handle_mouse_event(self, event):
         pos = event.pos
@@ -179,13 +188,6 @@ class WorldController:
         else:
             return
 
-    def update_movement(self, dt):
-        self.accumulated_time += dt
-
-        if self.move_direction != (0, 0):
-            if self.accumulated_time >= self.time_to_move_one_tile:
-                self.move_character()
-                self.accumulated_time = 0.0
 
     def move_character(self):
         keys_pressed = pygame.key.get_pressed()
@@ -244,7 +246,7 @@ class WorldController:
             self.quest_manager.check_location_objective_completion()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
         self.view.local_map = self.local_map
-        self.view.display_world(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
+        self.view.render(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
 
     # def handle_npc_interaction(self, pos, button):
     #     for npc, npc_rect in self.view.get_npcs():
