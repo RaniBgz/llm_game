@@ -1,9 +1,8 @@
 import sys
 import pygame
 
-import model.quest.objective
 from model.map.world_map import WorldMap
-from model.dialogue_manager import DialogueManager
+from model.dialogue.dialogue_manager import DialogueManager
 from model.quest.quest_manager import QuestManager
 from view import view_constants as view_cst
 from view.quest_view import QuestView
@@ -14,7 +13,6 @@ from controller.quest_controller import QuestController
 from controller.inventory_controller import InventoryController
 from controller.map_controller import MapController
 from controller.settings_controller import SettingsController
-from view.main_menu_view import MainMenuView
 
 
 class WorldController:

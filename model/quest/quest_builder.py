@@ -1,6 +1,6 @@
 from model.quest.quest import Quest
 from model.quest.objective import KillObjective, LocationObjective, RetrievalObjective, TalkToNPCObjective
-from model.dialogue import Dialogue, QuestDialogue
+from model.dialogue.dialogue import Dialogue, QuestDialogue
 
 '''Links quests to objectives'''
 

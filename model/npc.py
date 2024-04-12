@@ -1,6 +1,6 @@
 from model.entity import Entity
-from model.dialogue import Dialogue
-from model.dialogue import QuestDialogue
+from model.dialogue.dialogue import Dialogue
+from model.dialogue.dialogue import QuestDialogue
 # from model.subject.npc_subject import NPCSubject
 from model.subject.subject import Subject
 

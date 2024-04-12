@@ -58,8 +58,13 @@ class Item(Entity, Subject):
 
     def reset_item(self):
         print(f"Initial state: {self.initial_state}")
-        self.global_position = self.initial_state["global_position"]
-        self.local_position = self.initial_state["local_position"]
-        self.in_world = self.initial_state["in_world"]
-        if self.in_world:
-            self.notify(self, "item_added_to_world")
+        if self.global_position != self.initial_state["global_position"]:
+            self.global_position = self.initial_state["global_position"]
+        if self.local_position != self.initial_state["local_position"]:
+            self.local_position = self.initial_state["local_position"]
+        if self.in_world != self.initial_state["in_world"]:
+            self.in_world = self.initial_state["in_world"]
+            if self.in_world:
+                self.notify(self, "item_added_to_world")
+            else:
+                self.notify(self, "item_removed_from_world")

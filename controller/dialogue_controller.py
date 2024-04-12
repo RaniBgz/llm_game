@@ -1,6 +1,6 @@
 import pygame
 import random
-from model.dialogue import Dialogue
+from model.dialogue.dialogue import Dialogue
 
 #TODO: Revamp all of this to make it much simpler to access: the right dialogue, the right index in the dialogue, and update between text
 #TODO: The Dialoge Controller may have too much information. It only needs to know the current Dialogue.

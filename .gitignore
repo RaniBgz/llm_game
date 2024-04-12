@@ -1,4 +1,4 @@
-.env
+ai/llm/.env
 .idea/*
 */__pycache__/*
 model/*/__pycache__/
