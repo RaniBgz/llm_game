@@ -15,8 +15,9 @@ from controller.dialogue_controller import DialogueController
 from model.observer.observer import Observer
 
 #TODO: Init character, init all entities of local map in a different function.
-class WorldView:
+class WorldView(Observer):
     def __init__(self, screen, global_position):
+        Observer.__init__(self)
         self.screen = screen
         self.npcs = []
         self.items = []
@@ -38,6 +39,19 @@ class WorldView:
         self.game_menu_bar = GameMenuBar(screen, pygame.font.SysFont("Arial", 25))
         self.game_menu_bar_controller = GameMenuBarController(self.game_menu_bar)
 
+
+    #TODO: The "kill" is currently still handled by the controller and back to the worldview. Need to refactor this to be handled by the observer/subject pattern.
+    def update(self, entity, *args, **kwargs):
+        if args[1] == "dead":
+            if isinstance(entity, model.npc.NPC):
+                self.kill_npc(entity)
+            if isinstance(entity, model.item.Item):
+                self.remove_item(entity)
+        elif args[1] == "respawned":
+            if isinstance(entity, model.npc.NPC):
+                self.respawn_npc(entity)
+
+
     def update_character_position(self, x, y):
         x = x * view_cst.TILE_WIDTH
         y = y * view_cst.TILE_HEIGHT
@@ -57,6 +71,7 @@ class WorldView:
             if isinstance(entity, model.character.Character):
                 self.initialize_character(entity)
             if isinstance(entity, model.npc.NPC):
+                entity.attach(self)
                 if entity.dead:
                     continue
                 else:
@@ -144,8 +159,12 @@ class WorldView:
         for i, (npc_obj, npc_image, npc_rect) in enumerate(self.npcs):
             if npc_obj == npc:
                 self.npcs.pop(i)
-                npc_obj.dead = True
+                npc_obj.kill()
                 break
+
+    def respawn_npc(self, npc):
+        print(f"In respawn NPC")
+        self.initialize_npc(npc)
 
     def remove_item(self, item):
         print(f"Removing item {item.name} from world")
@@ -166,6 +185,9 @@ class WorldView:
     def render_npcs(self):
         for i in range(len(self.npcs)):
             self.screen.blit(self.npcs[i][1], self.npcs[i][2])
+
+    def render_npc(self, npc, npc_image, npc_rect):
+        self.screen.blit(self.npc_image, self.npc_rect)
 
     def render_items(self):
         for i in range(len(self.items)):
@@ -191,12 +213,4 @@ class WorldView:
         self.npc_info_box.display()
         pygame.display.flip()
 
-
-        # self.screen.blit(self.back_button_text, self.back_button_rect)
-        # self.screen.fill(view_cst.WHITE)
-        # self.screen.blit(self.character_image, self.character_rect)
-        # for i in range(len(self.npcs)): #Display NPCs
-        #     self.screen.blit(self.npcs[i][1], self.npcs[i][2])
-        # for i in range(len(self.items)): #Display Items
-        #     self.screen.blit(self.items[i][1], self.items[i][2])
 

@@ -1,13 +1,16 @@
 from model.entity import Entity
 from model.dialogue import Dialogue
 from model.dialogue import QuestDialogue
+# from model.subject.npc_subject import NPCSubject
+from model.subject.subject import Subject
 
 default_sprite = "./assets/default.png"
 
 
-class NPC(Entity):
+class NPC(Entity, Subject):
     def __init__(self, name, hp, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), hostile=False):
-        super().__init__()
+        Entity.__init__(self)
+        Subject.__init__(self)
         self.name = name
         self.hp = hp
         self.sprite = sprite
@@ -18,6 +21,13 @@ class NPC(Entity):
         self.quests = []
         self.dialogue = []
         self.quests_dialogue = {}
+
+    def notify(self, *args, **kwargs):
+        print(f"In notify")
+        print(f"Observer length: {len(self._observers)}")
+        for observer in self._observers:
+            print(f"Updating observers")
+            observer.update(self, *args, **kwargs)
 
     def get_id(self):
         return self.id
@@ -36,8 +46,15 @@ class NPC(Entity):
     def set_sprite(self, sprite):
         self.sprite = sprite
 
+    def kill(self):
+        self.dead = True
+        self.notify(self, "dead")
+
     def respawn(self):
         self.dead = False
+        self.notify(self, "respawned")
+
+
 
     def add_quest_with_dialogue(self, quest, dialogue):
         self.quests.append(quest)
