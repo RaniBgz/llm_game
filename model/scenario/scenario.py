@@ -85,7 +85,7 @@ class Scenario:
     def initialize_items_in_world(self):
         for item in self.game_data.items:
             if item not in self.game_data.character.inventory:
-                item.set_in_world(True) #Items are in the world if they are not in the inventory
+                item.set_in_world() #Items are in the world if they are not in the inventory
 
     def initialize_quest_with_dialogue(self):
         npc = self.game_data.find_npc_by_name("Elder")

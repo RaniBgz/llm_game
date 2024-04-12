@@ -1,10 +1,12 @@
 from model.entity import Entity
+from model.subject.subject import Subject
 
 default_sprite = "./assets/default.png"
 
-class Item(Entity):
+class Item(Entity, Subject):
     def __init__(self, name, description, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), in_world=False):
-        super().__init__()
+        Entity.__init__(self)
+        Subject.__init__(self)
         self.name = name
         self.description = description
         self.sprite = sprite
@@ -15,10 +17,15 @@ class Item(Entity):
                               "local_position": local_position,
                               "in_world": in_world}
 
+    def notify(self, *args, **kwargs):
+        print(f"Notifying with args[1]: {args[1]}")
+        for observer in self._observers:
+            observer.update(self, *args, **kwargs)
+
+
     '''Getter for ID of the item.'''
     def get_id(self):
         return self.id
-
 
 
     '''Setters for global and local positions of the item.'''
@@ -41,11 +48,18 @@ class Item(Entity):
     def get_local_y(self):
         return self.local_position[1]
 
-    def set_in_world(self, in_world):
-        self.in_world = in_world
+    def set_in_world(self):
+        self.in_world = True
+        self.notify(self, "item_added_to_world")
+
+    def set_in_inventory(self):
+        self.in_world = False
+        self.notify(self, "item_removed_from_world")
 
     def reset_item(self):
         print(f"Initial state: {self.initial_state}")
         self.global_position = self.initial_state["global_position"]
         self.local_position = self.initial_state["local_position"]
         self.in_world = self.initial_state["in_world"]
+        if self.in_world:
+            self.notify(self, "item_added_to_world")

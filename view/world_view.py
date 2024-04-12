@@ -42,14 +42,16 @@ class WorldView(Observer):
 
     #TODO: The "kill" is currently still handled by the controller and back to the worldview. Need to refactor this to be handled by the observer/subject pattern.
     def update(self, entity, *args, **kwargs):
-        if args[1] == "dead":
-            if isinstance(entity, model.npc.NPC):
+        if isinstance(entity, model.npc.NPC):
+            if args[1] == "npc_dead":
                 self.kill_npc(entity)
-            if isinstance(entity, model.item.Item):
-                self.remove_item(entity)
-        elif args[1] == "respawned":
-            if isinstance(entity, model.npc.NPC):
+            elif args[1] == "npc_respawned":
                 self.respawn_npc(entity)
+        if isinstance(entity, model.item.Item):
+            if args[1] == "item_removed_from_world":
+                self.remove_item(entity)
+            elif args[1] == "item_added_to_world":
+                self.initialize_item(entity)
 
 
     def update_character_position(self, x, y):
@@ -77,6 +79,7 @@ class WorldView(Observer):
                 else:
                     self.initialize_npc(entity)
             if isinstance(entity, model.item.Item):
+                entity.attach(self)
                 if entity.in_world:
                     self.initialize_item(entity)
 

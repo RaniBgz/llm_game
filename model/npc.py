@@ -23,10 +23,7 @@ class NPC(Entity, Subject):
         self.quests_dialogue = {}
 
     def notify(self, *args, **kwargs):
-        print(f"In notify")
-        print(f"Observer length: {len(self._observers)}")
         for observer in self._observers:
-            print(f"Updating observers")
             observer.update(self, *args, **kwargs)
 
     def get_id(self):
@@ -48,11 +45,11 @@ class NPC(Entity, Subject):
 
     def kill(self):
         self.dead = True
-        self.notify(self, "dead")
+        self.notify(self, "npc_dead")
 
     def respawn(self):
         self.dead = False
-        self.notify(self, "respawned")
+        self.notify(self, "npc_respawned")
 
 
 
