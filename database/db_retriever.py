@@ -56,14 +56,14 @@ def retrieve_items():
 def retrieve_npcs():
     conn = connect_to_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT name, hp, global_position, local_position, sprite, hostile FROM npcs")
+    cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile FROM npcs")
     npcs = cursor.fetchall()
     npcs_list = []
     for npc in npcs:
-        name, hp, global_position, local_position, sprite, hostile = npc
+        name, hp, robot, global_position, local_position, sprite, hostile = npc
         global_position = tuple(map(int, global_position.split(',')))
         local_position = tuple(map(int, local_position.split(',')))
-        game_npc = NPC(name, hp, sprite, global_position, local_position, hostile)
+        game_npc = NPC(name, hp, robot, sprite, global_position, local_position, hostile)
         npcs_list.append(game_npc)
         print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile},"
               f"Global: {game_npc.global_position}, Local: {game_npc.local_position}")

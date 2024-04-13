@@ -7,6 +7,7 @@ import model.npc
 import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
+from view.ui.robot_dialogue_box import RobotDialogueBox
 from view.ui.item_info_box import ItemInfoBox
 from view.ui.game_menu_bar import GameMenuBar
 from controller.game_menu_bar_controller import GameMenuBarController
@@ -26,6 +27,7 @@ class WorldView(Observer):
 
         self.npc_info_box = NPCInfoBox(screen)
         self.dialogue_box = DialogueBox(screen)
+        self.robot_dialogue_box = RobotDialogueBox(screen)
         self.item_info_box = ItemInfoBox(screen)
 
         self.character_rect = None
@@ -114,17 +116,17 @@ class WorldView(Observer):
         self.npc_info_box.create_npc_info(npc, npc_rect)
         self.npc_info_box.show = True
 
-    def get_dialogue_box(self):
-        return self.dialogue_box
-
 
     def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
         print(f"Creating dialogue box for {npc.name}")
         self.dialogue_controller = DialogueController(
             self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
+
         self.dialogue_controller.start_dialogue()
         # self.dialogue_box.create_dialogue(npc, dialogue_text)
         self.dialogue_box.show = True
+
+
 
     def create_item_info_box(self, item, item_rect):
         print(f"Creating item info box for {item.name}")

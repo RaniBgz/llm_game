@@ -3,24 +3,21 @@ from view.ui.popup_box import PopupBox
 from view import view_constants as view_cst
 from view.ui.utils import wrap_text
 
-class DialogueBox(PopupBox):
+class RobotDialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
         super().__init__(screen, width, height)
 
-        #TODO: may be a better way to handle fonts
         self.name_font = pygame.font.SysFont("Arial", 24)
         self.font = pygame.font.SysFont("Arial", 16)
         self.exit_font = pygame.font.SysFont("Arial", 24)
         self.button_font = pygame.font.SysFont("Arial", 20)
         self.accept_deny_font = pygame.font.SysFont("Arial", 24)
-        # self.background_color = view_cst.LIGHT_GRAY
-        self.background_color = view_cst.PARCHMENT_COLOR
-
+        self.background_color = view_cst.LIGHT_GRAY
 
     def create_dialogue(self, npc_name, dialogue_text):
         self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
-        self.surface.fill(self.background_color)
+        self.surface.fill(view_cst.PARCHMENT_COLOR)
 
         name_rendered = self.name_font.render(npc_name, True, view_cst.COFFEE_BROWN_3)
         name_pos = (10 + self.width // 2 - name_rendered.get_width() // 2, 10)

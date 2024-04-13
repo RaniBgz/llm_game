@@ -15,7 +15,7 @@ class ItemInfoBox(PopupBox):
 
     def create_item_info(self, item, item_rect):
         self.item = item
-        self.surface.fill(view_cst.POPUP_BG_COLOR)
+        self.surface.fill(view_cst.PARCHMENT_COLOR)
 
 
         screen_width, screen_height = pygame.display.get_surface().get_size()
@@ -51,7 +51,7 @@ class ItemInfoBox(PopupBox):
     def create_close_button(self, font, color):
         close_button_text = font.render("X", True, color)
         close_button_rect = close_button_text.get_rect(topright=(self.width - 10, 10))
-        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, close_button_rect)
+        pygame.draw.rect(self.surface, view_cst.PARCHMENT_COLOR, close_button_rect)
         self.surface.blit(close_button_text, close_button_rect)
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 

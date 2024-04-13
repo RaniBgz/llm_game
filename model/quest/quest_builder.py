@@ -33,9 +33,6 @@ class QuestBuilder():
         return quest_dialogue
 
 
-
-
-
     '''Methods to build single-objective quests'''
     def build_kill_quest(self, name, description, target_id):
         quest = Quest(name, description)

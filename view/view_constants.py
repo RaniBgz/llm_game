@@ -1,23 +1,26 @@
+import pygame
+
 """ Constants to handle the view of the game. """
 
+''' Screen and tile constants'''
+FPS = 60
 WIDTH, HEIGHT = 1280, 720
 H_TILES = 24
 V_TILES = 8
 TILE_WIDTH = WIDTH // H_TILES
 TILE_HEIGHT = HEIGHT // V_TILES
-
 MENU_BUTTON_HEIGHT = TILE_HEIGHT
 PLAYABLE_AREA_HEIGHT = HEIGHT - MENU_BUTTON_HEIGHT
 PLAYABLE_AREA_WIDTH = WIDTH
 
+''' Colors '''
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TEXT_COLOR = BLACK
 RED = (128, 0, 0)
 GREEN = (0, 128, 0)
 BLUE = (0, 0, 128)
-POPUP_BG_COLOR = (225,173,109)
-
+PARCHMENT_COLOR = (225, 173, 109)
 DARK_GRAY_2 = (50, 50, 50)  # A darker gray
 DARK_GRAY = (100, 100, 100)  # A basic dark gray
 LIGHT_GRAY = (150, 150, 150)  # A basic light gray
@@ -32,9 +35,17 @@ COFFEE_BROWN = (200, 190, 140)  # A coffee brown color for text
 COFFEE_BROWN_2 = (150, 140, 100)  # A darker coffee brown color for text
 COFFEE_BROWN_3 = (111, 78, 55)  # A darker coffee brown color for text
 
-FPS = 60
-MOVEMENT_SPEED = 10
+''' Fonts '''
+#TODO: Figure out how to initialize fonts
 
+# ARIAL_32 = pygame.font.SysFont("Arial", 32)
+# ARIAL_24 = pygame.font.SysFont("Arial", 24)
+# ARIAL_20 = pygame.font.SysFont("Arial", 20)
+# ARIAL_16 = pygame.font.SysFont("Arial", 16)
+
+
+
+''' Menu constants '''
 QUEST_MENU = "quests"
 INVENTORY_MENU = "inventory"
 MAP_MENU = "map"

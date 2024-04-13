@@ -8,12 +8,13 @@ default_sprite = "./assets/default.png"
 
 
 class NPC(Entity, Subject):
-    def __init__(self, name, hp, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), hostile=False):
+    def __init__(self, name, hp, robot=False, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), hostile=False):
         Entity.__init__(self)
         Subject.__init__(self)
         self.name = name
         self.hp = hp
         self.sprite = sprite
+        self.robot = robot
         self.global_position = global_position
         self.local_position = local_position
         self.hostile = hostile

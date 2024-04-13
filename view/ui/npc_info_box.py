@@ -24,7 +24,7 @@ class NPCInfoBox(PopupBox):
             print("Not enough space to the right")
             self.rect.midright = (npc_rect.midleft[0] - 10, npc_rect.midleft[1])
 
-        self.surface.fill(view_cst.POPUP_BG_COLOR)
+        self.surface.fill(view_cst.PARCHMENT_COLOR)
 
         npc_name = f"Name: {self.npc.name}"
         npc_name_text = self.font.render(npc_name, True, view_cst.TEXT_COLOR)
@@ -45,7 +45,7 @@ class NPCInfoBox(PopupBox):
     def create_close_button(self, font, color):
         close_button_text = font.render("X", True, color)
         close_button_rect = close_button_text.get_rect(topright=(self.width - 10, 10))
-        pygame.draw.rect(self.surface, view_cst.POPUP_BG_COLOR, close_button_rect)
+        pygame.draw.rect(self.surface, view_cst.PARCHMENT_COLOR, close_button_rect)
         self.surface.blit(close_button_text, close_button_rect)
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 

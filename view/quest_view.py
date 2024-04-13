@@ -13,7 +13,7 @@ class QuestView:
         self.exit_button_rect = self.exit_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
     def display_quests(self, quests):
-        self.screen.fill(view_cst.POPUP_BG_COLOR)
+        self.screen.fill(view_cst.PARCHMENT_COLOR)
 
         # Title
         title_text = self.title_font.render("Quests", True, view_cst.TEXT_COLOR)
