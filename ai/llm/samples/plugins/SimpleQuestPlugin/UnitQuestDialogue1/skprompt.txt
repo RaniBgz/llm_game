@@ -1,0 +1,34 @@
+Given the following JSON representation of a quest for an RPG game:
+
+{{$quest_json}}
+
+Generate a QuestDialogue object that contains three Dialogue objects:
+1. An initialization dialogue, which introduces the quest and provides initial instructions.
+2. A waiting dialogue, which the NPC can use while the player is working on the quest objectives.
+3. A completion dialogue, which the NPC can use when the player has completed all the quest objectives.
+
+The dialogue should be engaging, fit the genre and difficulty level of the quest, and provide relevant context and guidance to the player. Each Dialogue object should be a list of text chunks that the NPC can deliver in sequence.
+
+Output the QuestDialogue object as a JSON string, following the provided format:
+
+{
+  "initialization": [
+    "First line of the initialization dialogue",
+    "Second line of the initialization dialogue",
+    ...
+  ],
+  "waiting": [
+    "First line of the waiting dialogue",
+    "Second line of the waiting dialogue",
+    ...
+  ],
+  "completion": [
+    "First line of the completion dialogue",
+    "Second line of the completion dialogue",
+    ...
+  ]
+}
+
++++++
+{{$quest_json}}
++++++
