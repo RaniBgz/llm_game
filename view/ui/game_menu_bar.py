@@ -28,7 +28,7 @@ class GameMenuBar:
 
         button_color = view_cst.DARK_GRAY
         button_hover_color = view_cst.LIGHT_GRAY
-        text_color = view_cst.SCI_FI_BLUE_3
+        text_color = view_cst.SCI_FI_BLUE_5
         button_border_color = view_cst.DARK_GRAY_2
         button_border_width = 2
 

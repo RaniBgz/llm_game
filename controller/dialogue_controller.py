@@ -22,7 +22,7 @@ class DialogueController:
             print(f"NPC is a robot")
             self.npc_type = "robot"
             self.dialogue_box.set_background_color(view_cst.LIGHT_GRAY)
-            self.dialogue_box.set_name_color(view_cst.SCI_FI_BLUE_3)
+            self.dialogue_box.set_name_color(view_cst.SCI_FI_BLUE_5)
         else:
             print(f"NPC is a human")
             self.npc_type = "human"
