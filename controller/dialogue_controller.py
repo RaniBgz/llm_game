@@ -1,6 +1,7 @@
 import pygame
 import random
 from model.dialogue.dialogue import Dialogue
+from view import view_constants as view_cst
 
 #TODO: Revamp all of this to make it much simpler to access: the right dialogue, the right index in the dialogue, and update between text
 #TODO: The Dialoge Controller may have too much information. It only needs to know the current Dialogue.
@@ -14,6 +15,20 @@ class DialogueController:
         self.dialogue = dialogue
         self.dialogue_type = dialogue_type
         self.dialogue_length = self.dialogue.get_dialogue_length()
+        self.set_npc_type()
+
+    def set_npc_type(self):
+        if self.npc.robot:
+            print(f"NPC is a robot")
+            self.npc_type = "robot"
+            self.dialogue_box.set_background_color(view_cst.LIGHT_GRAY)
+            self.dialogue_box.set_name_color(view_cst.SCI_FI_BLUE_3)
+        else:
+            print(f"NPC is a human")
+            self.npc_type = "human"
+            self.dialogue_box.set_background_color(view_cst.PARCHMENT_COLOR)
+            self.dialogue_box.set_name_color(view_cst.COFFEE_BROWN_3)
+
 
     def start_dialogue(self):
         self.dialogue_index = self.dialogue.get_current_text_index()

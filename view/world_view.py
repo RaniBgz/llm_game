@@ -7,7 +7,6 @@ import model.npc
 import model.item
 from view.ui.npc_info_box import NPCInfoBox
 from view.ui.dialogue_box import DialogueBox
-from view.ui.robot_dialogue_box import RobotDialogueBox
 from view.ui.item_info_box import ItemInfoBox
 from view.ui.game_menu_bar import GameMenuBar
 from controller.game_menu_bar_controller import GameMenuBarController
@@ -27,7 +26,6 @@ class WorldView(Observer):
 
         self.npc_info_box = NPCInfoBox(screen)
         self.dialogue_box = DialogueBox(screen)
-        self.robot_dialogue_box = RobotDialogueBox(screen)
         self.item_info_box = ItemInfoBox(screen)
 
         self.character_rect = None
