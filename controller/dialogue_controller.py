@@ -37,6 +37,8 @@ class DialogueController:
         self.dialogue_box.create_dialogue(self.npc.name, dialogue_text)
         self.handle_prev_next_buttons_logic()
         self.handle_quest_buttons_logic()
+        if self.npc_type == "robot":
+            self.handle_generate_quest_button_logic()
 
     def reset_dialogue(self):
         self.dialogue.current_text_index = 0
@@ -61,6 +63,9 @@ class DialogueController:
         if(self.dialogue_index == self.dialogue_length - 1) and self.dialogue_type == "quest_completion":
             self.dialogue_box.create_end_quest_button()
 
+    def handle_generate_quest_button_logic(self):
+        self.dialogue_box.create_generate_quest_button()
+
     def handle_events(self, event):
         print(f"In dialogue controller event")
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -72,6 +77,10 @@ class DialogueController:
             elif getattr(self.dialogue_box, 'next_button_rect', None) and self.dialogue_box.next_button_rect.collidepoint(event.pos):
                 self.dialogue.point_to_next_text()
                 self.start_dialogue()
+            elif getattr(self.dialogue_box, 'generate_quest_button_rect', None) and self.dialogue_box.generate_quest_button_rect.collidepoint(event.pos):
+                print(f"Generating quest button clicked")
+                # self.reset_dialogue()
+                return "generate_quest"
             if self.dialogue_type == "quest_initialization":
                 if getattr(self.dialogue_box, 'accept_button_rect', None) and self.dialogue_box.accept_button_rect.collidepoint(event.pos):
                     self.reset_dialogue()

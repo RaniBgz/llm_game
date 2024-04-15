@@ -99,7 +99,7 @@ class DialogueBox(PopupBox):
 
     def create_generate_quest_button(self):
         generate_quest_button_text = self.accept_deny_font.render("Generate quest", True, view_cst.DARK_GRAY_2)
-        generate_quest_button_rect = generate_quest_button_text.get_rect(bottomleft=(self.width // 2 - generate_quest_button_text.get_width() // 2, self.height - 20))
+        generate_quest_button_rect = generate_quest_button_text.get_rect(bottomleft=(self.width // 2 - generate_quest_button_text.get_width() // 2+10, self.height - 20))
         pygame.draw.rect(self.surface, self.background_color, generate_quest_button_rect)
         self.generate_quest_button_rect = pygame.Rect(self.width // 2 - generate_quest_button_text.get_width() // 2, self.rect.topleft[1] + self.height - 50, 100, 40)
         self.surface.blit(generate_quest_button_text, generate_quest_button_rect)

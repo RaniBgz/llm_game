@@ -22,17 +22,11 @@ class WorldView(Observer):
         self.npcs = []
         self.items = []
 
-        # self.observer = Observer()
-
         self.npc_info_box = NPCInfoBox(screen)
         self.dialogue_box = DialogueBox(screen)
         self.item_info_box = ItemInfoBox(screen)
 
         self.character_rect = None
-
-        # self.exit_font = pygame.font.SysFont("Arial", 30)
-        # self.back_button_text = self.exit_font.render("Back", True, view_cst.TEXT_COLOR)
-        # self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
 
         self.initialize_local_map(global_position[0], global_position[1])
 

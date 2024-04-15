@@ -4,3 +4,5 @@ ai/llm/.env
 model/*/__pycache__/
 model/*/__pycache__/
 view/*/__pycache__/
+ai/*/__pycache__/
+*/*/__pycache__/
