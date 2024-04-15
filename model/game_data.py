@@ -1,6 +1,7 @@
 from model.map.map import Map
 from model.quest.quest_builder import QuestBuilder
 from model.map.world_map import WorldMap
+from ai.llm.llm_model import LLMModel
 
 #TODO: Should the game data take as input a map? (map dimensions for now)
 class GameData:
@@ -9,12 +10,20 @@ class GameData:
         self.character = None
         self.world_map = WorldMap.get_instance()
         self.initialize_world()
+        self.llm_model = LLMModel("gpt-3.5-turbo-1106")
         self.npcs = []
         self.items = []
         self.quests = []
 
     def initialize_world(self):
         self.world_map.build_map(20, 20)
+
+    #TODO: this may change a lot in the future
+    def get_llm_model(self):
+        return self.llm_model
+
+    def set_llm_model(self, model):
+        self.llm_model = model
 
     def add_npc(self, npc):
         self.npcs.append(npc)

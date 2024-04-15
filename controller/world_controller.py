@@ -4,6 +4,7 @@ import pygame
 from model.map.world_map import WorldMap
 from model.dialogue.dialogue_manager import DialogueManager
 from model.quest.quest_manager import QuestManager
+from model.quest.quest_builder import QuestBuilder
 from view import view_constants as view_cst
 from view.quest_view import QuestView
 from view.inventory_view import InventoryView
@@ -21,6 +22,7 @@ class WorldController:
         self.view = view
         self.main_menu_controller = main_menu_ctrl
         self.quest_manager = QuestManager(self.game_data)
+        self.quest_builder = QuestBuilder()
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
@@ -109,8 +111,13 @@ class WorldController:
             #TODO: Fix the way the quest lifecycle is handled
             self.quest_manager.handle_quest_completion()
             # self.quest_manager.remove_quest_from_character()
+        elif return_code == "generate_quest":
+            self.quest_builder.generate_quest(self.game_data.get_llm_model)
+            # self.quest_manager.generate_quest()
         else:
             return
+
+
 
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:

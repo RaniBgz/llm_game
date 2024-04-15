@@ -8,6 +8,13 @@ class QuestBuilder():
     def __init__(self):
         pass
 
+    ''' Methods to generate quests and dialogue with llm_model and semantic_kernel'''
+    def generate_quest(self, llm_model, genre="fantasy", difficulty="easy"):
+        quest = Quest()
+        #
+        return quest
+
+
     '''Write "initialize x quest" methods here for complex quests with objectives that have their own descriptions and names.'''
     def initialize_ordered_quest(self, name, description):
         quest = Quest(name, description, ordered=True)
@@ -18,13 +25,6 @@ class QuestBuilder():
         return quest
 
     '''Quest Dialogue methods'''
-    # def build_kill_quest_with_dialogue(self, name, description, target_id, dialogue):
-    #     quest = Quest(name, description)
-    #     kill_objective = KillObjective(name, description, target_id)
-    #     quest.add_objective(kill_objective)
-    #     #TODO: Dialogue should be a list of dialogues
-    #     return quest
-
     def create_quest_dialogue(self, initial_dialogue, waiting_dialogue, completion_dialogue):
         quest_dialogue = QuestDialogue()
         quest_dialogue.add_initialization_dialogue(initial_dialogue)
