@@ -1,5 +1,6 @@
 import sys
 import pygame
+import asyncio
 
 from model.map.world_map import WorldMap
 from model.dialogue.dialogue_manager import DialogueManager
@@ -112,7 +113,9 @@ class WorldController:
             self.quest_manager.handle_quest_completion()
             # self.quest_manager.remove_quest_from_character()
         elif return_code == "generate_quest":
-            self.quest_builder.generate_quest(self.game_data.get_llm_model)
+            llm_model = self.game_data.get_llm_model()
+            print(f"LLM Model: {llm_model}")
+            asyncio.run(self.quest_builder.generate_quest(llm_model))
             # self.quest_manager.generate_quest()
         else:
             return

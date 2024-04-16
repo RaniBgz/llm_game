@@ -35,10 +35,11 @@ class DialogueController:
         dialogue_text = self.dialogue.get_current_dialogue()
         print(f"Dialogue index is {self.dialogue_index} and dialogue length is {self.dialogue_length}")
         self.dialogue_box.create_dialogue(self.npc.name, dialogue_text)
-        self.handle_prev_next_buttons_logic()
-        self.handle_quest_buttons_logic()
         if self.npc_type == "robot":
             self.handle_generate_quest_button_logic()
+        self.handle_prev_next_buttons_logic()
+        self.handle_quest_buttons_logic()
+
 
     def reset_dialogue(self):
         self.dialogue.current_text_index = 0
@@ -64,6 +65,7 @@ class DialogueController:
             self.dialogue_box.create_end_quest_button()
 
     def handle_generate_quest_button_logic(self):
+        print(f"In generate quest button logic")
         self.dialogue_box.create_generate_quest_button()
 
     def handle_events(self, event):

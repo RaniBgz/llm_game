@@ -5,15 +5,18 @@ from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 import ai.llm.plugin_paths as pp
 
 class LLMModel:
-    path_to_plugins = "./samples/plugins/"
+    path_to_plugins = "./ai/llm/samples/plugins"
     def __init__(self, model_name):
         self.model_name = model_name
         self.kernel = self.initialize_kernel_with_openai()
         self.plugins = {}
+        #TODO: Find the proper way to initialize all plugins
+        self.import_plugin(pp.SIMPLE_QUEST_PLUGIN)
+
 
     def initialize_kernel_with_openai(self):
         kernel = sk.Kernel()
-        api_key, org_id = sk.openai_settings_from_dot_env()
+        api_key, org_id = sk.openai_settings_from_dot_env( )
         service_id = "default"
         kernel.add_service(
             OpenAIChatCompletion(service_id=service_id, ai_model_id=self.model_name, api_key=api_key,
@@ -24,6 +27,8 @@ class LLMModel:
 
 
     def import_plugin(self, plugin_name):
+        print(f"Path to plugin directory: {self.path_to_plugins}")
+        print(f"Plugin name to import: {plugin_name}")
         plugin = self.kernel.import_plugin_from_prompt_directory(self.path_to_plugins, plugin_name)
         if plugin is None:
             print(f"Plugin {plugin_name} not found")

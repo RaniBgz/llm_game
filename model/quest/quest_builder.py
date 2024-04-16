@@ -9,10 +9,13 @@ class QuestBuilder():
         pass
 
     ''' Methods to generate quests and dialogue with llm_model and semantic_kernel'''
-    def generate_quest(self, llm_model, genre="fantasy", difficulty="easy"):
-        quest = Quest()
+    async def generate_quest(self, llm_model, genre="fantasy", difficulty="easy"):
+        print(f" Inside generate_quest method")
+        quest_json = await llm_model.generate_unit_quest(genre, difficulty)
+        print(f"Generated quest json: {quest_json}")
+        # quest = Quest()
         #
-        return quest
+        # return quest
 
 
     '''Write "initialize x quest" methods here for complex quests with objectives that have their own descriptions and names.'''
