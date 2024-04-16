@@ -115,11 +115,10 @@ class WorldController:
         elif return_code == "generate_quest":
             llm_model = self.game_data.get_llm_model()
             print(f"LLM Model: {llm_model}")
-            asyncio.run(self.quest_builder.generate_quest(llm_model))
-            # self.quest_manager.generate_quest()
+            quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
+            self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
         else:
             return
-
 
 
     def handle_npc_interaction(self, pos, button):

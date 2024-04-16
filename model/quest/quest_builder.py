@@ -9,13 +9,51 @@ class QuestBuilder():
         pass
 
     ''' Methods to generate quests and dialogue with llm_model and semantic_kernel'''
-    async def generate_quest(self, llm_model, genre="fantasy", difficulty="easy"):
-        print(f" Inside generate_quest method")
+    async def generate_quest_and_dialogue(self, llm_model, genre="fantasy", difficulty="easy"):
+        print(f"Generating quest")
         quest_json = await llm_model.generate_unit_quest(genre, difficulty)
         print(f"Generated quest json: {quest_json}")
-        # quest = Quest()
-        #
-        # return quest
+        quest = self.create_quest_from_json(quest_json)
+        print(f"Generating dialogue associated with quest")
+        dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
+        print(f"Generated dialogue json: {dialogue_json}")
+        quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
+        return quest, quest_dialogue
+
+
+    def create_quest_from_json(self, quest_json):
+        quest = Quest(
+            name=quest_json["name"],
+            description=quest_json["description"],
+            ordered=quest_json["ordered"],
+        )
+
+        # Create the objectives
+        for obj in quest_json["objectives"]:
+            if obj["type"] == "kill":
+                objective = KillObjective(obj["name"], obj["description"], obj["target"])
+            elif obj["type"] == "location":
+                objective = LocationObjective(obj["name"], obj["description"], obj["target"])
+            elif obj["type"] == "retrieval":
+                objective = RetrievalObjective(obj["name"], obj["description"], obj["target"])
+            elif obj["type"] == "talk_to_npc":
+                objective = TalkToNPCObjective(obj["name"], obj["description"], obj["target"])
+            else:
+                raise ValueError(f"Invalid objective type: {obj['type']}")
+
+            quest.objectives.append(objective)
+
+        return quest
+
+    def create_quest_dialogue_from_json(self, dialogue_json):
+        initialization_dialogue = self.build_dialogue(dialogue_json["initialization"])
+        waiting_dialogue = self.build_dialogue(dialogue_json["waiting"])
+        completion_dialogue = self.build_dialogue(dialogue_json["completion"])
+        quest_dialogue = QuestDialogue()
+        quest_dialogue.add_initialization_dialogue(initialization_dialogue)
+        quest_dialogue.add_waiting_dialogue(waiting_dialogue)
+        quest_dialogue.add_completion_dialogue(completion_dialogue)
+        return quest_dialogue
 
 
     '''Write "initialize x quest" methods here for complex quests with objectives that have their own descriptions and names.'''

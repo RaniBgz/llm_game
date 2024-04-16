@@ -53,7 +53,6 @@ class NPC(Entity, Subject):
         self.notify(self, "npc_respawned")
 
 
-
     def add_quest_with_dialogue(self, quest, dialogue):
         self.quests.append(quest)
         quest_id = quest.get_id()

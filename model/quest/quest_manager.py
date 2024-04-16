@@ -14,9 +14,12 @@ class QuestManager():
     def _build_initial_quest_data(self):
         current_quests = {}
         for npc in self.game_data.npcs:
+            if npc not in current_quests:
+                current_quests[npc] = []
             next_quest = self._get_next_available_quest(npc)
             if next_quest:
-                current_quests[npc] = [next_quest]
+                current_quests[npc].append(next_quest)
+                # current_quests[npc] = [next_quest]
         return current_quests
 
     def _get_next_available_quest(self, npc):
@@ -29,6 +32,7 @@ class QuestManager():
         if len(npc.quests) == 0:
             return None
         else:
+            #TODO: if npc doesn't start with a quest, might be an issue later
             for i in range(len(npc.quests)):
                 if not npc.quests[i].ended:
                     self.current_quests[npc].append(npc.quests[i])
@@ -39,6 +43,9 @@ class QuestManager():
         next_quest = self._get_next_available_quest(npc)
         if next_quest:
             self.current_quests[npc] = [next_quest]
+
+    def add_quest_with_dialogue_to_current_npc(self, quest, quest_dialogue):
+        self.current_npc.add_quest_with_dialogue(quest, quest_dialogue)
 
     def handle_quest_giving(self):
         if self.current_npc and self.current_quests.get(self.current_npc):
@@ -61,7 +68,6 @@ class QuestManager():
                 item = self.game_data.find_item_by_id(objective.target_item_id)
                 if self.game_data.character.check_character_has_item(objective.target_item_id):
                     self.game_data.character.remove_item_from_inventory(item)
-        pass
 
 
     ''' Quest completion methods '''
