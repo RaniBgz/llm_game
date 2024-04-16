@@ -33,18 +33,57 @@ class WorldController:
         self.accumulated_time = 0.0
         self.move_direction = (0, 0)
 
-    def run(self):
+    #Original run loop
+    # def run(self):
+    #     clock = pygame.time.Clock()
+    #     loop = asyncio.get_event_loop()
+    #
+    #     while True:
+    #         clock.tick(view_cst.FPS)
+    #         dt = clock.tick(view_cst.FPS)*10
+    #         for event in pygame.event.get():
+    #             self.handle_event(event)
+    #
+    #         self.update_movement(dt)
+    #         # self.move_character()
+    #         self.view.render(self.game_data.character.global_position[0],
+    #                                 self.game_data.character.global_position[1])
+    #         loop.run_until_complete(asyncio.sleep(0))
+
+    async def run_async(self):
         clock = pygame.time.Clock()
-        while True:
+        running = True
+        while running:
             clock.tick(view_cst.FPS)
             dt = clock.tick(view_cst.FPS)*10
             for event in pygame.event.get():
-                self.handle_event(event)
+                if event.type == pygame.QUIT:
+                    running = False
+                else:
+                    self.handle_event(event)
 
+            # self.update_movement(clock.tick(view_cst.FPS) / 1000.0)  # converting to seconds
             self.update_movement(dt)
-            # self.move_character()
             self.view.render(self.game_data.character.global_position[0],
-                                    self.game_data.character.global_position[1])
+                             self.game_data.character.global_position[1])
+
+            # Let asyncio handle tasks for a moment
+            await asyncio.sleep(0)
+
+    def run(self):
+        try:
+            # Get the default event loop (or create it)
+            loop = asyncio.get_event_loop()
+            # Running the asyncio part of the game
+            loop.run_until_complete(self.run_async())
+        except RuntimeError as e:
+            # In case the loop is closed and we're trying to run the game again
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.run_async())
+        finally:
+            loop.close()
+
 
     def handle_event(self, event):
         if event.type == pygame.QUIT:
@@ -115,11 +154,17 @@ class WorldController:
         elif return_code == "generate_quest":
             llm_model = self.game_data.get_llm_model()
             print(f"LLM Model: {llm_model}")
-            quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
-            self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
+            asyncio.create_task(self.process_quest_generation(llm_model))
+            # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
+            # self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
         else:
             return
 
+    async def process_quest_generation(self, llm_model):
+        print(f"Generating quest")
+        # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
+        quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
+        self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
 
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
