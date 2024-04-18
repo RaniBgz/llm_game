@@ -2,6 +2,7 @@ import asyncio, time
 import json
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
+from semantic_kernel.connectors.ai.open_ai.services.open_ai_text_embedding import OpenAITextEmbedding
 import ai.llm.plugin_paths as pp
 
 class LLMModel:
