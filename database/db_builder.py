@@ -16,6 +16,18 @@ def connect_to_db():
         print("Connected to the database")
         return conn
 
+def ensure_pgvector_extension(conn):
+    cursor = conn.cursor()
+    try:
+        # Attempt to create the extension (does nothing if already exists)
+        cursor.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+        conn.commit()
+        print("pgvector extension ensured.")
+    except psycopg2.Error as e:
+        print("Error ensuring pgvector extension:", e)
+    finally:
+        cursor.close()
+
 def create_tables(conn):
     cursor = conn.cursor()
 
@@ -66,6 +78,36 @@ def create_tables(conn):
     conn.commit()
     print("Tables created successfully")
 
+def add_vector_column(conn, table_name, vector_dim=128):
+    cursor = conn.cursor()
+    try:
+        # SQL command to add a vector column
+        cursor.execute(f"""
+        ALTER TABLE {table_name} 
+        ADD COLUMN IF NOT EXISTS embedding vector({vector_dim});
+        """)
+        conn.commit()
+        print(f"Vector column added to {table_name}.")
+    except psycopg2.Error as e:
+        print(f"Error adding vector column to {table_name}:", e)
+    finally:
+        cursor.close()
+
+def remove_vector_column(conn, table_name):
+    cursor = conn.cursor()
+    try:
+        # SQL command to remove the vector column
+        cursor.execute(f"""
+        ALTER TABLE {table_name} 
+        DROP COLUMN IF EXISTS embedding;
+        """)
+        conn.commit()
+        print(f"Vector column removed from {table_name}.")
+    except psycopg2.Error as e:
+        print(f"Error removing vector column from {table_name}:", e)
+    finally:
+        cursor.close()
+
 def populate_tables(conn):
     cursor = conn.cursor()
 
@@ -111,6 +153,8 @@ def populate_tables(conn):
 
 if __name__ == "__main__":
     conn = connect_to_db()
-    create_tables(conn)
-    populate_tables(conn)
+    ensure_pgvector_extension(conn)
+    add_vector_column(conn, 'npcs')
+    add_vector_column(conn, 'items')
+    add_vector_column(conn, 'characters')
     conn.close()
