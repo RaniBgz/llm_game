@@ -25,6 +25,8 @@ class Scenario:
             self.build_quest_dialogue_test_scenario()
         elif self.name == "test":
             self.build_test_scenario()
+        scenario_context = self.build_llm_context()
+        self.game_data.set_game_context(scenario_context)
 
     #TODO: In the future, a scenario could be built from a file.
     def build_default_scenario(self):
@@ -221,10 +223,6 @@ class Scenario:
         self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_3)
         self.game_data.find_npc_by_name("Elder").add_dialogue(dialogue_4)
 
-        # self.game_data.find_npc_by_name("Elder").add_dialogue("Hello, young adventurer. This is my first dialogue.")
-        # self.game_data.find_npc_by_name("Elder").add_dialogue("This is my second dialogue.")
-        # self.game_data.find_npc_by_name("Elder").add_dialogue("This is my third dialogue.")
-
 
     def initialize_entities(self):
         self.game_data.set_character(retrieve_characters()[0])
@@ -238,6 +236,43 @@ class Scenario:
         for item in items:
             self.game_data.add_item(item)
 
+
+    def format_character(self, character):
+        return f"Character(name={character.name}, hp={character.hp}, position={character.global_position})"
+
+    def format_npc(self, npc):
+        role = "Robot" if npc.robot else "NPC"
+        status = "Hostile" if npc.hostile else "Friendly"
+        return f"{role}(name={npc.name}, hp={npc.hp}, status={status}, position={npc.global_position})"
+
+    def format_item(self, item):
+        status = "in world" if item.in_world else "in inventory"
+        return f"Item(name={item.name}, description={item.description}, status={status}, position={item.global_position})"
+
+    def format_quest(self, quest):
+        return f"Quest(name={quest.name}, description={quest.description}"
+
+    def build_llm_context(self):
+        context_parts = []
+
+        # Add the main character
+        context_parts.append(self.format_character(self.game_data.character))
+
+        # Add NPCs
+        for npc in self.game_data.npcs:
+            context_parts.append(self.format_npc(npc))
+
+        # Add items
+        for item in self.game_data.items:
+            context_parts.append(self.format_item(item))
+
+        # Add quests
+        for quest in self.game_data.quests:
+            context_parts.append(self.format_quest(quest))
+
+        # Combine all parts into a single string
+        context_string = " | ".join(context_parts)
+        return context_string
 
 if __name__ == '__main__':
     game_data = GameData()

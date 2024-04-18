@@ -14,6 +14,7 @@ class GameData:
         self.npcs = []
         self.items = []
         self.quests = []
+        self.game_context = ''
 
     def initialize_world(self):
         self.world_map.build_map(20, 20)
@@ -24,6 +25,12 @@ class GameData:
 
     def set_llm_model(self, model):
         self.llm_model = model
+
+    def set_game_context(self, context):
+        self.game_context = context
+
+    def get_game_context(self):
+        return self.game_context
 
     def add_npc(self, npc):
         self.npcs.append(npc)
