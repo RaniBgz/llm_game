@@ -27,6 +27,7 @@ class Scenario:
             self.build_test_scenario()
         scenario_context = self.build_llm_context()
         self.game_data.set_game_context(scenario_context)
+        print(f"Scenario context: {scenario_context}")
 
     #TODO: In the future, a scenario could be built from a file.
     def build_default_scenario(self):

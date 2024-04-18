@@ -20,6 +20,16 @@ class QuestBuilder():
         quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
         return quest, quest_dialogue
 
+    async def generate_quest_and_dialogue_with_context(self, llm_model, game_context, genre="fantasy", difficulty="easy"):
+        print(f"Generating quest")
+        quest_json = await llm_model.generate_unit_quest_with_context(game_context, genre, difficulty)
+        print(f"Generated quest json: {quest_json}")
+        quest = self.create_quest_from_json(quest_json)
+        print(f"Generating dialogue associated with quest")
+        dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
+        print(f"Generated dialogue json: {dialogue_json}")
+        quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
+        return quest, quest_dialogue
 
     def create_quest_from_json(self, quest_json):
         quest = Quest(

@@ -39,6 +39,7 @@ class LLMModel:
             print('Added plugin to plugins dict')
         return plugin
 
+    #TODO: might need to delete this, no need to explicitly import plugin functions
     def import_plugin_function(self, plugin_name, function_name):
         if plugin_name in self.plugins:
             plugin = self.plugins[plugin_name]
@@ -50,15 +51,23 @@ class LLMModel:
 
     async def generate_unit_quest(self, genre, difficulty):
         plugin = self.plugins[pp.SIMPLE_QUEST_PLUGIN]
-        unit_quest_pf = plugin[pp.UNIT_QUEST_1]
+        unit_quest_pf = plugin[pp.UNIT_QUEST]
         quest_result = await self.kernel.invoke(unit_quest_pf, genre=genre, difficulty=difficulty)
+        quest_json = json.loads(str(quest_result))
+        print(f"Quest json: {quest_json}")
+        return quest_json
+
+    async def generate_unit_quest_with_context(self, game_context, genre, difficulty):
+        plugin = self.plugins[pp.SIMPLE_QUEST_PLUGIN]
+        unit_quest_pf = plugin[pp.UNIT_QUEST_WITH_CONTEXT]
+        quest_result = await self.kernel.invoke(unit_quest_pf, game_context=game_context, genre=genre, difficulty=difficulty)
         quest_json = json.loads(str(quest_result))
         print(f"Quest json: {quest_json}")
         return quest_json
 
     async def generate_unit_quest_dialogue(self, quest_json):
         plugin = self.plugins[pp.SIMPLE_QUEST_PLUGIN]
-        unit_quest_dialogue_pf = plugin[pp.UNIT_QUEST_DIALOGUE_1]
+        unit_quest_dialogue_pf = plugin[pp.UNIT_QUEST_DIALOGUE]
         dialogue_result = await self.kernel.invoke(unit_quest_dialogue_pf, quest_json=quest_json)
         dialogue_json = json.loads(str(dialogue_result))
         print(f"Dialogue data: {dialogue_json}")

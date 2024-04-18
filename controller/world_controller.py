@@ -153,10 +153,9 @@ class WorldController:
             # self.quest_manager.remove_quest_from_character()
         elif return_code == "generate_quest":
             llm_model = self.game_data.get_llm_model()
-            print(f"LLM Model: {llm_model}")
-            asyncio.create_task(self.process_quest_generation(llm_model))
-            # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
-            # self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
+            game_context = self.game_data.get_game_context()
+            # asyncio.create_task(self.process_quest_generation(llm_model))
+            asyncio.create_task(self.process_quest_generation_with_context(llm_model, game_context))
         else:
             return
 
@@ -164,6 +163,12 @@ class WorldController:
         print(f"Generating quest")
         # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
         quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
+        self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
+
+    async def process_quest_generation_with_context(self, llm_model, game_context):
+        print(f"Generating quest")
+        # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
+        quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue_with_context(llm_model, game_context)
         self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
 
     def handle_npc_interaction(self, pos, button):
