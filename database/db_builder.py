@@ -3,15 +3,27 @@ import view.view_constants as view_cst
 import json
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai.services.open_ai_text_embedding import OpenAITextEmbedding
+from semantic_kernel.core_plugins.text_memory_plugin import TextMemoryPlugin
+from semantic_kernel.kernel import Kernel
+from semantic_kernel.memory.semantic_text_memory import SemanticTextMemory
+from semantic_kernel.memory.volatile_memory_store import VolatileMemoryStore
 import database.data_constants as data_cst
+from langchain_openai.embeddings import OpenAIEmbeddings
+
+#https://github.com/microsoft/semantic-kernel/blob/main/python/notebooks/06-memory-and-embeddings.ipynb
+#https://platform.openai.com/docs/models/embeddings
+
 
 #1,536
 
 class DBBuilder():
     def __init__(self):
         self.conn = self.connect_to_db()
-        self.kernel = self.initialize_kernel_with_openai()
-        self.initialize_embedding_service()
+        # self.embedding_model =
+        # self.kernel = self.initialize_kernel_with_openai()
+        # self.embedding_gen = self.initialize_embedding_service()
+        # self.collection_id = "generic"
+        # self.memory = self.initialize_memory()
         # self.ensure_pgvector_extension()
         # self.create_tables()
         # self.add_vector_column('npcs')
@@ -19,16 +31,20 @@ class DBBuilder():
         # self.add_vector_column('characters')
         # self.populate_tables()
 
+    # def initialize_memory(self):
+    #     memory = SemanticTextMemory(storage=VolatileMemoryStore(), embeddings_generator=self.embedding_gen)
+    #     return memory
+    #     # self.kernel.add_plugin( "TextMemoryPlugin", TextMemoryPlugin(memory))
 
-    def initialize_kernel_with_openai(self):
-        kernel = sk.Kernel()
-        return kernel
-
-    def initialize_embedding_service(self):
-        api_key, org_id = sk.openai_settings_from_dot_env()
-        embedding_gen = OpenAITextEmbedding(ai_model_id="text-embedding-3-small", api_key=api_key, org_id=org_id)
-        self.kernel.add_service(embedding_gen)
-        return embedding_gen
+    # def initialize_kernel_with_openai(self):
+    #     kernel = sk.Kernel()
+    #     return kernel
+    #
+    # def initialize_embedding_service(self):
+    #     api_key, org_id = sk.openai_settings_from_dot_env()
+    #     embedding_gen = OpenAITextEmbedding(ai_model_id="text-embedding-3-small", api_key=api_key, org_id=org_id)
+    #     self.kernel.add_service(embedding_gen)
+    #     return embedding_gen
 
     def connect_to_db(self):
         try:
@@ -137,6 +153,7 @@ class DBBuilder():
         finally:
             cursor.close()
 
+#TODO: Add a method to create the embedding
     def get_characters(self, conn):
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM characters")

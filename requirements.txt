@@ -1,2 +1,4 @@
 psycopg2-binary
-SQLAlchemy
+langchain
+langchain-core
+langchain-openai
