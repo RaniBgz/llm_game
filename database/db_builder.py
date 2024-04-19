@@ -9,6 +9,7 @@ from semantic_kernel.memory.semantic_text_memory import SemanticTextMemory
 from semantic_kernel.memory.volatile_memory_store import VolatileMemoryStore
 import database.data_constants as data_cst
 from langchain_openai.embeddings import OpenAIEmbeddings
+from sentence_transformers import SentenceTransformer, util
 
 #https://github.com/microsoft/semantic-kernel/blob/main/python/notebooks/06-memory-and-embeddings.ipynb
 #https://platform.openai.com/docs/models/embeddings
@@ -19,32 +20,14 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 class DBBuilder():
     def __init__(self):
         self.conn = self.connect_to_db()
-        # self.embedding_model =
-        # self.kernel = self.initialize_kernel_with_openai()
-        # self.embedding_gen = self.initialize_embedding_service()
-        # self.collection_id = "generic"
-        # self.memory = self.initialize_memory()
-        # self.ensure_pgvector_extension()
-        # self.create_tables()
-        # self.add_vector_column('npcs')
-        # self.add_vector_column('items')
-        # self.add_vector_column('characters')
-        # self.populate_tables()
+        self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
 
-    # def initialize_memory(self):
-    #     memory = SemanticTextMemory(storage=VolatileMemoryStore(), embeddings_generator=self.embedding_gen)
-    #     return memory
-    #     # self.kernel.add_plugin( "TextMemoryPlugin", TextMemoryPlugin(memory))
 
-    # def initialize_kernel_with_openai(self):
-    #     kernel = sk.Kernel()
-    #     return kernel
-    #
-    # def initialize_embedding_service(self):
-    #     api_key, org_id = sk.openai_settings_from_dot_env()
-    #     embedding_gen = OpenAITextEmbedding(ai_model_id="text-embedding-3-small", api_key=api_key, org_id=org_id)
-    #     self.kernel.add_service(embedding_gen)
-    #     return embedding_gen
+    def embed_text(self, text):
+        return self.embedding_model.encode(text, convert_to_tensor=True)
+
+    def embed_text_to_list(self, text):
+        return self.embedding_model.encode(text).tolist()
 
     def connect_to_db(self):
         try:
@@ -154,25 +137,8 @@ class DBBuilder():
             cursor.close()
 
 #TODO: Add a method to create the embedding
-    def get_characters(self, conn):
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM characters")
-        rows = cursor.fetchall()
-        characters = []
-        for row in rows:
-            character = {
-                "id": row[0],
-                "name": row[1],
-                "hp": row[2],
-                "global_position": row[3],
-                "local_position": row[4],
-                "sprite": row[5]
-            }
-            characters.append(character)
-        return json.dumps(characters)
-
-    def display_characters_as_json(self, conn):
-        cursor = conn.cursor()
+    def build_character_vector(self):
+        cursor = self.conn.cursor()
         try:
             cursor.execute("""
             SELECT id, name, hp, global_position, local_position, sprite 
@@ -183,14 +149,19 @@ class DBBuilder():
             column_names = [desc[0] for desc in cursor.description]
             for row in rows:
                 row_dict = dict(zip(column_names, row))
-                print(json.dumps(row_dict, indent=4))  # Display JSON string
+                row_json = json.dumps(row_dict)
+                row_vector = self.embed_text_to_list(row_json)
+                cursor.execute("""
+                UPDATE characters SET embedding = %s WHERE id = %s;
+                """, (row_vector, row_dict['id']))
+            self.conn.commit()
         except psycopg2.Error as e:
             print("Error retrieving characters data:", e)
         finally:
             cursor.close()
 
-    def display_npcs_as_json(self, conn):
-        cursor = conn.cursor()
+    def build_npcs_vector(self):
+        cursor = self.conn.cursor()
         try:
             cursor.execute("""
             SELECT id, name, hp, robot, global_position, local_position, sprite, hostile 
@@ -201,13 +172,18 @@ class DBBuilder():
             column_names = [desc[0] for desc in cursor.description]
             for row in rows:
                 row_dict = dict(zip(column_names, row))
-                print(json.dumps(row_dict, indent=4))  # Display JSON string
+                row_json = json.dumps(row_dict)
+                row_vector = self.embed_text_to_list(row_json)
+                cursor.execute("""
+                UPDATE npcs SET embedding = %s WHERE id = %s;
+                """, (row_vector, row_dict['id']))
+            self.conn.commit()
         except psycopg2.Error as e:
             print("Error retrieving NPCs data:", e)
         finally:
             cursor.close()
 
-    def display_items_as_json(self, conn):
+    def build_items_vector(self, conn):
         cursor = conn.cursor()
         try:
             cursor.execute("""
@@ -219,7 +195,12 @@ class DBBuilder():
             column_names = [desc[0] for desc in cursor.description]
             for row in rows:
                 row_dict = dict(zip(column_names, row))
-                print(json.dumps(row_dict, indent=4))  # Display JSON string
+                row_json = json.dumps(row_dict)
+                row_vector = self.embed_text_to_list(row_json)
+                cursor.execute("""
+                UPDATE items SET embedding = %s WHERE id = %s;
+                """, (row_vector, row_dict['id']))
+            self.conn.commit()
         except psycopg2.Error as e:
             print("Error retrieving items data:", e)
         finally:
