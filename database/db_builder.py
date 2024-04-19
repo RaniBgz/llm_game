@@ -9,7 +9,7 @@ from semantic_kernel.memory.semantic_text_memory import SemanticTextMemory
 from semantic_kernel.memory.volatile_memory_store import VolatileMemoryStore
 import database.data_constants as data_cst
 from langchain_openai.embeddings import OpenAIEmbeddings
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
 
 #https://github.com/microsoft/semantic-kernel/blob/main/python/notebooks/06-memory-and-embeddings.ipynb
 #https://platform.openai.com/docs/models/embeddings
@@ -136,8 +136,9 @@ class DBBuilder():
         finally:
             cursor.close()
 
-#TODO: Add a method to create the embedding
-    def build_character_vector(self):
+#TODO: When the DB grows, think about using fetchone instead of fetchall
+#TODO: Properly define process to add an entity to the DB and build its vector at the same time
+    def build_character_vectors(self):
         cursor = self.conn.cursor()
         try:
             cursor.execute("""
@@ -160,7 +161,7 @@ class DBBuilder():
         finally:
             cursor.close()
 
-    def build_npcs_vector(self):
+    def build_npcs_vectors(self):
         cursor = self.conn.cursor()
         try:
             cursor.execute("""
@@ -183,8 +184,8 @@ class DBBuilder():
         finally:
             cursor.close()
 
-    def build_items_vector(self, conn):
-        cursor = conn.cursor()
+    def build_items_vectors(self):
+        cursor = self.conn.cursor()
         try:
             cursor.execute("""
             SELECT id, name, description, global_position, local_position, sprite, in_world 
@@ -203,6 +204,19 @@ class DBBuilder():
             self.conn.commit()
         except psycopg2.Error as e:
             print("Error retrieving items data:", e)
+        finally:
+            cursor.close()
+
+    def verify_vectors(self, table_name):
+        cursor = self.conn.cursor()
+        try:
+            # Query to check a few rows
+            cursor.execute(f"SELECT id, embedding FROM {table_name} WHERE embedding IS NOT NULL LIMIT 5;")
+            rows = cursor.fetchall()
+            for row in rows:
+                print(f"ID: {row[0]}, Embedding: {row[1][:10]}...")  # Print the first 10 elements of the embedding
+        except psycopg2.Error as e:
+            print(f"Error checking embeddings in {table_name}:", e)
         finally:
             cursor.close()
 
@@ -257,8 +271,14 @@ if __name__ == "__main__":
     # db_builder.remove_vector_column('npcs')
     # db_builder.remove_vector_column('items')
     # db_builder.remove_vector_column('characters')
-    db_builder.add_vector_column('npcs', vector_dim=data_cst.EMBEDDING_DIM)
-    db_builder.add_vector_column('items', vector_dim=data_cst.EMBEDDING_DIM)
-    db_builder.add_vector_column('characters', vector_dim=data_cst.EMBEDDING_DIM)
+    # db_builder.add_vector_column('npcs', vector_dim=data_cst.EMBEDDING_DIM)
+    # db_builder.add_vector_column('items', vector_dim=data_cst.EMBEDDING_DIM)
+    # db_builder.add_vector_column('characters', vector_dim=data_cst.EMBEDDING_DIM)
+    # db_builder.build_character_vectors()
+    # db_builder.verify_vectors('characters')
+    # db_builder.build_npcs_vectors()
+    # db_builder.verify_vectors('npcs')
+    # db_builder.build_items_vectors()
+    # db_builder.verify_vectors('items')
     db_builder.close_connection()
 

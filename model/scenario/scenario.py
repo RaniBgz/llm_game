@@ -1,6 +1,6 @@
 ''' Defines the scenario of the game. Builds the quests, associates them to the right targets, and associates them to a NPC'''
 
-from database.db_retriever import retrieve_characters, retrieve_npcs, retrieve_items
+from database.db_retriever import DBRetriever
 from model.game_data import GameData
 from model.quest.quest_builder import QuestBuilder
 
@@ -9,6 +9,7 @@ class Scenario:
         self.name = name
         self.game_data = game_data
         self.quest_builder = QuestBuilder()
+        self.db_retriever = DBRetriever()
 
     def build_scenario(self):
         if self.name == "default":
@@ -226,11 +227,12 @@ class Scenario:
 
 
     def initialize_entities(self):
-        self.game_data.set_character(retrieve_characters()[0])
+        character = self.db_retriever.retrieve_characters()[0]
+        self.game_data.set_character(character)
         print(f"Character: {self.game_data.character}")
-        npcs = retrieve_npcs()
+        npcs = self.db_retriever.retrieve_npcs()
         print(f"NPCs: {npcs}")
-        items = retrieve_items()
+        items = self.db_retriever.retrieve_items()
         print(f"Items: {items}")
         for npc in npcs:
             self.game_data.add_npc(npc)
