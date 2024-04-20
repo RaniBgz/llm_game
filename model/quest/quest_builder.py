@@ -1,12 +1,15 @@
 from model.quest.quest import Quest
 from model.quest.objective import KillObjective, LocationObjective, RetrievalObjective, TalkToNPCObjective
 from model.dialogue.dialogue import Dialogue, QuestDialogue
+from database.db_retriever import DBRetriever
+from sentence_transformers import SentenceTransformer, util
 
 '''Links quests to objectives'''
 
 class QuestBuilder():
-    def __init__(self):
-        pass
+    def __init__(self, game_data):
+        self.game_data = game_data
+        self.db_retriever = DBRetriever()
 
     ''' Methods to generate quests and dialogue with llm_model and semantic_kernel'''
     async def generate_quest_and_dialogue(self, llm_model, genre="fantasy", difficulty="easy"):
@@ -42,12 +45,26 @@ class QuestBuilder():
         for obj in quest_json["objectives"]:
             if obj["type"] == "kill":
                 objective = KillObjective(obj["name"], obj["description"], obj["target"])
+                #TODO: check that target exists, first in game objects, then in DB
+                npc = self.game_data.find_npc_by_name(obj["target"]) #Trying to find the NPC in the game data
+                if npc is None:
+                    npc = self.db_retriever.retrieve_npc_by_name(obj["target"]) #If not found, try to retrieve it from the DB
+                    if npc is None:
+                        #If still not found, return the most similar NPC
+                        raise ValueError(f"NPC {obj['target']} not found")
+
             elif obj["type"] == "location":
                 objective = LocationObjective(obj["name"], obj["description"], obj["target"])
             elif obj["type"] == "retrieval":
                 objective = RetrievalObjective(obj["name"], obj["description"], obj["target"])
+                item = self.game_data.find_item_by_name(obj["target"])
+                if item is None:
+                    raise ValueError(f"Item {obj['target']} not found")
             elif obj["type"] == "talk_to_npc":
                 objective = TalkToNPCObjective(obj["name"], obj["description"], obj["target"])
+                npc = self.game_data.find_npc_by_name(obj["target"])
+                if npc is None:
+                    raise ValueError(f"NPC {obj['target']} not found")
             else:
                 raise ValueError(f"Invalid objective type: {obj['type']}")
 

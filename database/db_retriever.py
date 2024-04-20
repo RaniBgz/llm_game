@@ -2,7 +2,8 @@ import psycopg2
 from model.character import Character
 from model.npc import NPC
 from model.item import Item
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
+import database.utils as utils
 import numpy as np
 
 
@@ -86,13 +87,14 @@ class DBRetriever:
             print("Item not found")
             return None
 
-    def get_vectors_by_character_name(self, character_name):
+    def retrieve_vectors_by_character_name(self, character_name):
         cursor = self.conn.cursor()
         try:
             cursor.execute("SELECT id, name, embedding FROM characters WHERE name = %s;", (character_name,))
             rows = cursor.fetchall()
             if rows:
-                vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                # vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                vectors = [(row[0], utils.string_to_np_array(row[2])) for row in rows if row[2] is not None]
                 return vectors
             else:
                 print("No characters found with this name")
@@ -108,7 +110,8 @@ class DBRetriever:
             cursor.execute("SELECT id, name, embedding FROM npcs WHERE name = %s;", (npc_name,))
             rows = cursor.fetchall()
             if rows:
-                vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                # vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                vectors = [(row[0], utils.string_to_np_array(row[2])) for row in rows if row[2] is not None]
                 return vectors
             else:
                 print("No NPCs found with this name")
@@ -118,13 +121,14 @@ class DBRetriever:
         finally:
             cursor.close()
 
-    def get_vectors_by_item_name(self, item_name):
+    def retrieve_vectors_by_item_name(self, item_name):
         cursor = self.conn.cursor()
         try:
             cursor.execute("SELECT id, name, embedding FROM items WHERE name = %s;", (item_name,))
             rows = cursor.fetchall()
             if rows:
-                vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                # vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                vectors = [(row[0], utils.string_to_np_array(row[2])) for row in rows if row[2] is not None]
                 return vectors
             else:
                 print("No items found with this name")
@@ -190,9 +194,19 @@ class DBRetriever:
 
 if __name__ == '__main__':
     db_retriever = DBRetriever()
-    db_retriever.retrieve_npc_by_name("Elder")
-    db_retriever.retrieve_character_by_name("Gary")
-    db_retriever.retrieve_item_by_name("Health Potion")
+    # db_retriever.retrieve_npc_by_name("Elder")
+    # db_retriever.retrieve_character_by_name("Gary")
+    # db_retriever.retrieve_item_by_name("Health Potion")
+    npc_1 = db_retriever.retrieve_vectors_by_npc_name("Elder")
+    npc_2 = db_retriever.retrieve_vectors_by_npc_name("Enchantress")
+    npc_3 = db_retriever.retrieve_vectors_by_npc_name("Echo")
+    cosine_sim_1_2 = util.cos_sim(npc_1[0][1], npc_2[0][1])
+    cosine_sim_1_3 = util.cos_sim(npc_1[0][1], npc_3[0][1])
+    cosine_sim_2_3 = util.cos_sim(npc_2[0][1], npc_3[0][1])
+
+    print(f"Cosine similarity Elder - Enchantress : {cosine_sim_1_2.item()}")
+    print(f"Cosine similarity Elder - Echo : {cosine_sim_1_3.item()}")
+    print(f"Cosine similarity Enchantress - Echo : {cosine_sim_2_3.item()}")
     # retrieve_characters()
     # retrieve_npcs()
     # retrieve_items()

@@ -8,7 +8,7 @@ class Scenario:
     def __init__(self, name, game_data):
         self.name = name
         self.game_data = game_data
-        self.quest_builder = QuestBuilder()
+        self.quest_builder = QuestBuilder(self.game_data)
         self.db_retriever = DBRetriever()
 
     def build_scenario(self):

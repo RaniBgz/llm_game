@@ -106,7 +106,7 @@ class DBBuilder():
         self.conn.commit()
         print("Tables created successfully")
 
-    def add_vector_column(self, table_name, vector_dim=128):
+    def add_vector_column(self, table_name, vector_dim=data_cst.EMBEDDING_DIM):
         cursor = self.conn.cursor()
         try:
             # SQL command to add a vector column
@@ -153,7 +153,7 @@ class DBBuilder():
                 row_json = json.dumps(row_dict)
                 row_vector = self.embed_text_to_list(row_json)
                 cursor.execute("""
-                UPDATE characters SET embedding = %s WHERE id = %s;
+                UPDATE npcs SET embedding = %s WHERE id = %s;
                 """, (row_vector, row_dict['id']))
             self.conn.commit()
         except psycopg2.Error as e:
@@ -199,7 +199,7 @@ class DBBuilder():
                 row_json = json.dumps(row_dict)
                 row_vector = self.embed_text_to_list(row_json)
                 cursor.execute("""
-                UPDATE items SET embedding = %s WHERE id = %s;
+                UPDATE npcs SET embedding = %s WHERE id = %s;
                 """, (row_vector, row_dict['id']))
             self.conn.commit()
         except psycopg2.Error as e:
@@ -274,11 +274,11 @@ if __name__ == "__main__":
     # db_builder.add_vector_column('npcs', vector_dim=data_cst.EMBEDDING_DIM)
     # db_builder.add_vector_column('items', vector_dim=data_cst.EMBEDDING_DIM)
     # db_builder.add_vector_column('characters', vector_dim=data_cst.EMBEDDING_DIM)
-    # db_builder.build_character_vectors()
-    # db_builder.verify_vectors('characters')
-    # db_builder.build_npcs_vectors()
-    # db_builder.verify_vectors('npcs')
-    # db_builder.build_items_vectors()
-    # db_builder.verify_vectors('items')
+    db_builder.build_character_vectors()
+    db_builder.verify_vectors('characters')
+    db_builder.build_npcs_vectors()
+    db_builder.verify_vectors('npcs')
+    db_builder.build_items_vectors()
+    db_builder.verify_vectors('items')
     db_builder.close_connection()
 

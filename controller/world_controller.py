@@ -23,7 +23,7 @@ class WorldController:
         self.view = view
         self.main_menu_controller = main_menu_ctrl
         self.quest_manager = QuestManager(self.game_data)
-        self.quest_builder = QuestBuilder()
+        self.quest_builder = QuestBuilder(self.game_data)
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
