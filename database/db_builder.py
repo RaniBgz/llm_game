@@ -142,22 +142,23 @@ class DBBuilder():
         cursor = self.conn.cursor()
         try:
             cursor.execute("""
-            SELECT id, name, hp, global_position, local_position, sprite 
-            FROM characters 
+            SELECT id, name
+            FROM characters
             WHERE embedding IS NULL;
             """)
             rows = cursor.fetchall()
-            column_names = [desc[0] for desc in cursor.description]
             for row in rows:
-                row_dict = dict(zip(column_names, row))
-                row_json = json.dumps(row_dict)
-                row_vector = self.embed_text_to_list(row_json)
+                npc_id, npc_name = row  # Unpack the id and name directly
+
+                # Generate the embedding for the name only
+                row_vector = self.embed_text_to_list(npc_name)
+
                 cursor.execute("""
-                UPDATE npcs SET embedding = %s WHERE id = %s;
-                """, (row_vector, row_dict['id']))
+                UPDATE characters SET embedding = %s WHERE id = %s;
+                """, (row_vector, npc_id))
             self.conn.commit()
         except psycopg2.Error as e:
-            print("Error retrieving characters data:", e)
+            print("Error retrieving Character data:", e)
         finally:
             cursor.close()
 
@@ -165,19 +166,20 @@ class DBBuilder():
         cursor = self.conn.cursor()
         try:
             cursor.execute("""
-            SELECT id, name, hp, robot, global_position, local_position, sprite, hostile 
+            SELECT id, name
             FROM npcs 
             WHERE embedding IS NULL;
             """)
             rows = cursor.fetchall()
-            column_names = [desc[0] for desc in cursor.description]
             for row in rows:
-                row_dict = dict(zip(column_names, row))
-                row_json = json.dumps(row_dict)
-                row_vector = self.embed_text_to_list(row_json)
+                npc_id, npc_name = row  # Unpack the id and name directly
+
+                # Generate the embedding for the name only
+                row_vector = self.embed_text_to_list(npc_name)
+
                 cursor.execute("""
                 UPDATE npcs SET embedding = %s WHERE id = %s;
-                """, (row_vector, row_dict['id']))
+                """, (row_vector, npc_id))
             self.conn.commit()
         except psycopg2.Error as e:
             print("Error retrieving NPCs data:", e)
@@ -188,22 +190,23 @@ class DBBuilder():
         cursor = self.conn.cursor()
         try:
             cursor.execute("""
-            SELECT id, name, description, global_position, local_position, sprite, in_world 
+            SELECT id, name
             FROM items 
             WHERE embedding IS NULL;
             """)
             rows = cursor.fetchall()
-            column_names = [desc[0] for desc in cursor.description]
             for row in rows:
-                row_dict = dict(zip(column_names, row))
-                row_json = json.dumps(row_dict)
-                row_vector = self.embed_text_to_list(row_json)
+                npc_id, npc_name = row  # Unpack the id and name directly
+
+                # Generate the embedding for the name only
+                row_vector = self.embed_text_to_list(npc_name)
+
                 cursor.execute("""
-                UPDATE npcs SET embedding = %s WHERE id = %s;
-                """, (row_vector, row_dict['id']))
+                UPDATE items SET embedding = %s WHERE id = %s;
+                """, (row_vector, npc_id))
             self.conn.commit()
         except psycopg2.Error as e:
-            print("Error retrieving items data:", e)
+            print("Error retrieving Items data:", e)
         finally:
             cursor.close()
 
@@ -271,14 +274,16 @@ if __name__ == "__main__":
     # db_builder.remove_vector_column('npcs')
     # db_builder.remove_vector_column('items')
     # db_builder.remove_vector_column('characters')
+
     # db_builder.add_vector_column('npcs', vector_dim=data_cst.EMBEDDING_DIM)
     # db_builder.add_vector_column('items', vector_dim=data_cst.EMBEDDING_DIM)
     # db_builder.add_vector_column('characters', vector_dim=data_cst.EMBEDDING_DIM)
-    db_builder.build_character_vectors()
-    db_builder.verify_vectors('characters')
-    db_builder.build_npcs_vectors()
-    db_builder.verify_vectors('npcs')
-    db_builder.build_items_vectors()
-    db_builder.verify_vectors('items')
+
+    # db_builder.build_character_vectors()
+    # db_builder.verify_vectors('characters')
+    # db_builder.build_npcs_vectors()
+    # db_builder.verify_vectors('npcs')
+    # db_builder.build_items_vectors()
+    # db_builder.verify_vectors('items')
     db_builder.close_connection()
 
