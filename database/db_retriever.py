@@ -26,11 +26,20 @@ class DBRetriever:
             print("Connected to the database")
             return conn
 
+    def ensure_connection(self):
+        try:
+            # psycopg2 exposes the closed attribute which is False if the connection is open
+            if self.conn.closed:
+                print("Reconnecting to the database...")
+                self.conn = self.connect_to_db()
+        except psycopg2.Error as e:
+            print("Error checking database connection:", e)
 
     def retrieve_character_by_name(self, name):
         cursor = self.conn.cursor()
         cursor.execute("SELECT name, hp, global_position, local_position, sprite FROM characters WHERE name = %s", (name,))
         character_data = cursor.fetchone()
+        cursor.close()
 
         if character_data:
             name, hp, global_position, local_position, sprite = character_data
@@ -47,6 +56,7 @@ class DBRetriever:
         cursor = self.conn.cursor()
         cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile FROM npcs WHERE name = %s", (name,))
         npc_data = cursor.fetchone()
+        cursor.close()
 
         if npc_data:
             name, hp, robot, global_position, local_position, sprite, hostile = npc_data
@@ -63,6 +73,7 @@ class DBRetriever:
         cursor = self.conn.cursor()
         cursor.execute("SELECT id, name, description, global_position, local_position, sprite, in_world FROM items WHERE name = %s", (name,))
         item_data = cursor.fetchone()
+        cursor.close()
 
         if item_data:
             id, name, description, global_position, local_position, sprite, in_world = item_data
@@ -74,6 +85,22 @@ class DBRetriever:
         else:
             print("Item not found")
             return None
+
+    def get_vectors_by_character_name(self, character_name):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("SELECT id, name, embedding FROM characters WHERE name = %s;", (character_name,))
+            rows = cursor.fetchall()
+            if rows:
+                vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                return vectors
+            else:
+                print("No characters found with this name")
+                return None
+        except psycopg2.Error as e:
+            print("Error retrieving vectors from characters:", e)
+        finally:
+            cursor.close()
 
     def retrieve_vectors_by_npc_name(self, npc_name):
         cursor = self.conn.cursor()
@@ -91,10 +118,27 @@ class DBRetriever:
         finally:
             cursor.close()
 
+    def get_vectors_by_item_name(self, item_name):
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("SELECT id, name, embedding FROM items WHERE name = %s;", (item_name,))
+            rows = cursor.fetchall()
+            if rows:
+                vectors = [(row[0], np.array(row[2])) for row in rows if row[2] is not None]
+                return vectors
+            else:
+                print("No items found with this name")
+                return None
+        except psycopg2.Error as e:
+            print("Error retrieving vectors from items:", e)
+        finally:
+            cursor.close()
+
     def retrieve_characters(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT name, hp, global_position, local_position, sprite FROM characters")
         characters = cursor.fetchall()
+        cursor.close()
         characters_list = []
         for character in characters:
             name, hp, global_position, local_position, sprite = character
@@ -111,6 +155,7 @@ class DBRetriever:
         cursor = self.conn.cursor()
         cursor.execute("SELECT id, name, description, global_position, local_position, sprite, in_world FROM items")
         items = cursor.fetchall()
+        cursor.close()
         items_list = []
         for item in items:
             id, name, description, global_position, local_position, sprite, in_world = item
@@ -126,6 +171,7 @@ class DBRetriever:
         cursor = self.conn.cursor()
         cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile FROM npcs")
         npcs = cursor.fetchall()
+        cursor.close()
         npcs_list = []
         for npc in npcs:
             name, hp, robot, global_position, local_position, sprite, hostile = npc

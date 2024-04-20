@@ -4,6 +4,7 @@ import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 from semantic_kernel.connectors.ai.open_ai.services.open_ai_text_embedding import OpenAITextEmbedding
 import ai.llm.plugin_paths as pp
+from sentence_transformers import SentenceTransformer
 
 class LLMModel:
     path_to_plugins = "./ai/llm/samples/plugins"
@@ -13,7 +14,13 @@ class LLMModel:
         self.plugins = {}
         #TODO: Find the proper way to initialize all plugins
         self.import_plugin(pp.SIMPLE_QUEST_PLUGIN)
+        self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
 
+    def embed_text(self, text):
+        return self.embedding_model.encode(text, convert_to_tensor=True)
+
+    def embed_text_to_list(self, text):
+        return self.embedding_model.encode(text).tolist()
 
     def initialize_kernel_with_openai(self):
         kernel = sk.Kernel()
