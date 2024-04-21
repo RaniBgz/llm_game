@@ -9,7 +9,8 @@ import numpy as np
 
 class DBRetriever:
     def __init__(self):
-        self.conn = self.connect_to_db()
+        self.conn = None
+        # self.conn = self.connect_to_db()
         self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
 
     def connect_to_db(self):
@@ -25,6 +26,7 @@ class DBRetriever:
             print(e)
         else:
             print("Connected to the database")
+            self.conn = conn
             return conn
 
     def embed_text(self, text):

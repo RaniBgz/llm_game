@@ -227,6 +227,7 @@ class Scenario:
 
 
     def initialize_entities(self):
+        self.db_retriever.connect_to_db()
         character = self.db_retriever.retrieve_characters()[0]
         self.game_data.set_character(character)
         print(f"Character: {self.game_data.character}")
@@ -238,6 +239,8 @@ class Scenario:
             self.game_data.add_npc(npc)
         for item in items:
             self.game_data.add_item(item)
+        self.db_retriever.close_connection()
+
 
 
     def format_character(self, character):

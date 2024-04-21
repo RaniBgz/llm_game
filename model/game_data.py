@@ -53,6 +53,7 @@ class GameData:
         self.character = character
         self.world_map.add_entity(character, character.global_position)
 
+    #TODO: Handle specific cases
     def find_most_similar_npc(self, name):
         name_vector = self.embed_text(name)
         max_similarity = -1
@@ -63,6 +64,21 @@ class GameData:
                 max_similarity = cosine_similarity
                 most_similar_npc = npc
         return most_similar_npc
+
+    def find_most_similar_item(self, name):
+        name_vector = self.embed_text(name)
+        max_similarity = -1
+        most_similar_item = None
+        for item in self.items:
+            if self.character.has_item(item):
+                continue
+            else:
+                cosine_similarity = util.cos_sim(name_vector, item.embedding)
+                if cosine_similarity > max_similarity:
+                    max_similarity = cosine_similarity
+                    most_similar_item = item
+        return most_similar_item
+
     def find_npc_by_id(self, id):
         for npc in self.npcs:
             if npc.id == id:

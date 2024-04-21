@@ -43,7 +43,7 @@ class Character(Entity):
                 return True
         return False
 
-    def check_character_has_item(self, item_id):
+    def has_item(self, item_id):
         for item in self.inventory:
             if item.get_id() == item_id:
                 return True

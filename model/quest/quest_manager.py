@@ -66,7 +66,7 @@ class QuestManager():
             #Take the item away from the player's inventory for retrieval quests
             if isinstance(objective, model.quest.objective.RetrievalObjective):
                 item = self.game_data.find_item_by_id(objective.target_item_id)
-                if self.game_data.character.check_character_has_item(objective.target_item_id):
+                if self.game_data.character.has_item(objective.target_item_id):
                     self.game_data.character.remove_item_from_inventory(item)
 
 
