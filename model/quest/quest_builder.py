@@ -45,14 +45,10 @@ class QuestBuilder():
         for obj in quest_json["objectives"]:
             if obj["type"] == "kill":
                 objective = KillObjective(obj["name"], obj["description"], obj["target"])
-                #TODO: check that target exists, first in game objects, then in DB
                 npc = self.game_data.find_npc_by_name(obj["target"]) #Trying to find the NPC in the game data
                 if npc is None:
-                    npc = self.db_retriever.retrieve_npc_by_name(obj["target"]) #If not found, try to retrieve it from the DB
-                    if npc is None:
-                        #If still not found, return the most similar NPC
-                        raise ValueError(f"NPC {obj['target']} not found")
-
+                    most_similar_npc = self.game_data.find_most_similar_npc(obj["target"]) #If not found, try to find the most similar NPC
+                    print("Most similar NPC: ", most_similar_npc)
             elif obj["type"] == "location":
                 objective = LocationObjective(obj["name"], obj["description"], obj["target"])
             elif obj["type"] == "retrieval":

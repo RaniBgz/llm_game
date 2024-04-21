@@ -27,6 +27,9 @@ class DBRetriever:
             print("Connected to the database")
             return conn
 
+    def embed_text(self, text):
+        return self.embedding_model.encode(text, convert_to_numpy=True)
+
     def ensure_connection(self):
         try:
             # psycopg2 exposes the closed attribute which is False if the connection is open
@@ -36,6 +39,8 @@ class DBRetriever:
         except psycopg2.Error as e:
             print("Error checking database connection:", e)
 
+    '''Retrieve by name functions for characters, NPCs and items.
+    Need to add embedding'''
     def retrieve_character_by_name(self, name):
         cursor = self.conn.cursor()
         cursor.execute("SELECT name, hp, global_position, local_position, sprite FROM characters WHERE name = %s", (name,))
@@ -87,6 +92,8 @@ class DBRetriever:
             print("Item not found")
             return None
 
+    '''Retrieve vectors by name functions for characters, NPCs and items.
+    Need to add embedding'''
     def retrieve_vectors_by_character_name(self, character_name):
         cursor = self.conn.cursor()
         try:
@@ -140,15 +147,21 @@ class DBRetriever:
 
     def retrieve_characters(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT name, hp, global_position, local_position, sprite FROM characters")
+        cursor.execute("SELECT name, hp, global_position, local_position, sprite, embedding FROM characters")
         characters = cursor.fetchall()
         cursor.close()
         characters_list = []
         for character in characters:
-            name, hp, global_position, local_position, sprite = character
+            name, hp, global_position, local_position, sprite, embedding = character
+            embedding = utils.string_to_np_array(embedding)
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
-            game_character = Character(name, hp, global_position, local_position, sprite)
+            game_character = Character(name,
+                                       hp,
+                                       global_position,
+                                       local_position,
+                                       sprite=sprite,
+                                       embedding=embedding)
             characters_list.append(game_character)
             print(f"Character: {game_character.name}, HP: {game_character.hp}, Global: {game_character.global_position}, Local: {game_character.local_position}",
                   f"Sprite: {game_character.sprite}")
@@ -157,15 +170,22 @@ class DBRetriever:
 
     def retrieve_items(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT id, name, description, global_position, local_position, sprite, in_world FROM items")
+        cursor.execute("SELECT id, name, description, global_position, local_position, sprite, in_world, embedding FROM items")
         items = cursor.fetchall()
         cursor.close()
         items_list = []
         for item in items:
-            id, name, description, global_position, local_position, sprite, in_world = item
+            id, name, description, global_position, local_position, sprite, in_world, embedding = item
+            embedding = utils.string_to_np_array(embedding)
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
-            game_item = Item(name, description, global_position=global_position, local_position=local_position, sprite=sprite, in_world=in_world)
+            game_item = Item(name,
+                             description,
+                             global_position=global_position,
+                             local_position=local_position,
+                             sprite=sprite,
+                             in_world=in_world,
+                             embedding=embedding)
             items_list.append(game_item)
             print(f"Item ID: {game_item.id}, Name: {game_item.name}, Description: {game_item.description},  sprite: {game_item.sprite}. In world: {game_item.in_world}")
             print(f"Object instantiated: {game_item}\n")
@@ -173,15 +193,23 @@ class DBRetriever:
 
     def retrieve_npcs(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile FROM npcs")
+        cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile, embedding FROM npcs")
         npcs = cursor.fetchall()
         cursor.close()
         npcs_list = []
         for npc in npcs:
-            name, hp, robot, global_position, local_position, sprite, hostile = npc
+            name, hp, robot, global_position, local_position, sprite, hostile, embedding = npc
+            embedding = utils.string_to_np_array(embedding)
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
-            game_npc = NPC(name, hp, robot, sprite, global_position, local_position, hostile)
+            game_npc = NPC(name,
+                           hp,
+                           robot,
+                           sprite=sprite,
+                           global_position=global_position,
+                           local_position=local_position,
+                           hostile=hostile,
+                           embedding=embedding)
             npcs_list.append(game_npc)
             print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile},"
                   f"Global: {game_npc.global_position}, Local: {game_npc.local_position}")
@@ -231,3 +259,30 @@ if __name__ == '__main__':
     db_retriever.close_connection()
 
 
+    # def retrieve_most_similar_npc(self, npc_name):
+    #     cursor = self.conn.cursor()
+    #     try:
+    #         cursor.execute("SELECT id, name, embedding FROM npcs;")
+    #         cursor.execute("SELECT name, hp, robot, global_position, local_position, sprite, hostile, embedding FROM npcs")
+    #         rows = cursor.fetchall()
+    #         if rows:
+    #             most_similar_npc_name = ""
+    #             max_similarity = -1
+    #             npc_name_vector = self.embed_text(npc_name)
+    #             vectors = [(row[0], utils.string_to_np_array(row[2])) for row in rows if row[2] is not None]
+    #             #TODO: fix from here
+    #             #If there are several NPCs with the same name, we need to compare the embeddings for each one
+    #             for vector in vectors:
+    #                 np_vector = vector[2]
+    #                 cosine_similarity = util.cos_sim(npc_name_vector, np_vector)
+    #                 if cosine_similarity > max_similarity:
+    #                     max_similarity = cosine_similarity
+    #                     most_similar_npc_name = str(vector[1])
+    #         else:
+    #             print("No NPCs found")
+    #             return None
+    #     except psycopg2.Error as e:
+    #         print("Error retrieving vectors from npcs:", e)
+    #     finally:
+    #         cursor.close()
+    #         #Build NPC object from most_similar_npc_name

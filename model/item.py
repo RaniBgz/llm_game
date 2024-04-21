@@ -4,7 +4,13 @@ from model.subject.subject import Subject
 default_sprite = "./assets/default.png"
 
 class Item(Entity, Subject):
-    def __init__(self, name, description, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), in_world=False):
+    def __init__(self, name,
+                 description,
+                 sprite=default_sprite,
+                 global_position=(0, 0),
+                 local_position=(0, 0),
+                 in_world=False,
+                 embedding=None):
         Entity.__init__(self)
         Subject.__init__(self)
         self.name = name
@@ -13,6 +19,7 @@ class Item(Entity, Subject):
         self.global_position = global_position
         self.local_position = local_position
         self.in_world = in_world
+        self.embedding = embedding
         self.initial_state = {"global_position": global_position,
                               "local_position": local_position,
                               "in_world": in_world}

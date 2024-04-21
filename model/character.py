@@ -7,7 +7,12 @@ from model.subject.subject import Subject
 
 
 class Character(Entity):
-    def __init__(self, name, hp, global_position=(0, 0), local_position=(0, 0), sprite="./assets/sprites/character/character.png"):
+    def __init__(self, name,
+                 hp,
+                 global_position=(0, 0),
+                 local_position=(0, 0),
+                 sprite="./assets/sprites/character/character.png",
+                 embedding=None):
         super().__init__()
         self.name = name
         self.hp = hp
@@ -16,6 +21,7 @@ class Character(Entity):
         self.quests = []
         self.global_position = global_position
         self.local_position = local_position
+        self.embedding = embedding
 
     def attach(self, observer):
         self.subject.attach(observer)

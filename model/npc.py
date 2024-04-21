@@ -8,7 +8,15 @@ default_sprite = "./assets/default.png"
 
 
 class NPC(Entity, Subject):
-    def __init__(self, name, hp, robot=False, sprite=default_sprite, global_position=(0, 0), local_position=(0, 0), hostile=False):
+    def __init__(self,
+                 name,
+                 hp,
+                 robot=False,
+                 sprite=default_sprite,
+                 global_position=(0, 0),
+                 local_position=(0, 0),
+                 hostile=False,
+                 embedding=None):
         Entity.__init__(self)
         Subject.__init__(self)
         self.name = name
@@ -19,6 +27,7 @@ class NPC(Entity, Subject):
         self.local_position = local_position
         self.hostile = hostile
         self.dead = False
+        self.embedding = embedding
         self.quests = []
         self.dialogue = []
         self.quests_dialogue = {}
