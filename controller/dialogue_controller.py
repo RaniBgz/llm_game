@@ -65,8 +65,8 @@ class DialogueController:
             self.dialogue_box.create_end_quest_button()
 
     def handle_generate_quest_button_logic(self):
-        print(f"In generate quest button logic")
-        self.dialogue_box.create_generate_quest_button()
+        if self.dialogue_index == 0:
+            self.dialogue_box.create_generate_quest_button()
 
     def handle_events(self, event):
         print(f"In dialogue controller event")

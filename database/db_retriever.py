@@ -10,7 +10,7 @@ import numpy as np
 class DBRetriever:
     def __init__(self):
         self.conn = None
-        # self.conn = self.connect_to_db()
+        self.conn = self.connect_to_db()
         self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
 
     def connect_to_db(self):

@@ -12,6 +12,7 @@ class Scenario:
         self.db_retriever = DBRetriever()
 
     def build_scenario(self):
+        print(f"Building scenario")
         if self.name == "default":
             self.build_default_scenario()
         elif self.name == "complex_quest":
@@ -227,7 +228,7 @@ class Scenario:
 
 
     def initialize_entities(self):
-        self.db_retriever.connect_to_db()
+        # self.db_retriever.connect_to_db()
         character = self.db_retriever.retrieve_characters()[0]
         self.game_data.set_character(character)
         print(f"Character: {self.game_data.character}")

@@ -10,11 +10,16 @@ class LLMModel:
     path_to_plugins = "./ai/llm/samples/plugins"
     def __init__(self, model_name):
         self.model_name = model_name
+        print(f"Before kernel init")
         self.kernel = self.initialize_kernel_with_openai()
+        print("After kernel init")
         self.plugins = {}
         #TODO: Find the proper way to initialize all plugins
+        print(f"Before importing simple quest plugin")
         self.import_plugin(pp.SIMPLE_QUEST_PLUGIN)
-        self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
+        print(f"After importing simple quest plugin")
+        # self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
+        print("After embedding model init")
 
     def embed_text(self, text):
         return self.embedding_model.encode(text, convert_to_tensor=True)

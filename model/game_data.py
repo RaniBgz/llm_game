@@ -32,6 +32,10 @@ class GameData:
     def set_llm_model(self, model):
         self.llm_model = model
 
+    def set_character(self, character):
+        self.character = character
+        self.world_map.add_entity(character, character.global_position)
+
     def set_game_context(self, context):
         self.game_context = context
 
@@ -49,11 +53,6 @@ class GameData:
     def add_quest(self, quest):
         self.quests.append(quest)
 
-    def set_character(self, character):
-        self.character = character
-        self.world_map.add_entity(character, character.global_position)
-
-    #TODO: Handle specific cases
     def find_most_similar_npc(self, name):
         name_vector = self.embed_text(name)
         max_similarity = -1
@@ -64,6 +63,35 @@ class GameData:
                 max_similarity = cosine_similarity
                 most_similar_npc = npc
         return most_similar_npc
+
+    def find_most_similar_friendly_npc(self, name):
+        name_vector = self.embed_text(name)
+        max_similarity = -1
+        most_similar_npc = None
+        for npc in self.npcs:
+            if npc.hostile:
+                continue
+            else:
+                cosine_similarity = util.cos_sim(name_vector, npc.embedding)
+                if cosine_similarity > max_similarity:
+                    max_similarity = cosine_similarity
+                    most_similar_npc = npc
+        return most_similar_npc
+
+    def find_most_similar_hostile_npc(self, name):
+        name_vector = self.embed_text(name)
+        max_similarity = -1
+        most_similar_npc = None
+        for npc in self.npcs:
+            if npc.friendly:
+                continue
+            else:
+                cosine_similarity = util.cos_sim(name_vector, npc.embedding)
+                if cosine_similarity > max_similarity:
+                    max_similarity = cosine_similarity
+                    most_similar_npc = npc
+        return most_similar_npc
+
 
     def find_most_similar_item(self, name):
         name_vector = self.embed_text(name)
