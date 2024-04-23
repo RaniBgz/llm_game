@@ -1,10 +1,12 @@
+import logging
 from model.quest.quest import Quest
 from model.quest.objective import KillObjective, LocationObjective, RetrievalObjective, TalkToNPCObjective
 from model.dialogue.dialogue import Dialogue, QuestDialogue
 from database.db_retriever import DBRetriever
 from sentence_transformers import SentenceTransformer, util
 
-'''Links quests to objectives'''
+logging.basicConfig(level=logging.INFO)
+
 
 class QuestBuilder():
     def __init__(self, game_data):
@@ -12,27 +14,36 @@ class QuestBuilder():
         self.db_retriever = DBRetriever()
 
     ''' Methods to generate quests and dialogue with llm_model and semantic_kernel'''
+
     async def generate_quest_and_dialogue(self, llm_model, genre="fantasy", difficulty="easy"):
-        print(f"Generating quest")
-        quest_json = await llm_model.generate_unit_quest(genre, difficulty)
-        print(f"Generated quest json: {quest_json}")
-        quest = self.create_quest_from_json(quest_json)
-        print(f"Generating dialogue associated with quest")
-        dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
-        print(f"Generated dialogue json: {dialogue_json}")
-        quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
-        return quest, quest_dialogue
+        logging.info(f"Generating quest")
+        try:
+            quest_json = await llm_model.generate_unit_quest(genre, difficulty)
+            logging.info(f"Generated quest json: {quest_json}")
+            quest = self.create_quest_from_json(quest_json)
+            logging.info(f"Generating dialogue associated with quest")
+            dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
+            logging.info(f"Generated dialogue json: {dialogue_json}")
+            quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
+            return quest, quest_dialogue
+        except Exception as e:
+            logging.error(f"An error occurred while generating quest and dialogue: {e}")
+            return None, None
 
     async def generate_quest_and_dialogue_with_context(self, llm_model, game_context, genre="fantasy", difficulty="easy"):
-        print(f"Generating quest")
-        quest_json = await llm_model.generate_unit_quest_with_context(game_context, genre, difficulty)
-        print(f"Generated quest json: {quest_json}")
-        quest = self.create_quest_from_json(quest_json)
-        print(f"Generating dialogue associated with quest")
-        dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
-        print(f"Generated dialogue json: {dialogue_json}")
-        quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
-        return quest, quest_dialogue
+        logging.info(f"Generating quest")
+        try:
+            quest_json = await llm_model.generate_unit_quest_with_context(game_context, genre, difficulty)
+            logging.info(f"Generated quest json: {quest_json}")
+            quest = self.create_quest_from_json(quest_json)
+            logging.info(f"Generating dialogue associated with quest")
+            dialogue_json = await llm_model.generate_unit_quest_dialogue(quest_json)
+            logging.info(f"Generated dialogue json: {dialogue_json}")
+            quest_dialogue = self.create_quest_dialogue_from_json(dialogue_json)
+            return quest, quest_dialogue
+        except Exception as e:
+            logging.error(f"An error occurred while generating quest and dialogue with context: {e}")
+            return None, None
 
     def create_quest_from_json(self, quest_json):
         try:

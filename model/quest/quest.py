@@ -2,8 +2,14 @@ from model.entity import Entity
 from model.quest.objective import Objective
 import uuid
 
+
 class Quest:
-    def __init__(self, name, description, ordered=False, active=False, completed=False, ended=False):
+    def __init__(self, name: str,
+                 description: str,
+                 ordered: bool = False,
+                 active: bool = False,
+                 completed: bool = False,
+                 ended: bool = False):
         self.id = uuid.uuid4()
         self.name = name
         self.description = description
@@ -31,7 +37,7 @@ class Quest:
 
     def point_to_next_objective(self):
         if self.ordered:
-            if self.current_objective == len(self.objectives)-1:
+            if self.current_objective == len(self.objectives) - 1:
                 self.completed = True
                 return False
             else:
