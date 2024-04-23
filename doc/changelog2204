@@ -12,7 +12,7 @@ Table of contents to navigate thread:
 -Game engine and logic
 -LLM and Quest generation - Intro
 -LLM and Quest generation - v0.01
--LLM and Quest generation - v0.02 - Part 1
+-LLM and Quest generation - v0.02
 -LLM and Quest generation - v0.03
 -Concurrency, Performance
 -Framework
@@ -210,6 +210,8 @@ Don't know if it's a good practice or not, it just feels more readable.
 
 Now the quests can be tied, and I have actually managed to complete a generated quest from beginning to the end.
 
+
+
 -Concurrency, Performance:
 
 At first, I had an issue where, when clicking "Generate Quest", everything would freeze.
@@ -361,7 +363,44 @@ Imagine playing a solo game, and in your version of the game, you get a chest/it
 Or you visit a place that no one else got to visit, the game generated it just for you.
 Imagine that in multiplayer with a group of friends. The lore, the stories.
 
-Or here's another concept
+Or here's another concept:
+Some of your NPCs are hardcoded.
+Others are actually LLM-based agents.
+The player goes through the game and completes quests, but they never know if they are completing NPC/human-made story quest, or LLM Agent quests.
+At the end of game/session, you have to decide who is a robot and who isn't.
+Several ways to implement this, you can do it "à la Among us", where you vote to kick the robots.
+Or you can have a more complex game with several human factions fight for their interests, and rogue LLM agents pulling strings underneath for their own interests.
+But this involves making sure that it's hard to tell who is who, it's like a real-life Turing test, and the slightest mishap ruins the entire thing.
+This is just a toy idea, I don't know how well it would work or scale up.
+
+So many avenues I'm foaming at the mouth, but there's lots to learn.
+
+
+Demo:
+-Showing udpated movement
+-Showing frontend modifications (including some I forgot to mention)
+-Showing quest generation and completion
+-Mentioning future avenues
+
+Future Directions:
+-Switch from MSK to using Llama 3/other LLMs through other frameworks
+-Refine quest completion logic
+-Rework the prompts for unit quests
+-Handle space in quests
+-Explore generation of several quests in a row
+-Add more assets
+
+The plan is to use this as a laboratory to run experiments with LLMs.
+I don't want to spend too much time on the frontend/game engine in Pygame, it'd be a waste of time. I'll do what is necessary to accomplish the LLM-based goals.
+I'm giving myself a few months of experimentation on this, and I think I'd like to transition to a proper game engine/framework in the future, when I am confident that something can be worked out with LLMs. Aiming at Unity, possibly Godot, less likely Unreal Engine due to the complexity. Lots of digging, learning, and exploration before getting there.
+
+
+
+
+
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 from model.map.map import Map
 from model.quest.quest_builder import QuestBuilder
 from model.map.world_map import WorldMap
-from ai.llm.llm_model import LLMModel
+from ai.old_llm.llm_model import LLMModel
 import database.utils as utils
 from sentence_transformers import SentenceTransformer, util
 

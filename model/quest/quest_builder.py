@@ -35,48 +35,64 @@ class QuestBuilder():
         return quest, quest_dialogue
 
     def create_quest_from_json(self, quest_json):
-        quest = Quest(
-            name=quest_json["name"],
-            description=quest_json["description"],
-            ordered=quest_json["ordered"],
-        )
+        try:
+            quest = Quest(
+                name=quest_json["name"],
+                description=quest_json["description"],
+                ordered=quest_json["ordered"],
+            )
 
-        for obj in quest_json["objectives"]:
-            if obj["type"] == "kill":
-                npc = self.game_data.find_npc_by_name(obj["target"]) #Trying to find the NPC in the game data
-                if npc is None:
-                    npc = self.game_data.find_most_similar_hostile_npc(obj["target"]) #If not found, try to find the most similar NPC
-                    print("Most similar NPC: ", npc)
-                if npc is not None:
-                    objective = KillObjective(obj["name"], obj["description"], npc.id)
+            for obj in quest_json["objectives"]:
+                if obj["type"] == "kill":
+                    npc = self.game_data.find_npc_by_name(obj["target"])  # Trying to find the NPC in the game data
+                    if npc is None:
+                        npc = self.game_data.find_most_similar_hostile_npc(
+                            obj["target"])  # If not found, try to find the most similar NPC
+                        print("Most similar NPC: ", npc)
+                    if npc is not None:
+                        objective = KillObjective(obj["name"], obj["description"], npc.id)
+                    else:
+                        raise ValueError(f"No NPC found for kill objective: {obj['target']}")
+                elif obj["type"] == "location":
+                    objective = LocationObjective(obj["name"], obj["description"], obj["target"])
+                elif obj["type"] == "retrieval":
+                    item = self.game_data.find_item_by_name(obj["target"])
+                    if item is None:
+                        item = self.game_data.find_most_similar_item(obj["target"])
+                        print(f"Most similar item: {item}")
+                    if item is not None:
+                        objective = RetrievalObjective(obj["name"], obj["description"], item.id)
+                    else:
+                        raise ValueError(f"No item found for retrieval objective: {obj['target']}")
+                elif obj["type"] == "talk_to_npc":
+                    npc = self.game_data.find_npc_by_name(obj["target"])
+                    if npc is None:
+                        npc = self.game_data.find_most_similar_friendly_npc(
+                            obj["target"])  # If not found, try to find the most similar NPC
+                        print("Most similar friendly NPC: ", npc)
+                    if npc is not None:
+                        objective = TalkToNPCObjective(obj["name"], obj["description"], npc.id)
+                    else:
+                        raise ValueError(f"No NPC found for talk to NPC objective: {obj['target']}")
                 else:
-                    pass
-            elif obj["type"] == "location":
-                objective = LocationObjective(obj["name"], obj["description"], obj["target"])
-            elif obj["type"] == "retrieval":
-                item = self.game_data.find_item_by_name(obj["target"])
-                if item is None:
-                    item = self.game_data.find_most_similar_item(obj["target"])
-                    print(f"Most similar item: {item}")
-                if item is not None:
-                    objective = RetrievalObjective(obj["name"], obj["description"], item.id)
-                else:
-                    pass
-            elif obj["type"] == "talk_to_npc":
-                npc = self.game_data.find_npc_by_name(obj["target"])
-                if npc is None:
-                    npc = self.game_data.find_most_similar_friendly_npc(obj["target"])  # If not found, try to find the most similar NPC
-                    print("Most similar friendly NPC: ", npc)
-                if npc is not None:
-                    objective = TalkToNPCObjective(obj["name"], obj["description"], npc.id)
-                else:
-                    pass
-            else:
-                raise ValueError(f"Invalid objective type: {obj['type']}")
+                    raise ValueError(f"Invalid objective type: {obj['type']}")
 
-            quest.objectives.append(objective)
+                quest.objectives.append(objective)
 
-        return quest
+            return quest
+
+        except KeyError as e:
+            print(f"Error: Missing key in quest JSON: {e}")
+            return None
+
+        except ValueError as e:
+            print(f"Error: {e}")
+            return None
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return None
+
 
     def create_quest_dialogue_from_json(self, dialogue_json):
         initialization_dialogue = self.build_dialogue(dialogue_json["initialization"])
