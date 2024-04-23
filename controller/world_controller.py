@@ -62,22 +62,17 @@ class WorldController:
                 else:
                     self.handle_event(event)
 
-            # self.update_movement(clock.tick(view_cst.FPS) / 1000.0)  # converting to seconds
             self.update_movement(dt)
             self.view.render(self.game_data.character.global_position[0],
                              self.game_data.character.global_position[1])
 
-            # Let asyncio handle tasks for a moment
             await asyncio.sleep(0)
 
     def run(self):
         try:
-            # Get the default event loop (or create it)
             loop = asyncio.get_event_loop()
-            # Running the asyncio part of the game
             loop.run_until_complete(self.run_async())
         except RuntimeError as e:
-            # In case the loop is closed and we're trying to run the game again
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(self.run_async())
@@ -117,7 +112,6 @@ class WorldController:
             self.move_direction = (0, 0)
 
     def update_movement(self, dt):
-        # print(f"Accumulated time: {self.accumulated_time}")
         self.accumulated_time += dt
 
         if self.move_direction != (0, 0):
@@ -143,34 +137,30 @@ class WorldController:
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
             self.quest_manager.handle_quest_giving()
-            # self.quest_manager.give_quest_to_character()
         elif return_code == "decline_quest":
             pass
         elif return_code == "end_quest":
-            #TODO: Handle rewards if any
-            #TODO: Fix the way the quest lifecycle is handled
             self.quest_manager.handle_quest_completion()
-            # self.quest_manager.remove_quest_from_character()
         elif return_code == "generate_quest":
             llm_model = self.game_data.get_llm_model()
             game_context = self.game_data.get_game_context()
-            # asyncio.create_task(self.process_quest_generation(llm_model))
             asyncio.create_task(self.process_quest_generation_with_context(llm_model, game_context))
         else:
             return
 
-    async def process_quest_generation(self, llm_model):
-        print(f"Generating quest")
-        # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
-        quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
-        self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
-
     async def process_quest_generation_with_context(self, llm_model, game_context):
-        print(f"Generating quest")
         # quest, quest_dialogue = asyncio.run(self.quest_builder.generate_quest_and_dialogue(llm_model))
         quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue_with_context(llm_model, game_context)
         self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
 
+
+
+
+    async def process_quest_generation(self, llm_model):
+        quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
+        self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
+        self.view.dialogue_controller.generate_quest_button_visible = True  # Re-enable the button
+        self.view.dialogue_controller.handle_generate_quest_button_logic()  # Update button visibility
     def handle_npc_interaction(self, pos, button):
         for npc, npc_image, npc_rect in self.view.npcs:
             if npc_rect.collidepoint(pos):

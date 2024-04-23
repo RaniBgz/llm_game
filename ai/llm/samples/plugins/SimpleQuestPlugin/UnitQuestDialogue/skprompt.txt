@@ -7,7 +7,8 @@ Generate a QuestDialogue object that contains three Dialogue objects:
 2. A waiting dialogue, which the NPC can use while the player is working on the quest objectives.
 3. A completion dialogue, which the NPC can use when the player has completed all the quest objectives.
 
-The dialogue should be engaging, fit the genre and difficulty level of the quest, and provide relevant context and guidance to the player. Each Dialogue object should be a list of text chunks that the NPC can deliver in sequence.
+The dialogue should be engaging, fit the genre and difficulty level of the quest, and provide relevant context and guidance to the player.
+Each Dialogue object should be a list of text chunks that the NPC can deliver in sequence.
 
 Output the QuestDialogue object as a JSON string, following the provided format:
 
@@ -32,3 +33,4 @@ Output the QuestDialogue object as a JSON string, following the provided format:
 +++++
 {{$quest_json}}
 +++++
+

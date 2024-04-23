@@ -96,10 +96,21 @@ class DialogueBox(PopupBox):
 
     def create_generate_quest_button(self):
         generate_quest_button_text = self.fonts["accept_deny"].render("Generate quest", True, view_cst.DARK_GRAY_2)
-        generate_quest_button_rect = generate_quest_button_text.get_rect(bottomleft=(self.width // 2 - generate_quest_button_text.get_width() // 2, self.height - 20))
+        generate_quest_button_rect = generate_quest_button_text.get_rect(bottomleft=((self.width // 2 - generate_quest_button_text.get_width() // 2)+10, self.height - 20))
         pygame.draw.rect(self.surface, self.background_color, generate_quest_button_rect)
         self.generate_quest_button_rect = pygame.Rect(self.width // 2 - generate_quest_button_text.get_width() // 2, self.rect.topleft[1] + self.height - 50, 100, 40)
         self.surface.blit(generate_quest_button_text, generate_quest_button_rect)
+
+    def hide_generate_quest_button(self):
+        if hasattr(self, 'generate_quest_button_rect'):
+            # Redraw the background over the button area to hide it
+            background_rect = pygame.Rect(self.generate_quest_button_rect.left - 10,
+                                          self.generate_quest_button_rect.top - 10,
+                                          self.generate_quest_button_rect.width + 20,
+                                          self.generate_quest_button_rect.height + 20)
+            pygame.draw.rect(self.surface, self.background_color, background_rect)
+            self.surface.blit(self.surface, background_rect, background_rect)
+            # Optional: Redraw part of the border if needed or other interface elements that might be overlapped by the button redraw
 
 
     def handle_events(self, event):

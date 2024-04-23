@@ -83,7 +83,7 @@ class GameData:
         max_similarity = -1
         most_similar_npc = None
         for npc in self.npcs:
-            if npc.friendly:
+            if not npc.hostile:
                 continue
             else:
                 cosine_similarity = util.cos_sim(name_vector, npc.embedding)

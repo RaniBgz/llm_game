@@ -52,15 +52,6 @@ class LLMModel:
             print('Added plugin to plugins dict')
         return plugin
 
-    #TODO: might need to delete this, no need to explicitly import plugin functions
-    def import_plugin_function(self, plugin_name, function_name):
-        if plugin_name in self.plugins:
-            plugin = self.plugins[plugin_name]
-        else:
-            plugin = self.import_plugin(plugin_name)
-        plugin_function = plugin[function_name]
-        print(f"Imported plugin function {function_name} from plugin {plugin_name}")
-        return plugin_function
 
     async def generate_unit_quest(self, genre, difficulty):
         plugin = self.plugins[pp.SIMPLE_QUEST_PLUGIN]

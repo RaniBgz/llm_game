@@ -262,18 +262,11 @@ class Scenario:
     def build_llm_context(self):
         context_parts = []
 
-        # Add the main character
         context_parts.append(self.format_character(self.game_data.character))
-
-        # Add NPCs
         for npc in self.game_data.npcs:
             context_parts.append(self.format_npc(npc))
-
-        # Add items
         for item in self.game_data.items:
             context_parts.append(self.format_item(item))
-
-        # Add quests
         for quest in self.game_data.quests:
             context_parts.append(self.format_quest(quest))
 

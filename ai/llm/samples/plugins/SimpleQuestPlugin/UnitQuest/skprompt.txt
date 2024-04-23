@@ -1,4 +1,5 @@
-Generate a quest for an RPG game in the {{$genre}} genre with a {{$difficulty}} difficulty level. The output should be a JSON object with the following keys:
+Generate a quest for an RPG game in the {{$genre}} genre with a {{$difficulty}} difficulty level.
+The output should be a JSON object with the following keys:
 
 - name: The name of the quest
 - description: A brief description of the quest's storyline
@@ -9,7 +10,8 @@ Generate a quest for an RPG game in the {{$genre}} genre with a {{$difficulty}} 
     - description: A brief description of the objective
     - target: The target of the objective (e.g., the enemy to kill, the location to visit, the item to retrieve, or the NPC to talk to)
 
-The objectives should be challenging and engaging, fitting the specified genre and difficulty level. Ensure that the quest has a clear storyline and that the objectives are diverse and interesting.
+The objectives should be challenging and engaging, fitting the specified genre and difficulty level.
+Ensure that the quest has a clear storyline and that the objectives are diverse and interesting.
 
 +++++
 {{$genre}}

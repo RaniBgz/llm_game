@@ -16,6 +16,7 @@ class DialogueController:
         self.dialogue_type = dialogue_type
         self.dialogue_length = self.dialogue.get_dialogue_length()
         self.set_npc_type()
+        self.generate_quest_button_visible = True
 
     def set_npc_type(self):
         if self.npc.robot:
@@ -65,8 +66,12 @@ class DialogueController:
             self.dialogue_box.create_end_quest_button()
 
     def handle_generate_quest_button_logic(self):
-        if self.dialogue_index == 0:
+        if self.dialogue_index == 0 and self.generate_quest_button_visible:
+            print(f"Calling create generate quest button")
             self.dialogue_box.create_generate_quest_button()
+        else:
+            print(f"Calling hide generate quest button")
+            self.dialogue_box.hide_generate_quest_button()
 
     def handle_events(self, event):
         print(f"In dialogue controller event")
@@ -81,7 +86,8 @@ class DialogueController:
                 self.start_dialogue()
             elif getattr(self.dialogue_box, 'generate_quest_button_rect', None) and self.dialogue_box.generate_quest_button_rect.collidepoint(event.pos):
                 print(f"Generating quest button clicked")
-                # self.reset_dialogue()
+                self.generate_quest_button_visible = False
+                self.handle_generate_quest_button_logic()
                 return "generate_quest"
             if self.dialogue_type == "quest_initialization":
                 if getattr(self.dialogue_box, 'accept_button_rect', None) and self.dialogue_box.accept_button_rect.collidepoint(event.pos):

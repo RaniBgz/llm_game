@@ -1,0 +1,369 @@
+Changelog 23/04:
+
+Preamble:
+This phase was focused on reworking some of the frontend, movement, and integrating LLMs to generate basic quests and dialogue.
+I won't go in as much atomic detail of lower level function, as it takes too much time and it is low ROI.
+
+This is a prototype, and I expect to ditch Pygame in the future. It's just clunky and quite capped in terms of game engine.
+Doing frontend is also a nightmare, so I won't be spending more time making the game pretty, I'll just treat this as an experiment to explore the AI/LLM aspects.
+
+Table of contents to navigate thread:
+-Frontend
+-Game engine and logic
+-LLM and Quest generation - Intro
+-LLM and Quest generation - v0.01
+-LLM and Quest generation - v0.02 - Part 1
+-LLM and Quest generation - v0.03
+-Concurrency, Performance
+-Framework
+-Thoughts and future directions
+-Demo
+
+
+Frontend:
+
+-Changed the Quest menu to make it a bit less ugly (parchment background color), changed spacing.
+
+[Quest screenshot]
+
+-Changed inventory menu: now displaying item sprites next to the names of the items.
+
+[Inventory screenshot]
+
+-Added shortcuts: now any menu can be exited by pressing escape.
+-Changed dialogue color for robot: now it is grey for robots, and parchment color for regular NPCs (also making the difference between which NPC is a robot, and which isn't)
+
+[Dialogue screenshot]
+
+
+
+
+Game engine and logic:
+
+Changed movement logic:
+I was tired of running the game at 16 fps and having rollbacks at the edge of the screen, as well as and laggy clicks.
+Now the game refreshes at 60 frames per second.
+
+With the old movement system, that would've a movement speed of 60 tiles/sec, which is way too quick.
+
+Now, at every tick (dt), if a key is pressed down, a value accumulates (accumulated_time).
+When it goes over a certain threshold, the character moves to an adjacent tile in the correct direction.
+When the key is released, the accumulation is reset, and the character stops moving.
+
+[Movement code]
+
+-Added Subject-Observer pattern
+The WorldView now observes the Character, NPC, and Item.
+The WorldView implements an abstract class "Observer", and the Character, NPC, and Item implement a Subject.
+
+[Subject-Observer screenshot]
+
+A "Subject" has a list of "Observers".
+When something specific happens to the Character, NPC, or Item, they "notify" the observer with a specific code.
+That Observer has an "update" function that performs certain actions depending on the received parameters.
+
+This allows the view to be refreshed as soon as something happens.
+For now this is used when:
+-An item is picked up/respawned
+-A NPC is killed/respawned.
+
+No need to exit and enter the view again to respawn an item.
+The next render will update the frame.
+
+For the character, this is the sort of pattern that can help update a health/mana bar in real time.
+
+
+
+
+LLMs and Quest Generation - Intro:
+
+That part took a bit more work, especially to tie the quests to the game, and it's still a work in progress.
+
+For this phase, I have used Microsoft Semantic Kernel (MSK) to handle quest generation.
+I have a LLMModel object that is an attribute of the GameData object to generate quests at runtime.
+
+That LLMModel has a SK kernel (as per the MSK framework).
+That kernel has an OpenAI service that calls Chat GPT 3.5 for now (specifically, gpt-3.5-turbo-1106)
+
+[Initialize kernel screenshot]
+
+It also has plugins, and this is where the prompts are actually made.
+
+The way MSK works is that you create a Plugin, inside which you define Plugin Functions.
+I don't have tons of experience in the framework at the moment, so this is just the basics.
+A Plugin Function is defined by a "config.json" file that holds configuration information, and a skprompt.txt which is actually where the prompt is written.
+
+Here are default MSK plugins (collapsed) + the SimpleQuestPlugin I made (expanded)
+
+[Plugins screenshot]
+
+Here are examples of the config and prompt for the UnitQuest plugin.
+
+[Config screenshot for the unit quest]
+
+[skprompt screenshot for the unit quest]
+
+
+
+
+LLM and Quest Generation v0.01:
+
+Once the plugins are imported, this is the function that generates the quest
+
+[Screenshot of "generate unit quest"]
+
+There are "genre" and "difficulty" parameters, but I am not really using them at the moment, I wanted to test passing parameters. to the prompt.
+
+
+After the quest is generated, another plugin is used to generate a QuestDialogue associated with that quest.
+Without it, it's not possible to integrate the quest in the game, and have the loop: "talk to npc", "get a quest", "give the quest back".
+The prompt includes the generation of the initialization, waiting, and completion dialogues.
+
+[skprompt sceenshot for the quest dialogue]
+
+Now, to actually generate the quest at runtime, I had to change the dialogues.
+I decided to add a "robot" boolean to the NPCs, and format the DialogueBox based on that.
+
+A "Generate Quest" button is now added.
+When it is clicked, the DialogueController returns a "generate_quest" code to the WorldController, which calls the "QuestBuilder", which itself calls what is necessary to build the quest (LLMModel inside GameData)
+
+[screenshot of the generate_quest_and_dialogue function of QuestBuilder]
+
+The LLM returns a JSON with the generation quest.
+That JSON is used as input to the next prompt that generates the QuestDialogue.
+The Quest object is built, followed by the QuestDialogue.
+The quest is then associated to the Robot NPC using the QuestManager.
+Due to the dialogue logic shared last time, next time the player clicks on the robot, the quest will appear since the Robot no longer has "0 quests". Before that, it just shows random dialogue.
+
+This was v 0.01 summarized here
+
+[Quest Generation v0.01]
+
+
+LLM and Quest Generation v0.02:
+
+Several issues at this point:
+
+The generated quests are very random at this point.
+The LLM has no idea about anything related to the game, so it just generates a "generic RPG quest".
+
+What is needed at this point is to give more CONTEXT to the LLM, in order to anchor it into the game.
+I also want this context to be as condensed as possible.
+As the game grows (more NPCs, Items...), the context could get very long, which will be an issue.
+
+For that, when the Scenario is generated at launch, the character, NPC, Items, and Quest are converted to condensed strings and concatenated together.
+That string will be the context given to the LLM
+
+[Screenshot of how the context is built]
+
+It also means that the Plugin Function has to be modified.
+We now need to pass the context as parameter to the function, and pass it inside the prompt.
+The prompt is also modified to tell the LLM to put the emphasis on generating a quest that make sense within the context of the game.
+
+[Screenshot of the new skprompt]
+
+The logic doesn't change: a JSON is received for the quest, and that JSON is still used to generate a dialogue.
+So the UnitQuestDialogue plugin can be reused
+
+[SimpleQuestPlugin screenshot]
+
+
+Here is a summary of the new Quest Generation (v0.02), after condensing the blocks from v0.01
+
+[Quest generation v0.02]
+
+
+
+LLM and Quest Generation v0.03:
+
+At this point, the quests are still not tied to game objects.
+What I mean by that is that we're just generating text.
+Going from "Retrieve the Mushroom" to "Retrieve the entity with id "2e94462f-d1dd-4556-acb5-232a834a551a" needs an additional step.
+
+The issue is that the LLM still generates quests for Items that don't exist, even despite the context.
+In a game where quests are generated in real-time, we can't have a failure case where the player is sent to look for something they will never find.
+So I decided to introduce similarity search.
+
+For that, I needed to add vectors to the database.
+I explained some things in other posts, but I basically added a vector extention to the PostgreSQL table.
+I went through different versions, now, only the name of the entity (Character, NPC, Item) is encoded into a vector.
+I am using HuggingFace's all-miniLM-L6-v2 model, which embeds the string into a 384-dimensional vector.
+I didn't want to use the OpenAI/Mistral embedding models as they are larger, and I probably don't need that at the moment.
+
+[Database schema]
+
+Now, after the quest JSON and Dialogue JSON are received, we need to tie the objectives to the most similar Game Objects.
+For now, this is done for:
+-Kill Objective (Hostile NPC)
+-Talk to NPC Objective (Friendly NPC)
+-Retrieve Objective (Item)
+
+The process is described here, as well as the old "naive" way of building the Objective.
+Since there is no type check here, I just fed a string as the "target_id", but it should be a uuid4.
+This is the id that is being check to see whether the Objective is accomplished.
+
+[Screenshot of similarity measure and objective tying - Quest v0.03]
+
+The GameData now has methods to find the most similar friendly NPC, hostile NPC, and Item.
+I could have abstracted that into a "most similar entity", and set the embedding as an attribute of Entity, but I like to know what I call from another context, so I prefer keeping the functions named.
+Don't know if it's a good practice or not, it just feels more readable.
+
+Now the quests can be tied, and I have actually managed to complete a generated quest from beginning to the end.
+
+-Concurrency, Performance:
+
+At first, I had an issue where, when clicking "Generate Quest", everything would freeze.
+The code was a single thread, which meant that as long as I was "awaiting" the result from the async function that prompts the model, nothing else could happen.
+
+I had to transform the main loop of the WorldController into an async run function, and I had to encapsulate it within an asyncio loop.
+
+[Screenshot of code for main WorldController loop]
+
+On the return of clicking the "Generate Quest" button, a new asyncio task is created to handle quest and dialogue generation
+
+[Screenshot of return code]
+
+Now the button can even be chain-clicked and tons of quests can be generated without freezing anything.
+This can be an issue of course. In a real game, you'd want to limit the quest generation, or even make it invisible and integrate it seamlessly into the gameplay experience.
+
+Roughly speaking, the workflow looks like that, where a new asyncio task is created for each click, and the main loop keeps running
+
+[Screenshot of arrows]
+
+
+-Framework:
+
+For now, I've been using MSK.
+A client talked to me about the framework, so I decided to explore it a bit.
+
+This is the general idea of it:
+
+[Image of MSK framework]
+
+It has native functions (your regular programming functions), semantic functions (that prompt LLMs), planners (that orchestrate function calls), and a memory system.
+
+I wanted to test it, but I realize that, like most things Microsoft build, it is bulky and bloated.
+It's open source, and still early, so things are continuously changing. To the point where the example notebook are out of date a few weeks after they are produced.
+
+I also realized that I can build every part myself using other open-source frameworks.
+I can handle my memory how I want by embedding what I want, how I want it, and retrieve it using llama-index for example.
+I can create and categorize my own prompts/plugins
+I can build my own agents.
+
+Example: I wanted to use the framework to embed my strings into vectors, so I looked into the notebooks:
+The embedding is tightly coupled to the memory, and the notebook example didn't even work.
+You have to create an entire memory, embed things into it, and retrieve them, which is way too complicated.
+Maybe it's me misunderstanding the framework, there may be one line that embeds things very simply, and I just didn't find it while digging on the git and in the code itself.
+
+Using HuggingFace and SentenceTransformer, I can just encode my string into a vector using one simple function: encode.
+I can get a tensor, or a numpy array, batch them, choose the precision. Very straightforward, atomic, low-level, lots of control
+
+[Encode function]
+
+Then I simply use cos_sim and get the cosine similarity between my two vectors
+
+[cos sim code]
+
+The concept of memory that you can query in MSK seems interesting, but some of this code doesn't work anymore.
+
+[MSK Memory]
+
+By the time I dig into the codebase, and before it changes again in a month, I can use a different approach.
+It also takes some time to initialize the plugins at the start of the game, but I don't know if that can be avoided one way or another (time at launch, vs delay at runtime)
+
+I think the framework is powerful, it's just that the documentation is lacking and it is in constant development.
+I want to have more lower level control rather than using something ready made.
+
+I also want to test Llama 3 with custom prompts.
+
+Quest generation takes too long at the moment.
+I don't know where it comes from, OpenAI, MSK, or my own code.
+Ideally, I'd want to stream the response, but since I need the fully formed JSON anyway, I don't know how much that would help.
+I have tons to learn about using LLM properly and efficiently in development.
+
+
+
+-Thoughts and future directions
+
+There are a few quirks in the quest generation:
+
+If the generated quest is: "The Enchantress needs you to retrieve the mushroom", but the Robot (Echo) generates it, the Dialogue looks like it is the Enchantress talking, but it comes out of the Robot.
+So I possibly need to refine this and have a concept of "Who is giving out the quest".
+
+Then you can see how the complexity and potential for mistakes rises for each detail you add.
+Each time, you have to think about failure cases, and create ways to handle them, and do some backwards thinking to correct things.
+
+Say there are no mushroom in the game, but the closest object is a Wild Mountain Flower.
+You use similarity measures to tie the quest to a game object that exists.
+But after that, the Quest description and the Dialogue still talk about some "Mushroom" to retrieve.
+So you actually need to go back to the Quest, Objectives, and Dialogue, and change instances of "Mushroom" to "Wild Mountain Flower".
+But the text may not make sense now, especially if the objects are quite different from one another.
+Say you had to go to the forest to get the Mushroom, now, you'd need to send the player to the mountain for the quest to make sense.
+
+Or you need to run a second prompt by "forcing" the LLM to keep the same structure, and alter everything else to fit the new narrative.
+That costs one more prompt, and more time.
+
+I think this is where the difficult part lies in using Generative AI in games: handling failure cases and inaccuracies without ruining without causing crashes, and without ruining the user experience.
+And this is just for ONE quest and ONE dialogue.
+
+The next step I had in mind was:
+-Generate a series of quest.
+Here it's simple: each generated quest could get condensed, and added to the context.
+So at each step, the LLM knows what the previous quest was.
+That way it can avoid generating duplicates, and it can generate a quest that makes sense in the continuity of the game.
+
+At each step you have to handle these potential errors and mishaps.
+And you have to make sure that you don't go delirious and start diverging and getting lost in quests that make no sense.
+
+But this leads to another question:
+Beside the initial context, what guides the LLM?
+
+If you only have very basic quests, it's already difficult to make sure that everything happens properly.
+If you do, it's only a matter of time until you run out of context.
+If you have INFINITE context, and perfect generation, you are still looping annoying quests around: kill this creature, retrieve this item, talk to that guy... Not a fun game (even though that's fundamentally what RPGs are, with a bit more makeup on).
+
+So my thinking was that you probably want:
+-Core context of the game
+-Sliding context for previously generated xxx (quest, dialogue, items, models, whatever you want to generate)
+-Guiding storyline written by a human.
+
+With this, the LLM would just "fill the gaps" between the major story bends/plot twists.
+At this point, you are kind of going through a "pick your adventure", but there are main "script nodes" that make sure that the LLM doesn't get too lost.
+
+Could you generate new types of quests as the game goes on?
+Would that require modifying the codebase of the game at runtime?
+Or could you find some very abstract code structure that gives lots of leeway and freedom?
+If the LLM touches the codebase, it gets dangerous too, you could just break the game, and it would just be a matter of time before the game crashes.
+
+Then I thought: could the player give feedback during the game?
+Basic experiments like "rating the quest" after completing it.
+How do you give that feedback to the LLM?
+I've never fine-tuned a LLM, but from what I've seen, it's feeding it "prompt" + "completion" pairs.
+Maybe putting the rating of each completed quest in the context, and explaining the concept.
+
+So many avenues.
+Learning how the player plays in order to generate a custom-made experience for them.
+Instead of getting player feedback directly, you simply observe their behavior, and adapt the game to their playstyle (to some extent).
+
+I summarized a rough draft with my thoughts, and there are probably 100s of things missing, or wrong.
+
+[Final Diagram]
+
+There are so many avenues too, like putting agents directly into the game.
+Or having a no-scenario, rule-based game, and have the LLM generate things that are valid as long as they respect the rules of the game.
+
+I think we'll see sub-genres of games emerge, with LLMs used at different levels, and in different ways inside the game.
+Add a multiplayer and real-time component, and the complexity explodes.
+
+Basically, you want a game that renews itself, that is fun and engaging, without hallucinating or becoming absurd.
+For a story-based game, you want some overall driving logic with generated elements.
+Imagine playing a solo game, and in your version of the game, you get a chest/item that no one else got.
+Or you visit a place that no one else got to visit, the game generated it just for you.
+Imagine that in multiplayer with a group of friends. The lore, the stories.
+
+Or here's another concept
+
+
+
+
+
