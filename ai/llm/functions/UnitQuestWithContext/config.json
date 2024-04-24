@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "description": "Generate a quest for an RPG game using game context to anchor the LLM",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 1000,
+      "temperature": 0.7,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "input_variables": [
+        {
+      "name": "game_context",
+      "description": "The context of the game (NPCs, items, existing quests...)",
+      "default": ""
+    },
+    {
+      "name": "genre",
+      "description": "The genre of the RPG game (e.g., fantasy, sci-fi, etc.)",
+      "default": ""
+    },
+    {
+      "name": "difficulty",
+      "description": "The difficulty level of the quest (easy, medium, hard)",
+      "default": ""
+    }
+  ]
+}
