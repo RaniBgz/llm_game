@@ -1,12 +1,15 @@
 import os
-import os
 from dotenv import load_dotenv
-
 from groq import Groq
 
-client = Groq(
-    api_key=os.environ.get("GROQ_API_KEY"),
-)
+load_dotenv()
+
+api_key = os.getenv("GROQ_API_KEY")
+if api_key is None:
+    raise ValueError("GROQ_API_KEY is not set in the environment variables")
+
+
+client = Groq(api_key=api_key)
 
 chat_completion = client.chat.completions.create(
     messages=[
