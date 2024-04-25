@@ -91,9 +91,11 @@ class DialogueController:
                 return "generate_quest"
             if self.dialogue_type == "quest_initialization":
                 if getattr(self.dialogue_box, 'accept_button', None) and self.dialogue_box.accept_button.is_clicked(event.pos):
+                    print("Accept button clicked")
                     self.reset_dialogue()
                     return "accept_quest"
-                elif getattr(self.dialogue_box, 'decline_button', None) and self.dialogue_box.accept_button.is_clicked(event.pos):
+                elif getattr(self.dialogue_box, 'decline_button', None) and self.dialogue_box.decline_button.is_clicked(event.pos):
+                    print("Decline button clicked")
                     self.reset_dialogue()
                     return "decline_quest"
             if self.dialogue_type == "quest_completion":
