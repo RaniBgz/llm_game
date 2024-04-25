@@ -18,17 +18,15 @@ class LLMModel():
     def parse_template(self, template_path, **kwargs):
         with open(template_path, 'r') as file:
             template = file.read()
-        print(f"Template: {template}")
 
         # Replace placeholders in the template with values provided in kwargs
         for key, value in kwargs.items():
             placeholder = f"{{${key}}}"  # Correct the placeholder format here
-            print(f"Placeholder: {placeholder}")
             template = template.replace(placeholder, str(value))
 
         return template
 
-    def generate_quest(self, config_path, template_path, **kwargs):
+    def build_prompt(self, config_path, template_path, **kwargs):
         config = self.load_config(config_path)
 
         # Ensure all required variables are provided
@@ -40,6 +38,22 @@ class LLMModel():
         # Parse the template with the given variables
         return self.parse_template(template_path, **kwargs)
 
+    def generate_quest_with_context(self, game_context, genre, difficulty):
+        config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
+        print(f"Config path: {config_path}")
+        prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
+        print(f"Prompt template path: {prompt_template_path}")
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
+        print("Formatted prompt: ", formatted_prompt)
+        return self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
+
+    def generate_quest_dialogue(self, quest_json):
+        config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'config.json')
+        prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'prompt_template.txt')
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path, quest_json=quest_json)
+        return formatted_prompt
+
+
 
 if __name__ == "__main__":
     model = LLMModel("llama3-8b-8192")
@@ -47,9 +61,11 @@ if __name__ == "__main__":
     genre = "fantasy"
     difficulty = "easy"
 
-    quest_config_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
-    prompt_template_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
-    # json_file = model.load_config(quest_config_path)
-    quest_prompt = model.generate_quest(quest_config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
-    print(f"Generated quest: {quest_prompt}")
+    model.generate_quest_with_context(game_context, genre, difficulty)
+
+    # quest_config_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
+    # prompt_template_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
+    # # json_file = model.load_config(quest_config_path)
+    # quest_prompt = model.build_prompt(quest_config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
+    # print(f"Generated quest: {quest_prompt}")
 
