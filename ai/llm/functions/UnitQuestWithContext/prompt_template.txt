@@ -16,10 +16,7 @@ The quest you generate should make sense within the context of the game.
 To guide you, here is some information about the existing character, NPCs (hostile and friendly), items, and existing quests.
 The quest you generate should rely on the existing game world and lore, incorporating elements such as characters, locations, and items that already exist in the game.
 
+RETURN A WELL-FORMATTED JSON ONLY.
+
 Game context:
 {$game_context}
-
-+++++
-{$genre}
-{$difficulty}
-+++++

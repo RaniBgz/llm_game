@@ -1,7 +1,8 @@
 import os
 import json
 import ai.llm.functions_paths as fp
-
+from dotenv import load_dotenv
+from groq import Groq
 
 class LLMModel():
     # path_to_functions = "./ai/llm/functions"
@@ -9,7 +10,20 @@ class LLMModel():
 
     def __init__(self, model_name):
         self.model_name = model_name
+        self.api_key = self.initialize_api_key()
         self.functions = []
+        self.client = self.initialize_groq_client()
+
+    def initialize_api_key(self):
+        load_dotenv()
+        api_key = os.getenv("GROQ_API_KEY")
+        if api_key is None:
+            raise ValueError("GROQ_API_KEY is not set in the environment variables")
+        return api_key
+
+    def initialize_groq_client(self):
+        client = Groq(api_key=self.api_key)
+        return client
 
     def load_config(self, config_path):
         with open(config_path, 'r') as file:
@@ -40,12 +54,20 @@ class LLMModel():
 
     def generate_quest_with_context(self, game_context, genre, difficulty):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
-        print(f"Config path: {config_path}")
         prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
-        print(f"Prompt template path: {prompt_template_path}")
         formatted_prompt = self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
-        print("Formatted prompt: ", formatted_prompt)
-        return self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
+        #Query LLM
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        return chat_completion.choices[0].message.content
 
     def generate_quest_dialogue(self, quest_json):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'config.json')
@@ -61,7 +83,8 @@ if __name__ == "__main__":
     genre = "fantasy"
     difficulty = "easy"
 
-    model.generate_quest_with_context(game_context, genre, difficulty)
+    generated_quest = model.generate_quest_with_context(game_context, genre, difficulty)
+    print(f"Generated quest: {generated_quest}")
 
     # quest_config_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
     # prompt_template_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
