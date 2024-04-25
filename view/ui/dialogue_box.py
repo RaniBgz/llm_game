@@ -2,11 +2,15 @@ import pygame
 from view.ui.popup_box import PopupBox
 from view import view_constants as view_cst
 from view.ui.utils import wrap_text
+from view.ui.button import Button
 
 class DialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
         super().__init__(screen, width, height)
+        self.default_button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
+
+
         self.fonts = {
             "name": pygame.font.SysFont("Arial", 24),
             "text": pygame.font.SysFont("Arial", 16),
@@ -73,18 +77,23 @@ class DialogueBox(PopupBox):
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 
     def create_accept_decline_buttons(self):
-        accept_button_text = self.fonts["accept_deny"].render("Accept", True, view_cst.DARK_GRAY_2)
-        accept_button_rect = accept_button_text.get_rect(bottomleft=(self.width // 3, self.height - 20))
-        pygame.draw.rect(self.surface, self.background_color, accept_button_rect)
-        self.accept_button_rect = pygame.Rect(self.width // 3, self.rect.topleft[1] + self.height - 50, 100, 40)
-        self.surface.blit(accept_button_text, accept_button_rect)
+        self.accept_button = Button(self.default_button_image, 200, 100, (self.width // 3, self.height - 20), "Accept")
+        self.decline_button = Button(self.default_button_image, 200, 100, (2 * self.width // 3, self.height - 20), "Decline")
+        self.accept_button.draw(self.surface)
+        self.decline_button.draw(self.surface)
 
-        decline_button_text = self.fonts["accept_deny"].render("Decline", True, view_cst.DARK_GRAY_2)
-        decline_button_rect = decline_button_text.get_rect(bottomright=(2 * self.width // 3, self.height - 20))
-        pygame.draw.rect(self.surface,self.background_color, decline_button_rect)
-        self.decline_button_rect = pygame.Rect(2 * self.width // 3 - 100, self.rect.topleft[1] + self.height - 50, 100,
-                                               40)
-        self.surface.blit(decline_button_text, decline_button_rect)
+        # accept_button_text = self.fonts["accept_deny"].render("Accept", True, view_cst.DARK_GRAY_2)
+        # accept_button_rect = accept_button_text.get_rect(bottomleft=(self.width // 3, self.height - 20))
+        # pygame.draw.rect(self.surface, self.background_color, accept_button_rect)
+        # self.accept_button_rect = pygame.Rect(self.width // 3, self.rect.topleft[1] + self.height - 50, 100, 40)
+        # self.surface.blit(accept_button_text, accept_button_rect)
+        #
+        # decline_button_text = self.fonts["accept_deny"].render("Decline", True, view_cst.DARK_GRAY_2)
+        # decline_button_rect = decline_button_text.get_rect(bottomright=(2 * self.width // 3, self.height - 20))
+        # pygame.draw.rect(self.surface,self.background_color, decline_button_rect)
+        # self.decline_button_rect = pygame.Rect(2 * self.width // 3 - 100, self.rect.topleft[1] + self.height - 50, 100,
+        #                                        40)
+        # self.surface.blit(decline_button_text, decline_button_rect)
 
     def create_end_quest_button(self):
         end_quest_button_text = self.fonts["accept_deny"].render("End quest", True, view_cst.DARK_GRAY_2)

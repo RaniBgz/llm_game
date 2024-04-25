@@ -90,10 +90,10 @@ class DialogueController:
                 self.handle_generate_quest_button_logic()
                 return "generate_quest"
             if self.dialogue_type == "quest_initialization":
-                if getattr(self.dialogue_box, 'accept_button_rect', None) and self.dialogue_box.accept_button_rect.collidepoint(event.pos):
+                if getattr(self.dialogue_box, 'accept_button', None) and self.dialogue_box.accept_button.is_clicked(event.pos):
                     self.reset_dialogue()
                     return "accept_quest"
-                elif getattr(self.dialogue_box, 'decline_button_rect', None) and  self.dialogue_box.decline_button_rect.collidepoint(event.pos):
+                elif getattr(self.dialogue_box, 'decline_button', None) and self.dialogue_box.accept_button.is_clicked(event.pos):
                     self.reset_dialogue()
                     return "decline_quest"
             if self.dialogue_type == "quest_completion":

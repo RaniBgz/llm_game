@@ -16,8 +16,8 @@ class MainMenuView:
         self.title_text = self.title_font.render("Game Title", True, view_cst.DARK_GRAY_2)
         self.title_rect = self.title_text.get_rect(center=(view_cst.WIDTH / 2, view_cst.HEIGHT / 4))
 
-        self.play_button = Button(self.button_image, (view_cst.WIDTH / 2, view_cst.HEIGHT / 2), "Play")
-        self.quit_button = Button(self.button_image, (view_cst.WIDTH / 2, view_cst.HEIGHT / 2 + 100), "Quit")
+        self.play_button = Button(self.button_image, 400, 200, (view_cst.WIDTH / 2, view_cst.HEIGHT / 2), "Play")
+        self.quit_button = Button(self.button_image, 400, 200, (view_cst.WIDTH / 2, view_cst.HEIGHT / 2 + 100), "Quit")
 
     def display_menu(self):
         self.screen.blit(self.background_image, (0, 0))
