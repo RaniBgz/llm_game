@@ -16,7 +16,7 @@ class DialogueBox(PopupBox):
             "text": pygame.font.SysFont("Arial", 16),
             "exit": pygame.font.SysFont("Arial", 24),
             "button": pygame.font.SysFont("Arial", 20),
-            "accept_deny": pygame.font.SysFont("Arial", 24)
+            "accept_deny": pygame.font.SysFont("Arial", 20)
         }
         self.background_color = view_cst.PARCHMENT_COLOR
         self.name_color = view_cst.COFFEE_BROWN_3
@@ -28,7 +28,10 @@ class DialogueBox(PopupBox):
         self.name_color = color
 
     def create_dialogue(self, npc_name, dialogue_text):
-        self.rect.topleft = (10, 2 * view_cst.HEIGHT // 3 - 10)
+        #Width and Height offset compared to the parent surface
+        self.width_offset = 10
+        self.height_offset = 2*view_cst.HEIGHT // 3-10
+        self.rect.topleft = (self.width_offset, self.height_offset)
         self.surface.fill(self.background_color)
 
         name_rendered = self.fonts["name"].render(npc_name, True, self.name_color)
@@ -76,17 +79,13 @@ class DialogueBox(PopupBox):
         self.surface.blit(close_button_text, close_button_rect)
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 
-    # def create_accept_decline_buttons(self):
-    #     self.accept_button = Button(self.default_button_image, 200, 100, (self.width // 3, self.height - 20), "Accept")
-    #     self.decline_button = Button(self.default_button_image, 200, 100, (2 * self.width // 3, self.height - 20), "Decline")
-    #     self.accept_button.draw(self.surface)
-    #     self.decline_button.draw(self.surface)
-
     def create_accept_decline_buttons(self):
         print("self width is: ", self.width)
         print("self height is: ", self.height)
-        self.accept_button = Button(self.default_button_image, 200, 100, (0, 0), "Accept", self.surface)
-        self.decline_button = Button(self.default_button_image, 200, 100, (0,0), "Decline", self.surface)
+        button_width = 150
+        button_height = 50
+        self.accept_button = Button(self.default_button_image, button_width, button_height, (self.width // 3 - button_width/2, self.height - button_height - 10), "Accept", self.rect.topleft)
+        self.decline_button = Button(self.default_button_image, button_width, button_height, (2*self.width // 3 - button_width/2, self.height - button_height - 10), "Decline", self.rect.topleft)
         self.accept_button.draw(self.surface)
         self.decline_button.draw(self.surface)
 

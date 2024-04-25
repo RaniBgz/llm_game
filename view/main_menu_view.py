@@ -18,8 +18,8 @@ class MainMenuView:
         button_width = 300
         button_height = 100
 
-        self.play_button = Button(self.button_image, button_width, button_height, (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 - 100), "Play", self.screen)
-        self.quit_button = Button(self.button_image, button_width, button_height, (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 + 50), "Quit", self.screen)
+        self.play_button = Button(self.button_image, button_width, button_height, (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 - 100), "Play")
+        self.quit_button = Button(self.button_image, button_width, button_height, (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 + 50), "Quit")
 
     def display_menu(self):
         self.screen.blit(self.background_image, (0, 0))
