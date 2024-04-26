@@ -8,8 +8,10 @@ class DialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
         super().__init__(screen, width, height)
-        self.default_button_image = pygame.image.load("./assets/buttons/wood_button_small.png").convert_alpha()
-
+        self.default_button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
+        self.default_pressed_button_image = pygame.image.load("./assets/buttons/wood_button_pressed.png").convert_alpha()
+        self.accept_button = None
+        self.decline_button = None
 
         self.fonts = {
             "name": pygame.font.SysFont("Arial", 24),
@@ -84,8 +86,12 @@ class DialogueBox(PopupBox):
         print("self height is: ", self.height)
         button_width = 150
         button_height = 50
-        self.accept_button = Button(self.default_button_image, button_width, button_height, (self.width // 3 - button_width/2, self.height - button_height - 10), "Accept", self.rect.topleft)
-        self.decline_button = Button(self.default_button_image, button_width, button_height, (2*self.width // 3 - button_width/2, self.height - button_height - 10), "Decline", self.rect.topleft)
+        self.accept_button = Button(self.default_button_image, button_width, button_height,
+                                    (self.width // 3 - button_width/2, self.height - button_height - 10),
+                                    "Accept", self.rect.topleft, pressed_image=self.default_pressed_button_image)
+        self.decline_button = Button(self.default_button_image, button_width, button_height,
+                                     (2*self.width // 3 - button_width/2, self.height - button_height - 10),
+                                     "Decline", self.rect.topleft, pressed_image=self.default_pressed_button_image)
         self.accept_button.draw(self.surface)
         self.decline_button.draw(self.surface)
 
@@ -115,6 +121,9 @@ class DialogueBox(PopupBox):
             self.surface.blit(self.surface, background_rect, background_rect)
             # Optional: Redraw part of the border if needed or other interface elements that might be overlapped by the button redraw
 
+    def render_accept_decline_buttons(self):
+        self.accept_button.draw(self.surface)
+        self.decline_button.draw(self.surface)
 
     def handle_events(self, event):
         pass

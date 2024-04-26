@@ -4,6 +4,8 @@ import ai.llm.functions_paths as fp
 from dotenv import load_dotenv
 from groq import Groq
 
+
+#TODO: Need to add concept of who is talking in the dialogue in order to generate the dialogue
 class LLMModel():
     # path_to_functions = "./ai/llm/functions"
     path_to_functions = "./functions/"

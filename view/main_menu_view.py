@@ -10,7 +10,7 @@ class MainMenuView:
     def __init__(self, screen):
         self.screen = screen
         self.background_image = pygame.image.load("./assets/backgrounds/main_menu.png").convert()
-        self.button_image = pygame.image.load("./assets/buttons/wood_button_small.png").convert_alpha()
+        self.button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
 
         self.title_font = pygame.font.SysFont("Arial", 50)
         self.title_text = self.title_font.render("Game Title", True, view_cst.DARK_GRAY_2)
