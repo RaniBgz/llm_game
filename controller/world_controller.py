@@ -84,7 +84,7 @@ class WorldController:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
             print(f"Mouse clicked")
             self.handle_mouse_event(event)
         elif event.type == pygame.KEYDOWN:
@@ -111,14 +111,6 @@ class WorldController:
            (key == pygame.K_DOWN and self.move_direction == (0, 1)):
             self.move_direction = (0, 0)
 
-    def update_movement(self, dt):
-        self.accumulated_time += dt
-
-        if self.move_direction != (0, 0):
-            if self.accumulated_time >= self.time_to_move_one_tile:
-                self.move_character()
-                self.accumulated_time = 0.0
-
     def handle_mouse_event(self, event):
         pos = event.pos
         button = event.button
@@ -134,6 +126,13 @@ class WorldController:
         self.handle_npc_interaction(pos, button)
         self.handle_item_interaction(pos, button)
 
+    def update_movement(self, dt):
+        self.accumulated_time += dt
+
+        if self.move_direction != (0, 0):
+            if self.accumulated_time >= self.time_to_move_one_tile:
+                self.move_character()
+                self.accumulated_time = 0.0
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
             self.quest_manager.handle_quest_giving()

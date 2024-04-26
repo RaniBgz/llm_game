@@ -29,18 +29,8 @@ class Button(pygame.sprite.Sprite):
     def draw(self, surface):
         self.true_rect = pygame.Rect(self.rect.topleft[0] + self.parent_offset[0],
                                      self.rect.topleft[1] + self.parent_offset[1], self.rect.width, self.rect.height)
-        print(f"In draw button")
         surface.blit(self.image, self.rect)
         surface.blit(self.text_render, self.text_rect)
-
-    # def press(self):
-    #     self.image = pygame.transform.scale(self.pressed_image, self.rect.size)
-    #     self.draw(self.parent)
-    #
-    # def release(self):
-    #     self.image = pygame.transform.scale(self.original_image, self.rect.size)
-    #     self.draw(self.parent)
-
 
     def is_clicked(self, mouse_pos):
         return self.true_rect.collidepoint(mouse_pos)
@@ -48,8 +38,8 @@ class Button(pygame.sprite.Sprite):
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.true_rect.collidepoint(event.pos):
-                self.is_pressed = True
                 self.image = pygame.transform.scale(self.pressed_image, (self.rect.width, self.rect.height))
         elif event.type == pygame.MOUSEBUTTONUP:
-            self.is_pressed = False
             self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
+            # if self.true_rect.collidepoint(event.pos):
+            #     self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
