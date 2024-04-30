@@ -109,16 +109,24 @@ class WorldView(Observer):
         self.npc_info_box.show = True
 
 
+    # async def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
+    #     self.dialogue_controller = DialogueController(
+    #         self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
+    #
+    #     self.dialogue_controller.start_dialogue()
+    #     # self.dialogue_controller.run()
+    #     # self.dialogue_box.create_dialogue(npc, dialogue_text)
+    #     self.dialogue_box.show = True
+
+
     def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
         print(f"Creating dialogue box for {npc.name}")
         self.dialogue_controller = DialogueController(
             self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
 
+        self.dialogue_box.show = True
         self.dialogue_controller.start_dialogue()
         # self.dialogue_box.create_dialogue(npc, dialogue_text)
-        self.dialogue_box.show = True
-
-
 
     def create_item_info_box(self, item, item_rect):
         print(f"Creating item info box for {item.name}")
@@ -141,15 +149,12 @@ class WorldView(Observer):
             self.item_info_box.handle_events(event)
 
     def handle_dialogue_events(self, event):
-        print(f"Handling dialogue events")
         if self.dialogue_box.show:
-            print(f"Dialogue box is showing")
             return_code = self.dialogue_controller.handle_events(event)
             return return_code
 
     def handle_game_menu_events(self, event):
         return_code = self.game_menu_bar_controller.handle_events(event)
-        print("Return code: ", return_code)
         return return_code
 
     def kill_npc(self, npc):
@@ -195,9 +200,7 @@ class WorldView(Observer):
         self.coord_rect = self.coord_text.get_rect(topleft=(0, 10))
         self.screen.blit(self.coord_text, self.coord_rect)
 
-    #TODO: Add render functions
-    #TODO: Think about subcontrollers to handle the logic in parts of the view: killing npcs, removing items, then later health bars, etc.
-
+    #TODO: Optimize rendering. For now, everything is rendered at each frame
     def render(self, x, y):
         self.render_background()
         self.render_npcs()
@@ -206,6 +209,9 @@ class WorldView(Observer):
         self.render_coordinates(x, y)
         self.game_menu_bar.display()
         self.dialogue_box.display()
+        if self.dialogue_box.show:
+            print(f"Rendering dialogue box")
+            self.dialogue_controller.render_dialogue_box()
         self.item_info_box.display()
         self.npc_info_box.display()
         pygame.display.flip()

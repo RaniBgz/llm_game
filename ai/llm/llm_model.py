@@ -12,26 +12,47 @@ class LLMModel():
 
     def __init__(self, model_name):
         self.model_name = model_name
-        self.api_key = self.initialize_api_key()
+        self.api_key = self._load_api_key()
         self.functions = []
         self.client = self.initialize_groq_client()
 
-    def initialize_api_key(self):
-        load_dotenv()
-        api_key = os.getenv("GROQ_API_KEY")
-        if api_key is None:
-            raise ValueError("GROQ_API_KEY is not set in the environment variables")
-        return api_key
+    def _load_api_key(self):
+        try:
+            load_dotenv()
+            api_key = os.getenv("GROQ_API_KEY")
+            if api_key is None:
+                raise KeyError('GROQ_API_KEY not found in .env file')
+            return api_key
+        except FileNotFoundError as e:
+            raise ValueError(f"Error loading .env file: {e}") from e
 
     def initialize_groq_client(self):
         client = Groq(api_key=self.api_key)
         return client
 
     def load_config(self, config_path):
+        # try:
+        #     with open(self.config_dir / config_file, 'r') as file:
+        #         return json.load(file)
+        # except (FileNotFoundError, json.JSONDecodeError) as e:
+        #     raise ValueError(f"Error loading configuration file {config_file}: {e}") from e
+
         with open(config_path, 'r') as file:
             return json.load(file)
 
     def parse_template(self, template_path, **kwargs):
+        # try:
+        #     with open(self.config_dir / template_file, 'r') as file:
+        #         template = file.read()
+        #
+        #     # Replace placeholders  with values provided in kwargs
+        #     for key, value in kwargs.items():
+        #         placeholder = f"{{${key}}}"
+        #         template = template.replace(placeholder, str(value))
+        #
+        #     return template
+        # except FileNotFoundError as e:
+        #     raise ValueError(f"Error opening template file {template_file}: {e}") from e
         with open(template_path, 'r') as file:
             template = file.read()
 

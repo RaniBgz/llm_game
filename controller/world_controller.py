@@ -32,23 +32,9 @@ class WorldController:
         self.time_to_move_one_tile = 0.2
         self.accumulated_time = 0.0
         self.move_direction = (0, 0)
+        self.clicked_npc = None
+        self.clicked_item = None
 
-    #Original run loop
-    # def run(self):
-    #     clock = pygame.time.Clock()
-    #     loop = asyncio.get_event_loop()
-    #
-    #     while True:
-    #         clock.tick(view_cst.FPS)
-    #         dt = clock.tick(view_cst.FPS)*10
-    #         for event in pygame.event.get():
-    #             self.handle_event(event)
-    #
-    #         self.update_movement(dt)
-    #         # self.move_character()
-    #         self.view.render(self.game_data.character.global_position[0],
-    #                                 self.game_data.character.global_position[1])
-    #         loop.run_until_complete(asyncio.sleep(0))
 
     async def run_async(self):
         clock = pygame.time.Clock()
@@ -84,13 +70,23 @@ class WorldController:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-            print(f"Mouse clicked")
-            self.handle_mouse_event(event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.handle_mouse_down_event(event)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            self.handle_mouse_up_event(event)
+        # elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+        #     print(f"Mouse clicked")
+        #     self.handle_mouse_event(event)
         elif event.type == pygame.KEYDOWN:
             self.handle_key_down(event.key)
         elif event.type == pygame.KEYUP:
             self.handle_key_up(event.key)
+        menu_return_code = self.view.handle_game_menu_events(event)
+        self.open_menu(menu_return_code)
+
+        dialogue_return_code = self.view.handle_dialogue_events(event)
+        self.handle_dialogue_return(dialogue_return_code)
 
     def handle_key_down(self, key):
         if key == pygame.K_ESCAPE:
@@ -111,20 +107,61 @@ class WorldController:
            (key == pygame.K_DOWN and self.move_direction == (0, 1)):
             self.move_direction = (0, 0)
 
-    def handle_mouse_event(self, event):
+
+    def handle_mouse_down_event(self, event):
+        pos = event.pos #click position
+        button = event.button #left or right click
+        for npc, npc_image, npc_rect in self.view.npcs: #Check which NPC was clicked
+            if npc_rect.collidepoint(pos):
+                self.clicked_npc = npc #update the flag
+                print(f"Clicked on NPC: {npc.name}")
+
+        for item, item_image, item_rect in self.view.items: #Check which Item was clicked
+            if item_rect.collidepoint(pos):
+                self.clicked_item = item #update the flag
+                print(f"Clicked on Item: {item.name}")
+
+        self.view.handle_popup_events(event)
+        # #TODO: see if these should be here: actually, they'll need to be on mouse up once things are fixed
+        # menu_return_code = self.view.handle_game_menu_events(event)
+        # self.open_menu(menu_return_code)
+        #
+        # dialogue_return_code = self.view.handle_dialogue_events(event)
+        # self.handle_dialogue_return(dialogue_return_code)
+
+        #Still handling menu on mouse down for now, might switch to mouse up later
+
+
+    def handle_mouse_up_event(self, event):
         pos = event.pos
         button = event.button
 
-        self.view.handle_popup_events(event)
+        for npc, npc_image, npc_rect in self.view.npcs: #Handling NPC interaction
+            if npc_rect.collidepoint(pos) and npc == self.clicked_npc:
+                self.handle_npc_interaction(pos, button)
+                self.clicked_npc = None
 
-        dialogue_return_code = self.view.handle_dialogue_events(event)
-        self.handle_dialogue_return(dialogue_return_code)
+        for item, item_image, item_rect in self.view.items: #Handling Item interaction
+            if item_rect.collidepoint(pos) and item == self.clicked_item:
+                self.handle_item_interaction(pos, button)
+                self.clicked_item = None
 
-        menu_return_code = self.view.handle_game_menu_events(event)
-        self.open_menu(menu_return_code)
+    # def handle_mouse_event(self, event):
+    #     pos = event.pos
+    #     button = event.button
+    #
+    #     self.handle_npc_interaction(pos, button)
+    #     self.handle_item_interaction(pos, button)
+    #
+    #     self.view.handle_popup_events(event)
+    #
+        # dialogue_return_code = self.view.handle_dialogue_events(event)
+        # self.handle_dialogue_return(dialogue_return_code)
+    #
+    #     menu_return_code = self.view.handle_game_menu_events(event)
+    #     self.open_menu(menu_return_code)
 
-        self.handle_npc_interaction(pos, button)
-        self.handle_item_interaction(pos, button)
+
 
     def update_movement(self, dt):
         self.accumulated_time += dt
@@ -133,6 +170,7 @@ class WorldController:
             if self.accumulated_time >= self.time_to_move_one_tile:
                 self.move_character()
                 self.accumulated_time = 0.0
+
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
             self.quest_manager.handle_quest_giving()
@@ -152,15 +190,15 @@ class WorldController:
         quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue_with_context(llm_model, game_context)
         self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
 
-
-
-
     async def process_quest_generation(self, llm_model):
         quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
         self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
         self.view.dialogue_controller.generate_quest_button_visible = True  # Re-enable the button
         self.view.dialogue_controller.handle_generate_quest_button_logic()  # Update button visibility
+
     def handle_npc_interaction(self, pos, button):
+        time = pygame.time.get_ticks()
+        print(f"HANDLING NPC INTERACTION at time {time}")
         for npc, npc_image, npc_rect in self.view.npcs:
             if npc_rect.collidepoint(pos):
                 if button == pygame.BUTTON_RIGHT:
@@ -178,12 +216,10 @@ class WorldController:
                         #TODO: Keep refining dialogue system
                         print(f"Interacting with NPC: {npc.name}")
                         self.quest_manager.check_talk_to_npc_objective_completion(npc)
-                        self.view.show_dialogue = True
                         quest = self.quest_manager.get_next_npc_quest(npc)
                         self.quest_manager.set_current_npc(npc)
                         # self.quest_manager.current_npc = npc
                         dialogue_manager = DialogueManager(npc, self.game_data.character, quest)
-                        #TODO: In the future, a higher structure will give the right quest to the Dialogue Manager
                         dialogue, dialogue_type = dialogue_manager.get_dialogue()
                         self.view.create_dialogue_box(npc, self.game_data.character, dialogue, dialogue_type)
 

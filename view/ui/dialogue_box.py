@@ -57,22 +57,65 @@ class DialogueBox(PopupBox):
         self.show = True
 
     def create_prev_button(self):
-        prev_button_text = self.fonts["button"].render("Prev", True, view_cst.DARK_GRAY_2)
-        prev_button_rect = prev_button_text.get_rect(bottomleft=(10, self.height - 10))
-        pygame.draw.rect(self.surface, self.background_color, prev_button_rect)
-        self.prev_button_rect = pygame.Rect(10+10, self.rect.topleft[1] + self.height - 50, 60, 40)
-        print(f"Prev button rect: {self.prev_button_rect}")
-        # self.prev_button_rect = self.surface.get_rect(bottomleft=(10, self.rect.topleft[1] + self.height - 10))
-        self.surface.blit(prev_button_text, prev_button_rect)
+        button_width = 100
+        button_height = 50
+        if getattr(self, 'prev_button', None):
+            self.render_prev_button()
+        else:
+            self.prev_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height,
+                                      (10, self.height - button_height - 10), "Prev", self.rect.topleft,
+                                      pressed_image=self.default_pressed_button_image)
+            self.render_prev_button()
 
     def create_next_button(self):
-        next_button_text = self.fonts["button"].render("Next", True, view_cst.DARK_GRAY_2)
-        next_button_rect = next_button_text.get_rect(bottomright=(self.width - 10, self.height - 10))
-        pygame.draw.rect(self.surface, self.background_color, next_button_rect)
-        self.next_button_rect = pygame.Rect(self.width - 60, self.rect.topleft[1] + self.height - 50, 60, 40)
-        print(f"Next button rect: {self.next_button_rect}")
-        # self.next_button_rect = self.surface.get_rect(bottomright=(self.width - 10, self.rect.topleft[1] + self.height - 10))
-        self.surface.blit(next_button_text, next_button_rect)
+        button_width = 100
+        button_height = 50
+        if getattr(self, 'next_button', None):
+            self.render_next_button()
+        else:
+            self.next_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height,
+                                      (self.width - button_width - 10, self.height - button_height - 10), "Next", self.rect.topleft,
+                                      pressed_image=self.default_pressed_button_image)
+            self.render_next_button()
+
+
+
+    def create_accept_decline_buttons(self):
+        button_width = 150
+        button_height = 50
+        if getattr(self, 'accept_button', None) and getattr(self, 'decline_button', None):
+            self.render_accept_decline_buttons()
+        else:
+            self.accept_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+                                        (self.width // 3 - button_width/2, self.height - button_height - 10),
+                                        "Accept", self.rect.topleft, pressed_image=self.default_pressed_button_image)
+            self.decline_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+                                         (2*self.width // 3 - button_width/2, self.height - button_height - 10),
+                                         "Decline", self.rect.topleft, pressed_image=self.default_pressed_button_image)
+            self.render_accept_decline_buttons()
+
+    def create_end_quest_button(self):
+        button_width = 150
+        button_height = 50
+        if getattr(self, 'end_quest_button', None):
+            self.render_end_quest_button()
+        else:
+            self.end_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+                                        (self.width // 2 - button_width/2, self.height - button_height - 10),
+                                        "End quest", self.rect.topleft, pressed_image=self.default_pressed_button_image)
+            self.render_end_quest_button()
+
+
+    def create_generate_quest_button(self):
+        button_width = 150
+        button_height = 50
+        if getattr(self, 'generate_quest_button', None):
+            self.render_generate_quest_button()
+        else:
+            self.generate_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+                                        (self.width // 2 - button_width/2, self.height - button_height - 10),
+                                        "Generate quest", self.rect.topleft, pressed_image=self.default_pressed_button_image)
+            self.render_generate_quest_button()
 
     def create_close_button(self, font, color):
         close_button_text = font.render("X", True, color)
@@ -81,49 +124,21 @@ class DialogueBox(PopupBox):
         self.surface.blit(close_button_text, close_button_rect)
         self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
 
-    def create_accept_decline_buttons(self):
-        print("self width is: ", self.width)
-        print("self height is: ", self.height)
-        button_width = 150
-        button_height = 50
-        self.accept_button = Button(self.default_button_image, button_width, button_height,
-                                    (self.width // 3 - button_width/2, self.height - button_height - 10),
-                                    "Accept", self.rect.topleft, pressed_image=self.default_pressed_button_image)
-        self.decline_button = Button(self.default_button_image, button_width, button_height,
-                                     (2*self.width // 3 - button_width/2, self.height - button_height - 10),
-                                     "Decline", self.rect.topleft, pressed_image=self.default_pressed_button_image)
-        self.accept_button.draw(self.surface)
-        self.decline_button.draw(self.surface)
-
-    def create_end_quest_button(self):
-        end_quest_button_text = self.fonts["accept_deny"].render("End quest", True, view_cst.DARK_GRAY_2)
-        end_quest_button_rect = end_quest_button_text.get_rect(bottomleft=(self.width // 2 -end_quest_button_text.get_width()//2, self.height - 20))
-        pygame.draw.rect(self.surface, self.background_color, end_quest_button_rect)
-        self.end_quest_button_rect = pygame.Rect(self.width // 2-end_quest_button_text.get_width()//2, self.rect.topleft[1] + self.height - 50, 100, 40)
-        self.surface.blit(end_quest_button_text, end_quest_button_rect)
-
-
-    def create_generate_quest_button(self):
-        generate_quest_button_text = self.fonts["accept_deny"].render("Generate quest", True, view_cst.DARK_GRAY_2)
-        generate_quest_button_rect = generate_quest_button_text.get_rect(bottomleft=((self.width // 2 - generate_quest_button_text.get_width() // 2)+10, self.height - 20))
-        pygame.draw.rect(self.surface, self.background_color, generate_quest_button_rect)
-        self.generate_quest_button_rect = pygame.Rect(self.width // 2 - generate_quest_button_text.get_width() // 2, self.rect.topleft[1] + self.height - 50, 100, 40)
-        self.surface.blit(generate_quest_button_text, generate_quest_button_rect)
-
-    def hide_generate_quest_button(self):
-        if hasattr(self, 'generate_quest_button_rect'):
-            # Redraw the background over the button area to hide it
-            background_rect = pygame.Rect(self.generate_quest_button_rect.left - 10,
-                                          self.generate_quest_button_rect.top - 10,
-                                          self.generate_quest_button_rect.width + 20,
-                                          self.generate_quest_button_rect.height + 20)
-            pygame.draw.rect(self.surface, self.background_color, background_rect)
-            self.surface.blit(self.surface, background_rect, background_rect)
-            # Optional: Redraw part of the border if needed or other interface elements that might be overlapped by the button redraw
-
     def render_accept_decline_buttons(self):
         self.accept_button.draw(self.surface)
         self.decline_button.draw(self.surface)
+
+    def render_end_quest_button(self):
+        self.end_quest_button.draw(self.surface)
+
+    def render_prev_button(self):
+        self.prev_button.draw(self.surface)
+
+    def render_next_button(self):
+        self.next_button.draw(self.surface)
+
+    def render_generate_quest_button(self):
+        self.generate_quest_button.draw(self.surface)
 
     def handle_events(self, event):
         pass

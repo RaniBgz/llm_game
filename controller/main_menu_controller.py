@@ -15,6 +15,8 @@ class MainMenuController:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # self.view.play_button.handle_events(event)
+                    # self.view.quit_button.handle_events(event)
                     if self.view.play_button.rect.collidepoint(event.pos):
                         #TODO: Instead of starting game from the main menu, update the observer (game controller) and let it handle the transition
                         print(f"Rect position: {self.view.play_button.rect.topleft}")
@@ -23,6 +25,10 @@ class MainMenuController:
                         print(f"Rect position: {self.view.quit_button.rect.topleft}")
                         pygame.quit()
                         sys.exit()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    pass
+                    # self.view.play_button.handle_events(event)
+                    # self.view.quit_button.handle_events(event)
 
             self.view.display_menu()
 
