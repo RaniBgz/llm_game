@@ -179,9 +179,10 @@ class WorldController:
         elif return_code == "end_quest":
             self.quest_manager.handle_quest_completion()
         elif return_code == "generate_quest":
-            llm_model = self.game_data.get_llm_model()
-            game_context = self.game_data.get_game_context()
-            asyncio.create_task(self.process_quest_generation_with_context(llm_model, game_context))
+            print(f"In world controller after generate quest")
+            # llm_model = self.game_data.get_llm_model()
+            # game_context = self.game_data.get_game_context()
+            # asyncio.create_task(self.process_quest_generation_with_context(llm_model, game_context))
         else:
             return
 

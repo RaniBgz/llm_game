@@ -130,6 +130,21 @@ class DialogueController:
                 self.dialogue_box.next_button.handle_mouse_down(event) #Change button image to pressed
                 print(f"Next button clicked")
                 self.button_flags["next"] = True #Set next flag to true
+        if getattr(self.dialogue_box, 'generate_quest_button', None):
+            if self.dialogue_box.generate_quest_button.is_clicked(event):
+                self.dialogue_box.generate_quest_button.handle_mouse_down(event)
+                print(f"Generate quest button clicked")
+                self.button_flags["generate_quest"] = True
+        if getattr(self.dialogue_box, 'accept_button', None):
+            if self.dialogue_box.accept_button.is_clicked(event):
+                self.dialogue_box.accept_button.handle_mouse_down(event)
+                print(f"Accept button clicked")
+                self.button_flags["accept_quest"] = True
+        if getattr(self.dialogue_box, 'decline_button', None):
+            if self.dialogue_box.decline_button.is_clicked(event):
+                self.dialogue_box.decline_button.handle_mouse_down(event)
+                print(f"Decline button clicked")
+                self.button_flags["decline_quest"] = True
 
 
     def handle_mouse_up(self, event):
@@ -147,197 +162,25 @@ class DialogueController:
                     self.dialogue_box.next_button.handle_mouse_up(event)
                     self.dialogue.point_to_next_text()  # Point to next text
                     self.start_dialogue()  # Start dialogue
-        for flag in self.button_flags:
+        if getattr(self.dialogue_box, 'generate_quest_button', None):
+            if self.dialogue_box.generate_quest_button.is_clicked(event):
+                if self.button_flags["generate_quest"]:
+                    print(f"Generate quest button released")
+                    self.dialogue_box.generate_quest_button.handle_mouse_up(event)
+                    self.generate_quest_button_visible = False
+                    return "generate_quest"
+        if getattr(self.dialogue_box, 'accept_button', None):
+            if self.dialogue_box.accept_button.is_clicked(event):
+                if self.button_flags["accept_quest"]:
+                    print(f"Accept button released")
+                    self.dialogue_box.accept_button.handle_mouse_up(event)
+                    return "accept_quest"
+        if getattr(self.dialogue_box, 'decline_button', None):
+            if self.dialogue_box.decline_button.is_clicked(event):
+                if self.button_flags["decline_quest"]:
+                    print(f"Decline button released")
+                    self.dialogue_box.decline_button.handle_mouse_up(event)
+                    return "decline_quest"
+
+        for flag in self.button_flags: #Reset all flags
             self.button_flags[flag] = False
-
-
-        # if self.dialogue_type == "quest_initialization":
-        #     if getattr(self.dialogue_box, 'accept_button', None):
-        #         if self.button_flags["accept_quest"]:
-        #             self.dialogue_box.accept_button.handle_events(event)
-        #             self.dialogue_box.render_accept_decline_buttons()
-        #         if self.dialogue_box.accept_button.is_clicked(event.pos):
-        #             self.reset_dialogue()
-        #             return "accept_quest"
-        #     if getattr(self.dialogue_box, 'decline_button', None):
-        #         self.dialogue_box.decline_button.handle_events(event)
-        #         self.dialogue_box.render_accept_decline_buttons()
-        #         if self.dialogue_box.decline_button.is_clicked(event.pos):
-        #             self.reset_dialogue()
-        #             return "decline_quest"
-
-
-
-    # def handle_events(self, event):
-    #     print(f"In dialogue controller event")
-    #     if event.type == pygame.MOUSEBUTTONDOWN:
-    #         if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
-    #             self.reset_dialogue()
-    #         elif getattr(self.dialogue_box, 'prev_button', None):
-    #             self.dialogue_box.render_prev_button()
-    #             self.dialogue_box.prev_button.handle_events(event)
-    #             if self.dialogue_box.prev_button.is_clicked(event.pos):
-    #                 self.button_flags["prev"] = True
-    #                 self.dialogue.point_to_previous_text()
-    #                 self.start_dialogue()
-    #                 print(f"Prev button clicked")
-    #         elif getattr(self.dialogue_box, 'next_button', None):
-    #             self.dialogue_box.render_next_button()
-    #             self.dialogue_box.next_button.handle_events(event)
-    #             if self.dialogue_box.next_button.is_clicked(event.pos):
-    #                 self.button_flags["next"] = True
-    #                 self.dialogue.point_to_next_text()
-    #                 self.start_dialogue()
-    #                 print(f"Next button clicked")
-    #
-    #         # elif getattr(self.dialogue_box, 'prev_button_rect', None) and self.dialogue_box.prev_button_rect.collidepoint(event.pos):
-    #         #     self.dialogue.point_to_previous_text()
-    #         #     self.start_dialogue()
-    #         # elif getattr(self.dialogue_box, 'next_button_rect', None) and self.dialogue_box.next_button_rect.collidepoint(event.pos):
-    #         #     self.dialogue.point_to_next_text()
-    #         #     self.start_dialogue()
-    #         elif getattr(self.dialogue_box, 'generate_quest_button_rect', None) and self.dialogue_box.generate_quest_button_rect.collidepoint(event.pos):
-    #             print(f"Generating quest button clicked")
-    #             self.generate_quest_button_visible = False
-    #             self.handle_generate_quest_button_logic()
-    #             return "generate_quest"
-    #
-    #         if self.dialogue_type == "quest_initialization":
-    #             if getattr(self.dialogue_box, 'accept_button', None):
-    #                 self.dialogue_box.accept_button.handle_events(event)
-    #                 self.dialogue_box.render_accept_decline_buttons()
-    #                 if self.dialogue_box.accept_button.is_clicked(event.pos):
-    #                     self.button_flags["accept_quest"] = True
-    #                     print(f"Accept button clicked")
-    #                     self.button_pressed = "accept_quest"
-    #             if getattr(self.dialogue_box, 'decline_button', None):
-    #                 self.dialogue_box.decline_button.handle_events(event)
-    #                 self.dialogue_box.render_accept_decline_buttons()
-    #                 if self.dialogue_box.decline_button.is_clicked(event.pos):
-    #                     self.button_flags["decline_quest"] = True
-    #                     print(f"Decline button clicked")
-    #                     self.button_pressed = "decline_quest"
-    #
-    #         if self.dialogue_type == "quest_completion":
-    #             if getattr(self.dialogue_box, 'end_quest_button_rect', None) and self.dialogue_box.end_quest_button_rect.collidepoint(event.pos):
-    #                 self.reset_dialogue()
-    #                 return "end_quest"
-    #
-    #     elif event.type == pygame.MOUSEBUTTONUP:
-    #         if getattr(self.dialogue_box, 'prev_button', None):
-    #             self.dialogue_box.accept_button.handle_events(event)
-    #
-    #         if getattr(self.dialogue_box, 'next_button', None):
-    #             self.dialogue_box.accept_button.handle_events(event)
-    #
-    #         if self.dialogue_type == "quest_initialization":
-    #             if getattr(self.dialogue_box, 'accept_button', None):
-    #                 if self.button_flags["accept_quest"]:
-    #                     self.dialogue_box.accept_button.handle_events(event)
-    #                     self.dialogue_box.render_accept_decline_buttons()
-    #                 if self.dialogue_box.accept_button.is_clicked(event.pos):
-    #                     self.reset_dialogue()
-    #                     return "accept_quest"
-    #             if getattr(self.dialogue_box, 'decline_button', None):
-    #                 self.dialogue_box.decline_button.handle_events(event)
-    #                 self.dialogue_box.render_accept_decline_buttons()
-    #                 if self.dialogue_box.decline_button.is_clicked(event.pos):
-    #                     self.reset_dialogue()
-    #                     return "decline_quest"
-    #
-    #     if self.dialogue_type == "quest_completion":
-    #         if getattr(self.dialogue_box, 'end_quest_button_rect', None):
-    #             self.dialogue_box.end_quest_button.handle_events(event)
-    #             self.dialogue_box.render_end_quest_button()
-    #             self.reset_dialogue()
-    #             return "end_quest"
-
-            # def handle_events(self, event):
-            #     print(f"In dialogue controller event")
-            #
-            #     if event.type == pygame.MOUSEBUTTONDOWN:
-            #         if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(
-            #                 event.pos):
-            #             self.reset_dialogue()
-            #
-            #         for button in self.dialogue_box.buttons:
-            #             if button.rect.collidepoint(event.pos):
-            #                 button.handle_events(event)
-            #                 if button.is_clicked(event.pos):
-            #                     if button.name == "prev":
-            #                         self.dialogue.point_to_previous_text()
-            #                         self.start_dialogue()
-            #                     elif button.name == "next":
-            #                         self.dialogue.point_to_next_text()
-            #                         self.start_dialogue()
-            #                     elif button.name == "generate_quest":
-            #                         self.generate_quest_button_visible = False
-            #                         self.handle_generate_quest_button_logic()
-            #                         return "generate_quest"
-            #                     elif button.name == "accept_quest":
-            #                         self.button_flags["accept_quest"] = True
-            #                         self.button_pressed = "accept_quest"
-            #                     elif button.name == "decline_quest":
-            #                         self.button_flags["decline_quest"] = True
-            #                         self.button_pressed = "decline_quest"
-            #                     elif button.name == "end_quest":
-            #                         self.reset_dialogue()
-            #                         return "end_quest"
-            #
-            #     elif event.type == pygame.MOUSEBUTTONUP:
-            #         for button in self.dialogue_box.buttons:
-            #             button.handle_events(event)
-            #             if button.is_clicked(event.pos):
-            #                 if button.name == "accept_quest" and self.button_flags["accept_quest"]:
-            #                     self.reset_dialogue()
-            #                     return "accept_quest"
-            #                 elif button.name == "decline_quest" and self.button_flags["decline_quest"]:
-            #                     self.reset_dialogue()
-            #                     return "decline_quest"
-
-            # def handle_events(self, event):
-            #     if event.type == pygame.MOUSEBUTTONDOWN:
-            #         self.handle_mouse_down(event)
-            #     elif event.type == pygame.MOUSEBUTTONUP:
-            #         self.handle_mouse_up(event)
-            #
-            # def handle_mouse_down(self, event):
-            #     if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
-            #         self.reset_dialogue()
-            #     elif self.dialogue_box.prev_button and self.dialogue_box.prev_button_rect.collidepoint(event.pos):
-            #         self.button_flags["prev"] = True
-            #         self.dialogue.point_to_previous_text()
-            #         self.start_dialogue()
-            #     elif self.dialogue_box.next_button and self.dialogue_box.next_button_rect.collidepoint(event.pos):
-            #         self.button_flags["next"] = True
-            #         self.dialogue.point_to_next_text()
-            #         self.start_dialogue()
-            #     elif self.dialogue_box.generate_quest_button_rect and self.dialogue_box.generate_quest_button_rect.collidepoint(
-            #             event.pos):
-            #         self.generate_quest_button_visible = False
-            #         self.handle_generate_quest_button_logic()
-            #         return "generate_quest"
-            #
-            #     if self.dialogue_type == "quest_initialization":
-            #         if self.dialogue_box.accept_button and self.dialogue_box.accept_button_rect.collidepoint(event.pos):
-            #             self.button_flags["accept_quest"] = True
-            #             self.button_pressed = "accept_quest"
-            #         elif self.dialogue_box.decline_button and self.dialogue_box.decline_button_rect.collidepoint(
-            #                 event.pos):
-            #             self.button_flags["decline_quest"] = True
-            #             self.button_pressed = "decline_quest"
-            #
-            #     if self.dialogue_type == "quest_completion":
-            #         if self.dialogue_box.end_quest_button_rect and self.dialogue_box.end_quest_button_rect.collidepoint(
-            #                 event.pos):
-            #             self.reset_dialogue()
-            #             return "end_quest"
-            #
-            # def handle_mouse_up(self, event):
-            #     if self.dialogue_type == "quest_initialization":
-            #         if self.button_flags["accept_quest"]:
-            #             self.reset_dialogue()
-            #             return "accept_quest"
-            #         elif self.button_flags["decline_quest"]:
-            #             self.reset_dialogue()
-            #             return "decline_quest"
