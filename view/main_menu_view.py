@@ -11,6 +11,7 @@ class MainMenuView:
         self.screen = screen
         self.background_image = pygame.image.load("./assets/backgrounds/main_menu.png").convert()
         self.button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
+        self.text_offset = 5
 
         self.title_font = pygame.font.SysFont("Arial", 50)
         self.button_font = pygame.font.SysFont("Arial", 30)
@@ -19,9 +20,9 @@ class MainMenuView:
         button_width = 300
         button_height = 100
 
-        self.play_button = Button(self.button_image, self.button_font, button_width, button_height,
+        self.play_button = Button(self.button_image, self.button_font, button_width, button_height, self.text_offset,
                                   (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 - 100), "Play")
-        self.quit_button = Button(self.button_image, self.button_font, button_width, button_height,
+        self.quit_button = Button(self.button_image, self.button_font, button_width, button_height, self.text_offset,
                                   (view_cst.WIDTH / 2 - button_width/2, view_cst.HEIGHT / 2 + 50), "Quit")
 
     def display_menu(self):

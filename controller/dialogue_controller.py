@@ -16,6 +16,7 @@ class DialogueController:
         self.set_npc_type()
         self.generate_quest_button_visible = True
         self.button_flags = {
+            "close": False, #Close button flag
             "generate_quest": False,
             "accept_quest": False,
             "decline_quest": False,
@@ -24,6 +25,7 @@ class DialogueController:
             "next": False
         }
         self.button_displayed = {
+            "close": True,
             "generate_quest": False,
             "accept_quest": False,
             "decline_quest": False,
@@ -120,81 +122,79 @@ class DialogueController:
                 return return_code
 
     def handle_mouse_down(self, event):
-        if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
-            self.reset_dialogue()
+        # if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
+        #     self.reset_dialogue()
+
+        if getattr(self.dialogue_box, 'close_button', None): #Check prev button exists
+            if self.dialogue_box.close_button.is_clicked(event):
+                self.dialogue_box.close_button.handle_mouse_down()
+                self.button_flags["close"] = True
         if getattr(self.dialogue_box, 'prev_button', None): #Check prev button exists
             if self.dialogue_box.prev_button.is_clicked(event):
-                self.dialogue_box.prev_button.handle_mouse_down(event) #Change button image to pressed
-                print(f"Prev button clicked")
+                self.dialogue_box.prev_button.handle_mouse_down() #Change button image to pressed
                 self.button_flags["prev"] = True #Set prev flag to true
         if getattr(self.dialogue_box, 'next_button', None): #Check next button exists
             if self.dialogue_box.next_button.is_clicked(event):
-                self.dialogue_box.next_button.handle_mouse_down(event) #Change button image to pressed
-                print(f"Next button clicked")
+                self.dialogue_box.next_button.handle_mouse_down() #Change button image to pressed
                 self.button_flags["next"] = True #Set next flag to true
         if getattr(self.dialogue_box, 'generate_quest_button', None):
             if self.dialogue_box.generate_quest_button.is_clicked(event):
-                self.dialogue_box.generate_quest_button.handle_mouse_down(event)
-                print(f"Generate quest button clicked")
+                self.dialogue_box.generate_quest_button.handle_mouse_down()
                 self.button_flags["generate_quest"] = True
         if getattr(self.dialogue_box, 'accept_button', None):
             if self.dialogue_box.accept_button.is_clicked(event):
-                self.dialogue_box.accept_button.handle_mouse_down(event)
-                print(f"Accept button clicked")
+                self.dialogue_box.accept_button.handle_mouse_down()
                 self.button_flags["accept_quest"] = True
         if getattr(self.dialogue_box, 'decline_button', None):
             if self.dialogue_box.decline_button.is_clicked(event):
-                self.dialogue_box.decline_button.handle_mouse_down(event)
-                print(f"Decline button clicked")
+                self.dialogue_box.decline_button.handle_mouse_down()
                 self.button_flags["decline_quest"] = True
         if getattr(self.dialogue_box, 'end_quest_button', None):
             if self.dialogue_box.end_quest_button.is_clicked(event):
-                self.dialogue_box.end_quest_button.handle_mouse_down(event)
-                print(f"End quest button clicked")
+                self.dialogue_box.end_quest_button.handle_mouse_down()
                 self.button_flags["end_quest"] = True
 
 
     def handle_mouse_up(self, event):
+        if getattr(self.dialogue_box, 'close_button', None):
+            self.dialogue_box.close_button.handle_mouse_up()
+            if self.dialogue_box.close_button.is_clicked(event):
+                if self.button_flags["close"]:
+                    self.reset_dialogue()
         if getattr(self.dialogue_box, 'prev_button', None):
+            self.dialogue_box.prev_button.handle_mouse_up()
             if self.dialogue_box.prev_button.is_clicked(event):
                 if self.button_flags["prev"]:
-                    print(f"Prev button released")
-                    self.dialogue_box.prev_button.handle_mouse_up(event)  # Changes the button image back to normal
                     self.dialogue.point_to_previous_text()  # Point to previous text
                     self.start_dialogue()  # Start dialogue
         if getattr(self.dialogue_box, 'next_button', None):
+            self.dialogue_box.next_button.handle_mouse_up()
             if self.dialogue_box.next_button.is_clicked(event):
                 if self.button_flags["next"]:
-                    print(f"Next button released")
-                    self.dialogue_box.next_button.handle_mouse_up(event)
                     self.dialogue.point_to_next_text()  # Point to next text
                     self.start_dialogue()  # Start dialogue
         if getattr(self.dialogue_box, 'generate_quest_button', None):
+            self.dialogue_box.generate_quest_button.handle_mouse_up()
             if self.dialogue_box.generate_quest_button.is_clicked(event):
                 if self.button_flags["generate_quest"]:
-                    print(f"Generate quest button released")
-                    self.dialogue_box.generate_quest_button.handle_mouse_up(event)
                     self.generate_quest_button_visible = False
                     return "generate_quest"
         if getattr(self.dialogue_box, 'accept_button', None):
+            self.dialogue_box.accept_button.handle_mouse_up()
             if self.dialogue_box.accept_button.is_clicked(event):
                 if self.button_flags["accept_quest"]:
-                    print(f"Accept button released")
-                    self.dialogue_box.accept_button.handle_mouse_up(event)
                     self.reset_dialogue()
                     return "accept_quest"
         if getattr(self.dialogue_box, 'decline_button', None):
+            self.dialogue_box.decline_button.handle_mouse_up()
             if self.dialogue_box.decline_button.is_clicked(event):
                 if self.button_flags["decline_quest"]:
-                    print(f"Decline button released")
-                    self.dialogue_box.decline_button.handle_mouse_up(event)
                     self.reset_dialogue()
                     return "decline_quest"
         if getattr(self.dialogue_box, 'end_quest_button', None):
+            self.dialogue_box.end_quest_button.handle_mouse_up()
             if self.dialogue_box.end_quest_button.is_clicked(event):
                 if self.button_flags["end_quest"]:
-                    print(f"End quest button released")
-                    self.dialogue_box.end_quest_button.handle_mouse_up(event)
                     self.reset_dialogue()
                     return "end_quest"
 

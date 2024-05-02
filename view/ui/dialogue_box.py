@@ -6,16 +6,21 @@ from view.ui.button import Button
 
 class DialogueBox(PopupBox):
     def __init__(self, screen):
-        width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 4
+        width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 3-20
         super().__init__(screen, width, height)
         self.default_button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
         self.default_pressed_button_image = pygame.image.load("./assets/buttons/wood_button_pressed.png").convert_alpha()
         self.accept_button = None
         self.decline_button = None
+        self.text_offsets = {
+            "small": 2,
+            "medium": 4,
+            "large": 6,
+        }
 
         self.fonts = {
-            "name": pygame.font.SysFont("Arial", 24),
-            "text": pygame.font.SysFont("Arial", 16),
+            "name": pygame.font.SysFont("Arial", 26),
+            "text": pygame.font.SysFont("Arial", 18),
             "exit": pygame.font.SysFont("Arial", 24),
             "button": pygame.font.SysFont("Arial", 20),
             "accept_deny": pygame.font.SysFont("Arial", 20)
@@ -32,7 +37,7 @@ class DialogueBox(PopupBox):
     def create_dialogue(self, npc_name, dialogue_text):
         #Width and Height offset compared to the parent surface
         self.width_offset = 10
-        self.height_offset = 2*view_cst.HEIGHT // 3-10
+        self.height_offset = 2*view_cst.HEIGHT // 3-50
         self.rect.topleft = (self.width_offset, self.height_offset)
         self.surface.fill(self.background_color)
 
@@ -42,7 +47,7 @@ class DialogueBox(PopupBox):
 
         # Use the wrap_text function to get the lines of dialogue
         lines = wrap_text(dialogue_text, self.width - 20, self.fonts["text"], view_cst.TEXT_COLOR)
-        y_offset = 60
+        y_offset = 80  # Start below the name
         for line_surface in lines:
             # Calculate the x position to center the line
             line_width = line_surface.get_width()
@@ -52,28 +57,40 @@ class DialogueBox(PopupBox):
             self.surface.blit(line_surface, (x_offset, y_offset))
             y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
 
-        self.create_close_button(self.exit_font, view_cst.TEXT_COLOR)
+        self.create_close_button()
 
         self.show = True
 
+
+    def create_close_button(self):
+        button_width = 30
+        button_height = 35
+        if getattr(self, 'close_button', None):
+            self.render_close_button()
+        else:
+            self.close_button = Button(self.default_button_image, self.fonts["exit"], button_width, button_height, self.text_offsets["small"],
+                                        (self.width - button_width - 10, 10), "X", self.rect.topleft,
+                                        pressed_image=self.default_pressed_button_image)
+            self.render_close_button()
+
     def create_prev_button(self):
-        button_width = 100
-        button_height = 50
+        button_width = 80
+        button_height = 40
         if getattr(self, 'prev_button', None):
             self.render_prev_button()
         else:
-            self.prev_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height,
+            self.prev_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height, self.text_offsets["medium"],
                                       (10, self.height - button_height - 10), "Prev", self.rect.topleft,
                                       pressed_image=self.default_pressed_button_image)
             self.render_prev_button()
 
     def create_next_button(self):
-        button_width = 100
-        button_height = 50
+        button_width = 80
+        button_height = 40
         if getattr(self, 'next_button', None):
             self.render_next_button()
         else:
-            self.next_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height,
+            self.next_button = Button(self.default_button_image, self.fonts["button"], button_width, button_height, self.text_offsets["medium"],
                                       (self.width - button_width - 10, self.height - button_height - 10), "Next", self.rect.topleft,
                                       pressed_image=self.default_pressed_button_image)
             self.render_next_button()
@@ -86,10 +103,10 @@ class DialogueBox(PopupBox):
         if getattr(self, 'accept_button', None) and getattr(self, 'decline_button', None):
             self.render_accept_decline_buttons()
         else:
-            self.accept_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+            self.accept_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height, self.text_offsets["large"],
                                         (self.width // 3 - button_width/2, self.height - button_height - 10),
                                         "Accept", self.rect.topleft, pressed_image=self.default_pressed_button_image)
-            self.decline_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+            self.decline_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height, self.text_offsets["large"],
                                          (2*self.width // 3 - button_width/2, self.height - button_height - 10),
                                          "Decline", self.rect.topleft, pressed_image=self.default_pressed_button_image)
             self.render_accept_decline_buttons()
@@ -100,7 +117,7 @@ class DialogueBox(PopupBox):
         if getattr(self, 'end_quest_button', None):
             self.render_end_quest_button()
         else:
-            self.end_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+            self.end_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height, self.text_offsets["large"],
                                         (self.width // 2 - button_width/2, self.height - button_height - 10),
                                         "End quest", self.rect.topleft, pressed_image=self.default_pressed_button_image)
             self.render_end_quest_button()
@@ -112,17 +129,14 @@ class DialogueBox(PopupBox):
         if getattr(self, 'generate_quest_button', None):
             self.render_generate_quest_button()
         else:
-            self.generate_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height,
+            self.generate_quest_button = Button(self.default_button_image, self.fonts["accept_deny"], button_width, button_height, self.text_offsets["large"],
                                         (self.width // 2 - button_width/2, self.height - button_height - 10),
                                         "Generate quest", self.rect.topleft, pressed_image=self.default_pressed_button_image)
             self.render_generate_quest_button()
 
-    def create_close_button(self, font, color):
-        close_button_text = font.render("X", True, color)
-        close_button_rect = close_button_text.get_rect(topright=(self.width - 10, 10))
-        pygame.draw.rect(self.surface, self.background_color, close_button_rect)
-        self.surface.blit(close_button_text, close_button_rect)
-        self.close_button_rect = pygame.Rect(self.rect.topright[0] - 40, self.rect.topright[1], 40, 40)
+
+    def render_close_button(self):
+        self.close_button.draw(self.surface)
 
     def render_accept_decline_buttons(self):
         self.accept_button.draw(self.surface)
