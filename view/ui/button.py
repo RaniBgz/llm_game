@@ -15,6 +15,7 @@ class Button(pygame.sprite.Sprite):
         self.text_render = self.font.render(self.text, True, view_cst.TEXT_COLOR)
         self.text_rect = self.text_render.get_rect()
 
+        print("Button relative position: ", relative_position)
         self.rect.topleft = (relative_position[0], relative_position[1])
 
         self.text_rect.center = self.rect.center

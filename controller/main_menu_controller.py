@@ -7,30 +7,48 @@ class MainMenuController:
     def __init__(self, game_data, view):
         self.game_data = game_data
         self.view = view
+        self.button_flags = {
+            "play": False,
+            "quit": False
+        }
 
     def run(self):
         while True:
+            self.view.display_menu()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    # self.view.play_button.handle_events(event)
-                    # self.view.quit_button.handle_events(event)
-                    if self.view.play_button.rect.collidepoint(event.pos):
-                        #TODO: Instead of starting game from the main menu, update the observer (game controller) and let it handle the transition
-                        print(f"Rect position: {self.view.play_button.rect.topleft}")
-                        self.start_game()
-                    elif self.view.quit_button.rect.collidepoint(event.pos):  # Add quit handling
-                        print(f"Rect position: {self.view.quit_button.rect.topleft}")
-                        pygame.quit()
-                        sys.exit()
-                elif event.type == pygame.MOUSEBUTTONUP:
-                    pass
-                    # self.view.play_button.handle_events(event)
-                    # self.view.quit_button.handle_events(event)
+                self.handle_events(event)
 
-            self.view.display_menu()
+    def handle_events(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.handle_mouse_down_event(event)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            self.handle_mouse_up_event(event)
+
+    def handle_mouse_down_event(self, event):
+        if getattr(self.view, 'quit_button', None):
+            if self.view.quit_button.is_clicked(event):
+                self.view.quit_button.handle_mouse_down()
+                self.button_flags["quit"] = True
+        if getattr(self.view, 'play_button', None):
+            if self.view.play_button.is_clicked(event):
+                self.view.play_button.handle_mouse_down()
+                self.button_flags["play"] = True
+
+    def handle_mouse_up_event(self, event):
+        if getattr(self.view, 'quit_button', None):
+            self.view.quit_button.handle_mouse_up()
+            if self.view.quit_button.is_clicked(event):
+                if self.button_flags["quit"]:
+                    pygame.quit()
+                    sys.exit()
+        if getattr(self.view, 'play_button', None):
+            self.view.play_button.handle_mouse_up()
+            if self.view.play_button.is_clicked(event):
+                if self.button_flags["play"]:
+                    self.start_game()
 
     def start_game(self):
         # Transition to the main game
