@@ -47,3 +47,11 @@ class MainMenuView:
 
     def render_play_button(self):
         self.play_button.draw(self.surface)
+
+    def render_loading_screen(self):
+        self.surface.fill(view_cst.BLACK)
+        loading_text = pygame.font.SysFont("Arial", 30).render("Loading...", True, view_cst.WHITE)
+        loading_rect = loading_text.get_rect(center=(view_cst.WIDTH / 2, view_cst.HEIGHT / 2))
+        self.surface.blit(loading_text, loading_rect)
+        self.screen.blit(self.surface, (0, 0))
+        pygame.display.flip()

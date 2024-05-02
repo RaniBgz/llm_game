@@ -48,6 +48,7 @@ class MainMenuController:
             self.view.play_button.handle_mouse_up()
             if self.view.play_button.is_clicked(event):
                 if self.button_flags["play"]:
+                    self.view.render_loading_screen()
                     self.start_game()
 
     def start_game(self):

@@ -1,5 +1,6 @@
 import os
 import json
+import asyncio
 import ai.llm.functions_paths as fp
 from dotenv import load_dotenv
 from groq import Groq
@@ -31,28 +32,10 @@ class LLMModel():
         return client
 
     def load_config(self, config_path):
-        # try:
-        #     with open(self.config_dir / config_file, 'r') as file:
-        #         return json.load(file)
-        # except (FileNotFoundError, json.JSONDecodeError) as e:
-        #     raise ValueError(f"Error loading configuration file {config_file}: {e}") from e
-
         with open(config_path, 'r') as file:
             return json.load(file)
 
     def parse_template(self, template_path, **kwargs):
-        # try:
-        #     with open(self.config_dir / template_file, 'r') as file:
-        #         template = file.read()
-        #
-        #     # Replace placeholders  with values provided in kwargs
-        #     for key, value in kwargs.items():
-        #         placeholder = f"{{${key}}}"
-        #         template = template.replace(placeholder, str(value))
-        #
-        #     return template
-        # except FileNotFoundError as e:
-        #     raise ValueError(f"Error opening template file {template_file}: {e}") from e
         with open(template_path, 'r') as file:
             template = file.read()
 
@@ -75,7 +58,7 @@ class LLMModel():
         # Parse the template with the given variables
         return self.parse_template(template_path, **kwargs)
 
-    def generate_quest_with_context(self, game_context, genre, difficulty):
+    async def generate_quest_with_context(self, game_context, genre, difficulty):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
         prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
         formatted_prompt = self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
@@ -92,26 +75,23 @@ class LLMModel():
 
         return chat_completion.choices[0].message.content
 
-    def generate_quest_dialogue(self, quest_json):
+    async def generate_quest_dialogue(self, quest_json):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'config.json')
         prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'prompt_template.txt')
         formatted_prompt = self.build_prompt(config_path, prompt_template_path, quest_json=quest_json)
         return formatted_prompt
 
 
-
-if __name__ == "__main__":
+async def main():
     model = LLMModel("llama3-8b-8192")
     game_context = "You are a brave knight on a quest to save the kingdom from a dragon"
     genre = "fantasy"
     difficulty = "easy"
 
-    generated_quest = model.generate_quest_with_context(game_context, genre, difficulty)
+    generated_quest = await model.generate_quest_with_context(game_context, genre, difficulty)
     print(f"Generated quest: {generated_quest}")
 
-    # quest_config_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
-    # prompt_template_path = os.path.join(model.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
-    # # json_file = model.load_config(quest_config_path)
-    # quest_prompt = model.build_prompt(quest_config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
-    # print(f"Generated quest: {quest_prompt}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
 
