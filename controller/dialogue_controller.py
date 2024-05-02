@@ -115,7 +115,9 @@ class DialogueController:
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.handle_mouse_down(event)
         elif event.type == pygame.MOUSEBUTTONUP:
-            self.handle_mouse_up(event)
+            return_code = self.handle_mouse_up(event)
+            if return_code:
+                return return_code
 
     def handle_mouse_down(self, event):
         if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
@@ -145,6 +147,11 @@ class DialogueController:
                 self.dialogue_box.decline_button.handle_mouse_down(event)
                 print(f"Decline button clicked")
                 self.button_flags["decline_quest"] = True
+        if getattr(self.dialogue_box, 'end_quest_button', None):
+            if self.dialogue_box.end_quest_button.is_clicked(event):
+                self.dialogue_box.end_quest_button.handle_mouse_down(event)
+                print(f"End quest button clicked")
+                self.button_flags["end_quest"] = True
 
 
     def handle_mouse_up(self, event):
@@ -174,13 +181,22 @@ class DialogueController:
                 if self.button_flags["accept_quest"]:
                     print(f"Accept button released")
                     self.dialogue_box.accept_button.handle_mouse_up(event)
+                    self.reset_dialogue()
                     return "accept_quest"
         if getattr(self.dialogue_box, 'decline_button', None):
             if self.dialogue_box.decline_button.is_clicked(event):
                 if self.button_flags["decline_quest"]:
                     print(f"Decline button released")
                     self.dialogue_box.decline_button.handle_mouse_up(event)
+                    self.reset_dialogue()
                     return "decline_quest"
+        if getattr(self.dialogue_box, 'end_quest_button', None):
+            if self.dialogue_box.end_quest_button.is_clicked(event):
+                if self.button_flags["end_quest"]:
+                    print(f"End quest button released")
+                    self.dialogue_box.end_quest_button.handle_mouse_up(event)
+                    self.reset_dialogue()
+                    return "end_quest"
 
         for flag in self.button_flags: #Reset all flags
             self.button_flags[flag] = False

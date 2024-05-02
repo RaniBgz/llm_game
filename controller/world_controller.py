@@ -73,15 +73,13 @@ class WorldController:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.handle_mouse_down_event(event)
-        elif event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP:
             self.handle_mouse_up_event(event)
-        # elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-        #     print(f"Mouse clicked")
-        #     self.handle_mouse_event(event)
-        elif event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             self.handle_key_down(event.key)
-        elif event.type == pygame.KEYUP:
+        if event.type == pygame.KEYUP:
             self.handle_key_up(event.key)
+
         menu_return_code = self.view.handle_game_menu_events(event)
         self.open_menu(menu_return_code)
 
@@ -145,6 +143,13 @@ class WorldController:
             if item_rect.collidepoint(pos) and item == self.clicked_item:
                 self.handle_item_interaction(pos, button)
                 self.clicked_item = None
+
+        # menu_return_code = self.view.handle_game_menu_events(event)
+        # self.open_menu(menu_return_code)
+        #
+        # dialogue_return_code = self.view.handle_dialogue_events(event)
+        # print(f"Dialogue return code: {dialogue_return_code}")
+        # self.handle_dialogue_return(dialogue_return_code)
 
     # def handle_mouse_event(self, event):
     #     pos = event.pos

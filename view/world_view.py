@@ -109,16 +109,6 @@ class WorldView(Observer):
         self.npc_info_box.show = True
 
 
-    # async def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
-    #     self.dialogue_controller = DialogueController(
-    #         self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
-    #
-    #     self.dialogue_controller.start_dialogue()
-    #     # self.dialogue_controller.run()
-    #     # self.dialogue_box.create_dialogue(npc, dialogue_text)
-    #     self.dialogue_box.show = True
-
-
     def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
         print(f"Creating dialogue box for {npc.name}")
         self.dialogue_controller = DialogueController(
@@ -210,7 +200,6 @@ class WorldView(Observer):
         self.game_menu_bar.display()
         self.dialogue_box.display()
         if self.dialogue_box.show:
-            print(f"Rendering dialogue box")
             self.dialogue_controller.render_dialogue_box()
         self.item_info_box.display()
         self.npc_info_box.display()
