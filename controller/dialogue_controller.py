@@ -133,7 +133,6 @@ class DialogueController:
     def handle_mouse_down(self, event):
         # if self.dialogue_box.close_button_rect and self.dialogue_box.close_button_rect.collidepoint(event.pos):
         #     self.reset_dialogue()
-
         if getattr(self.dialogue_box, 'close_button', None): #Check prev button exists
             if self.dialogue_box.close_button.is_clicked(event):
                 self.dialogue_box.close_button.handle_mouse_down()

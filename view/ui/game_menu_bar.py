@@ -27,7 +27,7 @@ class GameMenuBar:
 
 
         button_color = view_cst.DARK_GRAY
-        button_hover_color = view_cst.LIGHT_GRAY
+        button_click_color = view_cst.LIGHT_GRAY
         text_color = view_cst.SCI_FI_BLUE_5
         button_border_color = view_cst.DARK_GRAY_2
         button_border_width = 2
@@ -44,7 +44,7 @@ class GameMenuBar:
             text_rect = text.get_rect(center=button_rect.center)
 
             # Add the button and text to the list of buttons
-            self.buttons.append((button_surface, button_rect, text, text_rect, button_hover_color))
+            self.buttons.append((button_surface, button_rect, text, text_rect, button_click_color))
 
     def display(self):
         for button_surface, button_rect, text, text_rect, _ in self.buttons:
