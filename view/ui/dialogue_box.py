@@ -61,11 +61,15 @@ class DialogueBox(PopupBox):
             self.surface.blit(line_surface, (x_offset, y_offset))
             y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
 
-        self.show = True
+        # self.show = True
+
+    def reinitialize_close_button(self):
+        self.close_button = None
 
     def create_close_button(self):
         button_width = 30
         button_height = 35
+        #TODO: fix this when changing dialogue type: previous button will be re-displayed
         if getattr(self, 'close_button', None):
             self.render_close_button()
         else:
@@ -125,7 +129,7 @@ class DialogueBox(PopupBox):
 
 
     def create_generate_quest_button(self):
-        button_width = 150
+        button_width = 200
         button_height = 50
         if getattr(self, 'generate_quest_button', None):
             self.render_generate_quest_button()

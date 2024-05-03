@@ -167,7 +167,6 @@ class WorldController:
     async def process_quest_generation(self, llm_model):
         quest, quest_dialogue = await self.quest_builder.generate_quest_and_dialogue(llm_model)
         self.quest_manager.add_quest_with_dialogue_to_current_npc(quest, quest_dialogue)
-        self.view.dialogue_controller.generate_quest_button_visible = True  # Re-enable the button
         self.view.dialogue_controller.handle_generate_quest_button_logic()  # Update button visibility
 
     def handle_npc_interaction(self, pos, button):

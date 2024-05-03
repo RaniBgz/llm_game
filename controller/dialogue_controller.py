@@ -7,14 +7,13 @@ from view import view_constants as view_cst
 class DialogueController:
     def __init__(self, screen, dialogue_box, npc, character, dialogue, dialogue_type="chat"):
         self.screen = screen
-        self.dialogue_box = dialogue_box
         self.npc = npc
+        self.dialogue_box = dialogue_box
+        self.set_npc_type()
         self.character = character
         self.dialogue = dialogue
         self.dialogue_type = dialogue_type
         self.dialogue_length = self.dialogue.get_dialogue_length()
-        self.set_npc_type()
-        self.generate_quest_button_visible = True
         self.button_flags = {
             "close": False, #Close button flag
             "generate_quest": False,
@@ -80,6 +79,7 @@ class DialogueController:
 
     def reset_dialogue(self):
         self.dialogue_box.show = False
+        self.dialogue_box.reinitialize_close_button()
         self.dialogue.current_text_index = 0
         self.dialogue_length = self.dialogue.get_dialogue_length()
 
@@ -108,13 +108,16 @@ class DialogueController:
         if(self.dialogue_index == self.dialogue_length - 1) and self.dialogue_type == "quest_initialization":
             self.button_displayed["accept_quest"] = True
             self.button_displayed["decline_quest"] = True
-            # self.dialogue_box.create_accept_decline_buttons()
+        else:
+            self.button_displayed["accept_quest"] = False
+            self.button_displayed["decline_quest"] = False
         if(self.dialogue_index == self.dialogue_length - 1) and self.dialogue_type == "quest_completion":
             self.button_displayed["end_quest"] = True
-            # self.dialogue_box.create_end_quest_button()
+        else:
+            self.button_displayed["end_quest"] = False
 
     def handle_generate_quest_button_logic(self):
-        if self.dialogue_index == 0 and self.generate_quest_button_visible:
+        if self.dialogue_index == 0:
             self.button_displayed["generate_quest"] = True
         else:
             self.button_displayed["generate_quest"] = False
