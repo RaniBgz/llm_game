@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import asyncio
 import ai.llm.functions_paths as fp
@@ -58,7 +59,43 @@ class LLMModel():
         # Parse the template with the given variables
         return self.parse_template(template_path, **kwargs)
 
-    async def generate_quest_with_context(self, game_context, genre, difficulty):
+    # def extract_json(self, content):
+    #     # This regex looks for content encapsulated within ```json and ```
+    #     # and captures everything in between, across multiple lines.
+    #     match = re.search(r"```\n([\s\S]*?)\n```", content)
+    #     if match:
+    #         json_string = match.group(1)
+    #         try:
+    #             # Attempt to parse the extracted string into a Python dictionary
+    #             json_data = json.loads(json_string)
+    #             return json_data
+    #         except json.JSONDecodeError as e:
+    #             print("Failed to decode JSON:", e)
+    #             return None
+    #     else:
+    #         print("No JSON content found.")
+    #         return None
+
+    def extract_json(self, content):
+        try:
+            # Find the first opening curly brace
+            start_index = content.index('{')
+            # Find the last closing curly brace
+            end_index = content.rindex('}') + 1
+            # Extract the substring that is likely the JSON
+            json_string = content[start_index:end_index]
+            # Attempt to parse the string into a Python dictionary
+            json_data = json.loads(json_string)
+            return json_data
+        except ValueError as e:
+            # Error handling if '{' or '}' are not found, or json.loads() fails
+            print("Error extracting JSON:", e)
+            return None
+        except json.JSONDecodeError as e:
+            print("Failed to decode JSON:", e)
+            return None
+
+    async def generate_unit_quest_with_context(self, game_context, genre, difficulty):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'config.json')
         prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_WITH_CONTEXT, 'prompt_template.txt')
         formatted_prompt = self.build_prompt(config_path, prompt_template_path, game_context=game_context, genre=genre, difficulty=difficulty)
@@ -72,14 +109,31 @@ class LLMModel():
             ],
             model=self.model_name,
         )
+        print(f"Generated quest before json extraction: {chat_completion.choices[0].message.content}")
 
-        return chat_completion.choices[0].message.content
+        quest_json = self.extract_json(chat_completion.choices[0].message.content)
 
-    async def generate_quest_dialogue(self, quest_json):
+        return quest_json
+
+    async def generate_unit_quest_dialogue(self, quest_json):
         config_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'config.json')
         prompt_template_path = os.path.join(self.path_to_functions, fp.UNIT_QUEST_DIALOGUE, 'prompt_template.txt')
         formatted_prompt = self.build_prompt(config_path, prompt_template_path, quest_json=quest_json)
-        return formatted_prompt
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        print(f"Generated dialogue before json extraction: {chat_completion.choices[0].message.content}")
+
+        dialogue_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        return dialogue_json
 
 
 async def main():
@@ -88,8 +142,12 @@ async def main():
     genre = "fantasy"
     difficulty = "easy"
 
-    generated_quest = await model.generate_quest_with_context(game_context, genre, difficulty)
-    print(f"Generated quest: {generated_quest}")
+    quest_json = await model.generate_unit_quest_with_context(game_context, genre, difficulty)
+    print(f"Generated quest: {quest_json}")
+
+    dialogue_json = await model.generate_unit_quest_dialogue(quest_json)
+
+    print(f"Generated dialogue: {dialogue_json}")
 
 
 if __name__ == "__main__":

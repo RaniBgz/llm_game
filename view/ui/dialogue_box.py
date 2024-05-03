@@ -8,8 +8,8 @@ class DialogueBox(PopupBox):
     def __init__(self, screen):
         width, height = view_cst.WIDTH - 20, view_cst.HEIGHT // 3-20
         super().__init__(screen, width, height)
-        self.default_button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
-        self.default_pressed_button_image = pygame.image.load("./assets/buttons/wood_button_pressed.png").convert_alpha()
+        self.default_button_image = None #pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
+        self.default_pressed_button_image = None #pygame.image.load("./assets/buttons/wood_button_pressed.png").convert_alpha()
         self.accept_button = None
         self.decline_button = None
         self.text_offsets = {
@@ -34,6 +34,10 @@ class DialogueBox(PopupBox):
     def set_name_color(self, color):
         self.name_color = color
 
+    def set_button_images(self, default_button_image, default_pressed_button_image):
+        self.default_button_image = pygame.image.load(default_button_image).convert_alpha()
+        self.default_pressed_button_image = pygame.image.load(default_pressed_button_image).convert_alpha()
+
     def create_dialogue(self, npc_name, dialogue_text):
         #Width and Height offset compared to the parent surface
         self.width_offset = 10
@@ -57,10 +61,7 @@ class DialogueBox(PopupBox):
             self.surface.blit(line_surface, (x_offset, y_offset))
             y_offset += line_surface.get_height() + 5  # Adjust spacing between lines
 
-        self.create_close_button()
-
         self.show = True
-
 
     def create_close_button(self):
         button_width = 30

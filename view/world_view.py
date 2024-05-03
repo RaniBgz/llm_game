@@ -111,12 +111,9 @@ class WorldView(Observer):
 
     def create_dialogue_box(self, npc, character, dialogue, dialogue_type):
         print(f"Creating dialogue box for {npc.name}")
-        self.dialogue_controller = DialogueController(
-            self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
-
-        self.dialogue_box.show = True
+        self.dialogue_controller = DialogueController(self.screen, self.dialogue_box, npc, character, dialogue, dialogue_type)
         self.dialogue_controller.start_dialogue()
-        # self.dialogue_box.create_dialogue(npc, dialogue_text)
+        self.dialogue_box.show = True
 
     def create_item_info_box(self, item, item_rect):
         print(f"Creating item info box for {item.name}")
@@ -170,7 +167,6 @@ class WorldView(Observer):
     def render_background(self):
         self.screen.fill(view_cst.WHITE)
 
-
     def render_character(self):
         self.screen.blit(self.character_image, self.character_rect)
 
@@ -198,9 +194,9 @@ class WorldView(Observer):
         self.render_items()
         self.render_coordinates(x, y)
         self.game_menu_bar.display()
-        self.dialogue_box.display()
         if self.dialogue_box.show:
             self.dialogue_controller.render_dialogue_box()
+            self.dialogue_box.display()
         self.item_info_box.display()
         self.npc_info_box.display()
         pygame.display.flip()

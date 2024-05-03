@@ -35,16 +35,20 @@ class DialogueController:
         }
 
     def set_npc_type(self):
+        print("Setting NPC type")
         if self.npc.robot:
             print(f"NPC is a robot")
             self.npc_type = "robot"
             self.dialogue_box.set_background_color(view_cst.LIGHT_GRAY)
             self.dialogue_box.set_name_color(view_cst.SCI_FI_BLUE_5)
+            self.dialogue_box.set_button_images(view_cst.STONE_BUTTON, view_cst.STONE_BUTTON_PRESSED)
         else:
             print(f"NPC is a human")
             self.npc_type = "human"
             self.dialogue_box.set_background_color(view_cst.PARCHMENT_COLOR)
             self.dialogue_box.set_name_color(view_cst.COFFEE_BROWN_3)
+            self.dialogue_box.set_button_images(view_cst.WOOD_BUTTON, view_cst.WOOD_BUTTON_PRESSED)
+
 
 
     def start_dialogue(self):
@@ -71,11 +75,13 @@ class DialogueController:
             self.dialogue_box.create_accept_decline_buttons()
         if self.button_displayed["end_quest"]:
             self.dialogue_box.create_end_quest_button()
+        if self.button_displayed["close"]:
+            self.dialogue_box.create_close_button()
 
     def reset_dialogue(self):
+        self.dialogue_box.show = False
         self.dialogue.current_text_index = 0
         self.dialogue_length = self.dialogue.get_dialogue_length()
-        self.dialogue_box.show = False
 
     #TODO: fix that, the buttons are probably not created properly
     #TODO: add button flags

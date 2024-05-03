@@ -44,10 +44,16 @@ COFFEE_BROWN_3 = (111, 78, 55)  # A darker coffee brown color for text
 # ARIAL_20 = pygame.font.SysFont("Arial", 20)
 # ARIAL_16 = pygame.font.SysFont("Arial", 16)
 
-
-
 ''' Menu constants '''
 QUEST_MENU = "quests"
 INVENTORY_MENU = "inventory"
 MAP_MENU = "map"
 SETTINGS_MENU = "settings"
+
+''' Dialogue constants '''
+
+''' Button constants '''
+WOOD_BUTTON = "./assets/buttons/wood_button.png"
+WOOD_BUTTON_PRESSED = "./assets/buttons/wood_button_pressed.png"
+STONE_BUTTON = "./assets/buttons/stone_button.png"
+STONE_BUTTON_PRESSED = "./assets/buttons/stone_button_pressed.png"

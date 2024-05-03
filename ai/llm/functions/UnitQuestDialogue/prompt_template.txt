@@ -30,7 +30,5 @@ Output the QuestDialogue object as a JSON string, following the provided format:
   ]
 }
 
-+++++
-{$quest_json}
-+++++
+The output should be a JSON ONLY WITH NOTHING ELSE.
 

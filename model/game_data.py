@@ -1,7 +1,8 @@
 from model.map.map import Map
 from model.quest.quest_builder import QuestBuilder
 from model.map.world_map import WorldMap
-from ai.old_llm.llm_model import LLMModel
+# from ai.old_llm.llm_model import LLMModel
+from ai.llm.llm_model import LLMModel
 import database.utils as utils
 from sentence_transformers import SentenceTransformer, util
 
@@ -12,7 +13,7 @@ class GameData:
         self.character = None
         self.world_map = WorldMap.get_instance()
         self.initialize_world()
-        self.llm_model = LLMModel("gpt-3.5-turbo-1106")
+        self.llm_model = LLMModel("llama3-8b-8192")
         self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
         self.npcs = []
         self.items = []
@@ -22,8 +23,8 @@ class GameData:
     def initialize_world(self):
         self.world_map.build_map(20, 20)
 
-    def embed_text(self, text):
-        return self.embedding_model.encode(text, convert_to_numpy=True)
+    # def embed_text(self, text):
+    #     return self.embedding_model.encode(text, convert_to_numpy=True)
 
     #TODO: this may change a lot in the future
     def get_llm_model(self):

@@ -11,7 +11,7 @@ class DBRetriever:
     def __init__(self):
         self.conn = None
         self.conn = self.connect_to_db()
-        self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
+        self.embedding_model = None
 
     def connect_to_db(self):
         try:
@@ -30,6 +30,8 @@ class DBRetriever:
             return conn
 
     def embed_text(self, text):
+        if self.embedding_model is None:
+            self.embedding_model = SentenceTransformer('all-miniLM-L6-v2')
         return self.embedding_model.encode(text, convert_to_numpy=True)
 
     def ensure_connection(self):
