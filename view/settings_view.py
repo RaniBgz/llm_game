@@ -67,6 +67,32 @@ class SettingsView:
 
         pygame.display.flip()
 
+    # def handle_events(self, event):
+    #     if event.type == pygame.MOUSEBUTTONDOWN:
+    #         self.handle_mouse_down_event(event)
+    #     elif event.type == pygame.MOUSEBUTTONUP:
+    #         self.handle_mouse_up_event(event)
+    #
+    # def handle_mouse_down_event(self, event):
+    #     for i, (button_surface, button_rect, text, text_rect) in enumerate(self.buttons):
+    #         if button_rect.collidepoint(event.pos):
+    #             # Change the button color to the hover color
+    #             button_surface.fill(self.button_hover_color)
+    #             pygame.draw.rect(button_surface, self.button_border_color, button_surface.get_rect(), self.button_border_width)
+    #             self.buttons[i] = (button_surface, button_rect, text, text_rect)
+    #             self.selected_button_index = i
+    #
+    # def handle_mouse_up_event(self, event):
+    #     for i, (button_surface, button_rect, text, text_rect) in enumerate(self.buttons):
+    #         if button_rect.collidepoint(event.pos):
+    #             # Change the button color back to the original color
+    #             button_surface.fill(self.button_color)
+    #             pygame.draw.rect(button_surface, self.button_border_color, button_surface.get_rect(), self.button_border_width)
+    #             self.buttons[i] = (button_surface, button_rect, text, text_rect)
+    #             if self.selected_button_index == i:
+    #                 return self.selected_button_index
+    #     self.selected_button_index = None
+
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             clicked_button = self.handle_button_click(event)

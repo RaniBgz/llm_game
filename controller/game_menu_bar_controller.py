@@ -21,11 +21,14 @@ class GameMenuBarController():
                 return return_code
 
     def handle_mouse_down_event(self, event):
-        for button_surface, button_rect, text, text_rect, button_hover_color in self.view.buttons:
+        for i, (button_surface, button_rect, text, text_rect, button_click_color) in enumerate(self.view.buttons):
             if button_rect.collidepoint(event.pos):
+                button_surface.fill(button_click_color)
+                pygame.draw.rect(button_surface, view_cst.DARK_GRAY_2, button_surface.get_rect(), 2)
+                self.view.buttons[i] = (button_surface, button_rect, text, text_rect, button_click_color)
                 # Handle menu item click event
                 menu_item_clicked = self.view.menu_items[
-                    self.view.buttons.index((button_surface, button_rect, text, text_rect, button_hover_color))]
+                    self.view.buttons.index((button_surface, button_rect, text, text_rect, button_click_color))]
                 if menu_item_clicked == "Quests":
                     self.menu_items_flags["Quests"] = True
                 if menu_item_clicked == "Inventory":
@@ -36,11 +39,15 @@ class GameMenuBarController():
                     self.menu_items_flags["Settings"] = True
 
     def handle_mouse_up_event(self, event):
-        for button_surface, button_rect, text, text_rect, button_hover_color in self.view.buttons:
+        for i, (button_surface, button_rect, text, text_rect, button_color) in enumerate(self.view.buttons):
             if button_rect.collidepoint(event.pos):
+                button_surface.fill(view_cst.DARK_GRAY)
+                pygame.draw.rect(button_surface, view_cst.DARK_GRAY_2, button_surface.get_rect(), 2)
+                self.view.buttons[i] = (button_surface, button_rect, text, text_rect, button_color)
+
                 # Handle menu item click event
                 menu_item_clicked = self.view.menu_items[
-                    self.view.buttons.index((button_surface, button_rect, text, text_rect, button_hover_color))]
+                    self.view.buttons.index((button_surface, button_rect, text, text_rect, button_color))]
                 if menu_item_clicked == "Quests":
                     if self.menu_items_flags["Quests"]:
                         self.menu_items_flags["Quests"] = False
