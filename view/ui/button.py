@@ -40,7 +40,6 @@ class Button(pygame.sprite.Sprite):
         # if self.is_clicked(event):
         #     print(f"Button {self.text} clicked")
 
-
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.handle_mouse_up(event)
