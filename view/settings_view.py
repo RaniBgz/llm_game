@@ -16,8 +16,8 @@ class SettingsView:
         # Back button
         self.back_button_text = self.font.render("Back", True, view_cst.TEXT_COLOR)
         self.back_button_rect = self.back_button_text.get_rect(topright=(view_cst.WIDTH - 10, 10))
-        self.default_button_image = pygame.image.load("./assets/buttons/stone_button.png").convert_alpha()
-        self.default_pressed_button_image = pygame.image.load("./assets/buttons/stone_button_pressed.png").convert_alpha()
+        self.default_button_image = pygame.image.load(view_cst.STONE_BUTTON).convert_alpha()
+        self.default_pressed_button_image = pygame.image.load(view_cst.STONE_BUTTON_PRESSED).convert_alpha()
 
         self.text_offset = 4
         self.button_width = 240
@@ -69,8 +69,7 @@ class SettingsView:
         self.reset_items_button.draw(self.surface)
 
     def render(self):
-        print("Rendering settings view")
-        self.surface.fill(view_cst.WHITE)
+        self.surface.fill(view_cst.BLUE_GRAY)
         # Render title
         self.surface.blit(self.title_text, self.title_rect)
         # Render back button

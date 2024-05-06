@@ -4,9 +4,9 @@ import pygame
 
 ''' Screen and tile constants'''
 FPS = 60
-WIDTH, HEIGHT = 1280, 720
-H_TILES = 24
-V_TILES = 8
+WIDTH, HEIGHT = 1280, 768
+H_TILES = 20
+V_TILES = 12
 TILE_WIDTH = WIDTH // H_TILES
 TILE_HEIGHT = HEIGHT // V_TILES
 MENU_BUTTON_HEIGHT = TILE_HEIGHT
@@ -35,6 +35,8 @@ SCI_FI_BLUE_5 = (24, 138, 180)
 COFFEE_BROWN = (200, 190, 140)  # A coffee brown color for text
 COFFEE_BROWN_2 = (150, 140, 100)  # A darker coffee brown color for text
 COFFEE_BROWN_3 = (111, 78, 55)  # A darker coffee brown color for text
+EARTH_BROWN = (100, 80, 50)
+BLUE_GRAY = (90, 100, 120)
 
 ''' Fonts '''
 #TODO: Figure out how to initialize fonts

@@ -1,5 +1,6 @@
 from model.map.map import Map
 from view import view_constants as vcst
+from model.map.biome import Biome
 
 class LocalMap(Map):
     def __init__(self):
