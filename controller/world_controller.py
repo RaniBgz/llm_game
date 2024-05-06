@@ -27,9 +27,9 @@ class WorldController:
         self.world_map = WorldMap.get_instance()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0],
                                                          self.game_data.character.global_position[1])
-        self.movement_speed = 5 # tiles per second
+        # self.movement_speed = 3 # tiles per second
         # self.time_to_move_one_tile = view_cst.FPS / self.movement_speed
-        self.time_to_move_one_tile = 0.2
+        self.time_to_move_one_tile = 0.3
         self.accumulated_time = 0.0
         self.move_direction = (0, 0)
         self.clicked_npc = None
