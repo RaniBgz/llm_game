@@ -30,12 +30,12 @@ class WorldView(Observer):
         self.grass_tile = pygame.transform.scale(self.grass_tile, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
 
         self.character_rect = None
+        self.move_direction = "down"
 
         self.initialize_local_map(global_position[0], global_position[1])
 
         self.game_menu_bar = GameMenuBar(screen, pygame.font.SysFont("Arial", 25))
         self.game_menu_bar_controller = GameMenuBarController(self.game_menu_bar)
-
 
     #TODO: The "kill" is currently still handled by the controller and back to the worldview. Need to refactor this to be handled by the observer/subject pattern.
     def update(self, entity, *args, **kwargs):
@@ -50,6 +50,8 @@ class WorldView(Observer):
             elif args[1] == "item_added_to_world":
                 self.initialize_item(entity)
 
+    def set_move_direction(self, direction):
+        self.move_direction = direction
 
     def update_character_position(self, x, y):
         x = x * view_cst.TILE_WIDTH
@@ -90,8 +92,19 @@ class WorldView(Observer):
 
     def initialize_character(self, character):
         print(f"Loading Character: {character.name} at {character.local_position}")
-        self.character_image = pygame.image.load(character.sprite).convert_alpha()
-        self.character_image = pygame.transform.scale(self.character_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+        self.character_image_down = pygame.image.load(character.sprites["down"]).convert_alpha()
+        self.character_image_down = pygame.transform.scale(self.character_image_down, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
+        self.character_image_up = pygame.image.load(character.sprites["up"]).convert_alpha()
+        self.character_image_up = pygame.transform.scale(self.character_image_up, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
+        self.character_image_left = pygame.image.load(character.sprites["left"]).convert_alpha()
+        self.character_image_left = pygame.transform.scale(self.character_image_left, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
+        self.character_image_right = pygame.image.load(character.sprites["right"]).convert_alpha()
+        self.character_image_right = pygame.transform.scale(self.character_image_right, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
+        self.character_image = self.character_image_down
         self.character_rect = self.character_image.get_rect(center=(
             character.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
             character.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
@@ -186,7 +199,15 @@ class WorldView(Observer):
                 tile = self.local_map.tile_grid[i][j]
                 self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
-    def render_character(self):
+    def render_character(self, move_direction):
+        if move_direction == "down":
+            self.character_image = self.character_image_down
+        elif move_direction == "up":
+            self.character_image = self.character_image_up
+        elif move_direction == "left":
+            self.character_image = self.character_image_left
+        elif move_direction == "right":
+            self.character_image = self.character_image_right
         self.screen.blit(self.character_image, self.character_rect)
 
     def render_npcs(self):
@@ -209,7 +230,7 @@ class WorldView(Observer):
     def render(self, x, y):
         self.render_background()
         self.render_npcs()
-        self.render_character()
+        self.render_character(self.move_direction)
         self.render_items()
         self.render_coordinates(x, y)
         self.game_menu_bar.display()

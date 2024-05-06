@@ -1,5 +1,9 @@
 import pygame
 from view import view_constants as view_cst
+from enum import Enum
+class TileType(Enum):
+    GRASS = 1
+    SAND = 2
 
 class Tile:
     def __init__(self, tile_type, image_path):

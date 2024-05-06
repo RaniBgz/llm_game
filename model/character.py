@@ -11,12 +11,18 @@ class Character(Entity):
                  hp,
                  global_position=(0, 0),
                  local_position=(0, 0),
-                 sprite="./assets/sprites/character/character.png",
+                 sprite="./assets/sprites/character/character_idle_up.png",
                  embedding=None):
         super().__init__()
         self.name = name
         self.hp = hp
         self.sprite = sprite
+        self.sprites = {
+            "down": "./assets/sprites/character/character_idle_down.png",
+            "up": "./assets/sprites/character/character_idle_up.png",
+            "left": "./assets/sprites/character/character_idle_left.png",
+            "right": "./assets/sprites/character/character_idle_right.png"
+        }
         self.inventory = []
         self.quests = []
         self.global_position = global_position

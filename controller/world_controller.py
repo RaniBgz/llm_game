@@ -91,12 +91,16 @@ class WorldController:
             self.back_to_main_menu()
         if key == pygame.K_LEFT:
             self.move_direction = (-1, 0)
+            self.view.set_move_direction("left")
         elif key == pygame.K_RIGHT:
             self.move_direction = (1, 0)
+            self.view.set_move_direction("right")
         elif key == pygame.K_UP:
             self.move_direction = (0, -1)
+            self.view.set_move_direction("up")
         elif key == pygame.K_DOWN:
             self.move_direction = (0, 1)
+            self.view.set_move_direction("down")
 
     def handle_key_up(self, key):
         if (key == pygame.K_LEFT and self.move_direction == (-1, 0)) or \
