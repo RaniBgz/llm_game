@@ -22,7 +22,7 @@ class GameMenuBar:
     def create_menu_buttons(self):
         self.buttons = []
         button_width = view_cst.WIDTH // len(self.menu_items) + 1
-        button_height = 2*view_cst.TILE_HEIGHT//3
+        button_height = view_cst.TILE_HEIGHT
         button_y = view_cst.HEIGHT - button_height #- 10
 
 

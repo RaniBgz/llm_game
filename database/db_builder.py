@@ -268,11 +268,34 @@ class DBBuilder():
         conn.commit()
         print("Tables populated successfully")
 
+    def clear_all_tables(self):
+        cursor = self.conn.cursor()
+        try:
+            # Delete all entries from each table
+            cursor.execute("DELETE FROM characters;")
+            cursor.execute("DELETE FROM npcs;")
+            cursor.execute("DELETE FROM items;")
+            self.conn.commit()
+            print("All tables cleared successfully.")
+        except psycopg2.Error as e:
+            print("Error clearing tables:", e)
+        finally:
+            cursor.close()
+
     def close_connection(self):
         self.conn.close()
 
 if __name__ == "__main__":
     db_builder = DBBuilder()
+    db_builder.clear_all_tables()
+    db_builder.populate_tables(db_builder.conn)
+    db_builder.build_character_vectors()
+    db_builder.verify_vectors('characters')
+    db_builder.build_npcs_vectors()
+    db_builder.verify_vectors('npcs')
+    db_builder.build_items_vectors()
+    db_builder.verify_vectors('items')
+
     # db_builder.remove_vector_column('npcs')
     # db_builder.remove_vector_column('items')
     # db_builder.remove_vector_column('characters')
@@ -281,11 +304,6 @@ if __name__ == "__main__":
     # db_builder.add_vector_column('items', vector_dim=data_cst.EMBEDDING_DIM)
     # db_builder.add_vector_column('characters', vector_dim=data_cst.EMBEDDING_DIM)
 
-    # db_builder.build_character_vectors()
-    # db_builder.verify_vectors('characters')
-    # db_builder.build_npcs_vectors()
-    # db_builder.verify_vectors('npcs')
-    # db_builder.build_items_vectors()
-    # db_builder.verify_vectors('items')
+
     db_builder.close_connection()
 

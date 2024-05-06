@@ -70,15 +70,6 @@ class WorldView(Observer):
                 tile.load_image()
                 self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
-        # for i in range(view_cst.H_TILES):
-        #     for j in range(view_cst.V_TILES):
-        #         self.screen.blit(self.grass_tile, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
-        #
-        # #TODO: when tile will be implemented
-        # # for i in range(view_cst.H_TILES):
-        # #     for j in range(view_cst.V_TILES):
-        # #         self.tilemap[i][j].image = self.grass_tile  # Or load based on biome
-        # #
         self.load_entities()
 
     def load_entities(self):
@@ -108,7 +99,7 @@ class WorldView(Observer):
     def initialize_item(self, item):
         print(f"Loading Item: {item.name} at {item.local_position}")
         item_image = pygame.image.load(item.sprite).convert_alpha()
-        item_image = pygame.transform.scale(item_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT//2))
+        item_image = pygame.transform.scale(item_image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
         item_rect = item_image.get_rect(center=(
             item.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
             item.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
@@ -122,6 +113,11 @@ class WorldView(Observer):
             npc.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
             npc.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
         self.npcs.append((npc, npc_image, npc_rect))
+
+    def calculate_aspect_ratio(self, image):
+        width = image.get_width()
+        height = image.get_height()
+        return width / height
 
     def create_npc_info_box(self, npc, npc_rect):
         print(f"Creating NPC info box for {npc.name}")
@@ -189,10 +185,6 @@ class WorldView(Observer):
             for j in range(view_cst.V_TILES):
                 tile = self.local_map.tile_grid[i][j]
                 self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
-        # for i in range(view_cst.H_TILES):
-        #     for j in range(view_cst.V_TILES):
-        #         self.screen.blit(self.grass_tile, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
-        # # self.screen.fill(view_cst.WHITE)
 
     def render_character(self):
         self.screen.blit(self.character_image, self.character_rect)
@@ -216,13 +208,6 @@ class WorldView(Observer):
     #TODO: Optimize rendering. For now, everything is rendered at each frame
     def render(self, x, y):
         self.render_background()
-
-        #TODO: Update the rendering
-        # for i in range(view_cst.H_TILES):
-        #     for j in range(view_cst.V_TILES):
-        #         tile = self.tilemap[i][j]
-        #         self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
-
         self.render_npcs()
         self.render_character()
         self.render_items()

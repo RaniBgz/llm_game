@@ -21,7 +21,7 @@ class GameData:
         self.game_context = ''
 
     def initialize_world(self):
-        self.world_map.build_map(20, 20)
+        self.world_map.build_map(8, 8)
 
     # def embed_text(self, text):
     #     return self.embedding_model.encode(text, convert_to_numpy=True)
