@@ -59,3 +59,6 @@ WOOD_BUTTON = "./assets/buttons/wood_button.png"
 WOOD_BUTTON_PRESSED = "./assets/buttons/wood_button_pressed.png"
 STONE_BUTTON = "./assets/buttons/stone_button.png"
 STONE_BUTTON_PRESSED = "./assets/buttons/stone_button_pressed.png"
+
+''' Tiles constants '''
+GRASS = "./assets/tiles/maps/grass.png"

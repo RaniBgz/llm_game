@@ -26,6 +26,9 @@ class WorldView(Observer):
         self.dialogue_box = DialogueBox(screen)
         self.item_info_box = ItemInfoBox(screen)
 
+        self.grass_tile = pygame.image.load("./assets/maps/tiles/grass.png").convert_alpha()
+        self.grass_tile = pygame.transform.scale(self.grass_tile, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
         self.character_rect = None
 
         self.initialize_local_map(global_position[0], global_position[1])
@@ -59,6 +62,23 @@ class WorldView(Observer):
         self.entities = self.local_map.entities
         self.npcs = []  # Clear the NPC list to start fresh
         self.items = []
+
+        # Fill background with grass tiles
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                tile = self.local_map.tile_grid[i][j]
+                tile.load_image()
+                self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+
+        # for i in range(view_cst.H_TILES):
+        #     for j in range(view_cst.V_TILES):
+        #         self.screen.blit(self.grass_tile, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+        #
+        # #TODO: when tile will be implemented
+        # # for i in range(view_cst.H_TILES):
+        # #     for j in range(view_cst.V_TILES):
+        # #         self.tilemap[i][j].image = self.grass_tile  # Or load based on biome
+        # #
         self.load_entities()
 
     def load_entities(self):
@@ -165,7 +185,14 @@ class WorldView(Observer):
                 break
 
     def render_background(self):
-        self.screen.fill(view_cst.WHITE)
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                tile = self.local_map.tile_grid[i][j]
+                self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+        # for i in range(view_cst.H_TILES):
+        #     for j in range(view_cst.V_TILES):
+        #         self.screen.blit(self.grass_tile, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+        # # self.screen.fill(view_cst.WHITE)
 
     def render_character(self):
         self.screen.blit(self.character_image, self.character_rect)
@@ -189,6 +216,13 @@ class WorldView(Observer):
     #TODO: Optimize rendering. For now, everything is rendered at each frame
     def render(self, x, y):
         self.render_background()
+
+        #TODO: Update the rendering
+        # for i in range(view_cst.H_TILES):
+        #     for j in range(view_cst.V_TILES):
+        #         tile = self.tilemap[i][j]
+        #         self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+
         self.render_npcs()
         self.render_character()
         self.render_items()
