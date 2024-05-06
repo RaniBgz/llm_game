@@ -7,21 +7,26 @@ from model.map.tile import Tile, TileType
 class LocalMap(Map):
 
 
-    def __init__(self):
+    def __init__(self, biome=Biome.PLAIN):
         super().__init__()
         self.entities = []
+        self.biome = biome
         self.tile_grid = [[None for _ in range(view_cst.V_TILES)] for _ in range(view_cst.H_TILES)]
         # Initialize grass tiles
         # tile_image = pygame.image.load("./assets/maps/tiles/grass.png").convert_alpha()
         self.grass_tile = Tile(TileType.GRASS, "./assets/maps/tiles/grass.png")
         self.sand_tile = Tile(TileType.SAND, "./assets/maps/tiles/sand.png")
+        if self.biome == Biome.PLAIN:
+            self.main_tile = self.grass_tile
+        elif self.biome == Biome.DESERT:
+            self.main_tile = self.sand_tile
         self.initialize_tiles()
         # self.grass_tile = pygame.transform.scale(self.grass_tile.image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
 
     def initialize_tiles(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                self.tile_grid[i][j] = self.grass_tile
+                self.tile_grid[i][j] = self.main_tile
 
 
     def add_entity(self, entity):

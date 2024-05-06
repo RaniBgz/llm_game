@@ -1,4 +1,5 @@
 from model.map.local_map import LocalMap
+from model.map.biome import Biome
 
 class WorldMap():
     _instance = None
@@ -22,7 +23,10 @@ class WorldMap():
         for x in range(-x_size, x_size):
             for y in range(-y_size, y_size):
                 # print(f"Adding local map at {x}, {y}")
-                self.map_grid[(x, y)] = LocalMap()
+                if (x % 2 == 0 and y % 2 == 0) or (x % -2 == 0 and y % -2 == 0):
+                    self.map_grid[(x, y)] = LocalMap(biome=Biome.PLAIN)
+                else:
+                    self.map_grid[(x, y)] = LocalMap(biome=Biome.DESERT)
 
     def add_entity(self, entity, local_map_coords):
         local_map = self.map_grid[local_map_coords]

@@ -278,7 +278,7 @@ class WorldController:
             self.old_position = self.game_data.character.global_position
             self.view.character_rect.right = view_cst.WIDTH
             self.game_data.character.global_position = (self.game_data.character.global_position[0] - 1, self.game_data.character.global_position[1])
-            self.game_data.character.local_position = (view_cst.H_TILES - 1, self.game_data.character.local_position[1])
+            self.game_data.character.local_position = (view_cst.H_TILES, self.game_data.character.local_position[1])
             is_wrapped = True
         elif self.view.character_rect.right > view_cst.WIDTH:
             self.old_position = self.game_data.character.global_position
@@ -290,7 +290,7 @@ class WorldController:
             self.old_position = self.game_data.character.global_position
             self.view.character_rect.bottom = view_cst.HEIGHT
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] + 1)
-            self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES - 1)
+            self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES)
             is_wrapped = True
         elif self.view.character_rect.bottom > view_cst.HEIGHT-view_cst.MENU_BUTTON_HEIGHT:
             self.old_position = self.game_data.character.global_position
@@ -311,4 +311,4 @@ class WorldController:
             self.quest_manager.check_location_objective_completion()
         self.local_map = self.world_map.get_local_map_at(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
         self.view.local_map = self.local_map
-        self.view.render(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
+        # self.view.render(self.game_data.character.global_position[0], self.game_data.character.global_position[1])
