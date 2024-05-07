@@ -41,7 +41,7 @@ class DialogueBox(PopupBox):
     def create_dialogue(self, npc_name, dialogue_text):
         #Width and Height offset compared to the parent surface
         self.width_offset = 10
-        self.height_offset = 2*view_cst.HEIGHT // 3-50
+        self.height_offset = 2*view_cst.HEIGHT // 3-100
         self.rect.topleft = (self.width_offset, self.height_offset)
         self.surface.fill(self.background_color)
 

@@ -20,10 +20,10 @@ class WorldMap():
         return cls._instance
 
     def build_map(self, x_size, y_size):
-        for x in range(-x_size, x_size):
-            for y in range(-y_size, y_size):
-                # print(f"Adding local map at {x}, {y}")
-                if (x % 2 == 0 and y % 2 == 0) or (x % -2 == 0 and y % -2 == 0):
+        for x in range(0, x_size):
+            for y in range(0, y_size):
+                # XOR operation: True when one is odd and the other is even
+                if (x + y) % 2 == 0:
                     self.map_grid[(x, y)] = LocalMap(biome=Biome.PLAIN)
                 else:
                     self.map_grid[(x, y)] = LocalMap(biome=Biome.DESERT)

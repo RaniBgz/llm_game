@@ -232,17 +232,17 @@ class DBBuilder():
         cursor.execute("""
             INSERT INTO characters (name, hp, global_position, local_position, sprite)
             VALUES (%s, %s, %s, %s, %s)
-        """, ('Gary', 16, '0,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/character/character.png'))
+        """, ('Gary', 16, '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/character/character.png'))
 
         # Insert NPCs
         npcs = [
-            ('Blacksmith', 50, False, '0,0', f"{view_cst.H_TILES},{view_cst.V_TILES//2}", './assets/sprites/npcs/blacksmith.png', False),
-            ('Elder', 50, False, '0,0', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
-            ('Enchantress', 20, False, '0,0', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
-            ('Echo', 1000, True, '0,0', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
-            ('Plant', 8, False, '0,1', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),
-            ('Goblin', 10, False, '0,1', f"{view_cst.H_TILES//2},1", './assets/sprites/npcs/goblin.png', True),
-            ('Skeleton', 12, False, '0,1', f"{3*view_cst.H_TILES//4},1", './assets/sprites/npcs/skeleton.png', True),
+            ('Blacksmith', 50, False, '3,3', f"{view_cst.H_TILES},{view_cst.V_TILES//2}", './assets/sprites/npcs/blacksmith.png', False),
+            ('Elder', 50, False, '3,3', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
+            ('Enchantress', 20, False, '3,3', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
+            ('Echo', 1000, True, '3,3', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
+            ('Plant', 8, False, '3,4', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),
+            ('Goblin', 10, False, '3,4', f"{view_cst.H_TILES//2},1", './assets/sprites/npcs/goblin.png', True),
+            ('Skeleton', 12, False, '3,4', f"{3*view_cst.H_TILES//4},1", './assets/sprites/npcs/skeleton.png', True),
         ]
         for npc in npcs:
             cursor.execute("""
@@ -252,12 +252,12 @@ class DBBuilder():
 
         # Insert items
         items = [
-            ('Dagger', "A common iron dagger", '0,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/dagger.png', False),
-            ('Shield', "A common wooden shield", '0,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/shield.png', False),
-            ('Health Potion', "A weak health potion", '0,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/health_potion.png', False),
-            ('Mana Potion', "A weak mana potion", '0,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/mana_potion.png', False),
-            ('Mushroom', "Good in an omelette", '1,0', f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", './assets/sprites/items/mushroom.png', True),
-            ('Throwing daggers', "Make sure to grab them by the correct end.", '1,0', f"{view_cst.H_TILES},{view_cst.V_TILES // 2}",'./assets/sprites/items/throwing_daggers.png', True),
+            ('Dagger', "A common iron dagger", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/dagger.png', False),
+            ('Shield', "A common wooden shield", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/shield.png', False),
+            ('Health Potion', "A weak health potion", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/health_potion.png', False),
+            ('Mana Potion', "A weak mana potion", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/mana_potion.png', False),
+            ('Mushroom', "Good in an omelette", '4,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", './assets/sprites/items/mushroom.png', True),
+            ('Throwing daggers', "Make sure to grab them by the correct end.", '4,3', f"{view_cst.H_TILES},{view_cst.V_TILES // 2}",'./assets/sprites/items/throwing_daggers.png', True),
         ]
         for item in items:
             cursor.execute("""
