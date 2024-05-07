@@ -36,16 +36,31 @@ class MapController:
     def run(self):
         running = True
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.view.back_button_rect.collidepoint(event.pos):
-                        running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-
+            self.handle_events()
             self.view.render()
 
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_down_events(event)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.handle_mouse_up_events(event)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False  # Update how we handle exiting
+    def handle_mouse_down_events(self, event):
+        mouse_pos = event.pos
+        # Iterate through grid rects to find collision and coordinates
+        for coords, rect in self.view.grid_rects_dict.items():
+            if rect.collidepoint(mouse_pos):
+                x, y = coords
+                biome = self.game_data.world_map.get_local_map_at(x, y).biome
+                print(f"Grid cell clicked at coordinates: ({x}, {y}), Biome: {biome}")
+                break  # Stop iterating once a clicked cell is found
+
+
+    def handle_mouse_up_events(self, event):
+        print("Mouse released at", event.pos)
