@@ -12,6 +12,8 @@ class WorldMap():
     def __init__(self):
         if "map_grid" not in self.__dict__:
             self.map_grid = {}  # Ensure this only happens once
+            self.x_size = 0
+            self.x_size = 0
 
     @classmethod
     def get_instance(cls):
@@ -20,13 +22,15 @@ class WorldMap():
         return cls._instance
 
     def build_map(self, x_size, y_size):
+        self.x_size = x_size
+        self.y_size = y_size
         for x in range(0, x_size):
             for y in range(0, y_size):
                 # XOR operation: True when one is odd and the other is even
                 if (x + y) % 2 == 0:
-                    self.map_grid[(x, y)] = LocalMap(biome=Biome.PLAIN)
-                else:
                     self.map_grid[(x, y)] = LocalMap(biome=Biome.DESERT)
+                else:
+                    self.map_grid[(x, y)] = LocalMap(biome=Biome.PLAIN)
 
     def add_entity(self, entity, local_map_coords):
         local_map = self.map_grid[local_map_coords]
