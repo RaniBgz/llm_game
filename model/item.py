@@ -25,7 +25,7 @@ class Item(Entity, Subject):
                               "in_world": in_world}
 
     def notify(self, *args, **kwargs):
-        print(f"Notifying with args[1]: {args[1]}")
+        # print(f"Notifying with args[1]: {args[1]}")
         for observer in self._observers:
             observer.update(self, *args, **kwargs)
 

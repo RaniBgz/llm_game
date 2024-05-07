@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer, util
 #TODO: Should the game data take as input a map? (map dimensions for now)
 class GameData:
     def __init__(self):
-        print("GameData initialized")
+        # print("GameData initialized")
         self.character = None
         self.world_map = WorldMap.get_instance()
         self.initialize_world()

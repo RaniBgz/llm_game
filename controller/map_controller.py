@@ -7,8 +7,10 @@ class MapController:
     def __init__(self, game_data, view):
         self.game_data = game_data
         self.view = view
+        self.clicked_cell = None
         self.view.set_map_size(self.game_data.world_map.x_size, self.game_data.world_map.y_size)
         self.set_map_biomes_asset()
+        self.view.initialize_text()
 
     def set_map_biomes_asset(self):
         #Iterate through world map grid
@@ -19,10 +21,10 @@ class MapController:
                 local_map = self.game_data.world_map.get_local_map_at(x, y)
                 if local_map.biome == Biome.PLAIN:
                     self.view.set_biome_asset(x, y, "./assets/maps/tiles/grass.png")
-                    print(f"Biome asset is grass_tile at ({x}, {y})")
+                    # print(f"Biome asset is grass_tile at ({x}, {y})")
                 else:
                     self.view.set_biome_asset(x, y, "./assets/maps/tiles/sand.png")
-                    print(f"Biome asset is sand_tile at ({x}, {y})")
+                    # print(f"Biome asset is sand_tile at ({x}, {y})")
 
 
     def initialize_map_biomes(self):
@@ -36,8 +38,8 @@ class MapController:
     def run(self):
         running = True
         while running:
-            self.handle_events()
             self.view.render()
+            self.handle_events()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -48,19 +50,37 @@ class MapController:
                 self.handle_mouse_down_events(event)
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.handle_mouse_up_events(event)
+            elif event.type == pygame.MOUSEMOTION:  # Add handling for mouse motion
+                self.handle_mouse_motion_events(event)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False  # Update how we handle exiting
+
+
     def handle_mouse_down_events(self, event):
         mouse_pos = event.pos
-        # Iterate through grid rects to find collision and coordinates
+        for coords, rect in self.view.grid_rects_dict.items():
+            if rect.collidepoint(mouse_pos):
+                self.clicked_cell = coords
+                break
+
+    #TODO: Calls could be optimized to not go look in the world map to get the biome, but in the initialized map_biomes
+    def handle_mouse_up_events(self, event):
+        mouse_pos = event.pos
+        if self.clicked_cell:  # Check if a cell was clicked down on previously
+            rect = self.view.grid_rects_dict.get(self.clicked_cell)
+            if rect and rect.collidepoint(mouse_pos):  # Mouse up within the same cell
+                x, y = self.clicked_cell
+                biome = self.game_data.world_map.get_local_map_at(x, y).biome
+                print(f"Cell confirmed at coordinates: ({x}, {y}), Biome: {biome}")
+            self.clicked_cell = None  # Reset the flag
+
+    def handle_mouse_motion_events(self, event):
+        mouse_pos = event.pos
+
         for coords, rect in self.view.grid_rects_dict.items():
             if rect.collidepoint(mouse_pos):
                 x, y = coords
                 biome = self.game_data.world_map.get_local_map_at(x, y).biome
-                print(f"Grid cell clicked at coordinates: ({x}, {y}), Biome: {biome}")
-                break  # Stop iterating once a clicked cell is found
-
-
-    def handle_mouse_up_events(self, event):
-        print("Mouse released at", event.pos)
+                self.view.update_info_display(coords, biome.name)
+                # print(f"Hovering over cell at coordinates: ({x}, {y}), Biome: {biome}")

@@ -14,7 +14,6 @@ class MainMenuView:
         self.surface = pygame.Surface((self.width, self.height))
         self.rect = self.surface.get_rect()
         self.rect.topleft = (0, 0)
-        print(f"Main menu surface: {self.surface}")
         self.background_image = pygame.image.load("./assets/backgrounds/main_menu.png").convert()
         self.default_button_image = pygame.image.load("./assets/buttons/wood_button.png").convert_alpha()
         self.default_pressed_button_image = pygame.image.load("./assets/buttons/wood_button_pressed.png").convert_alpha()

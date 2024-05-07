@@ -10,9 +10,9 @@ from model.scenario.scenario import Scenario
 class Game:
     def __init__(self, screen_width, screen_height):
         self.screen = None  # Initialize screen later in setup
-        print(f"Before game data init")
+        # print(f"Before game data init")
         self.game_data = GameData() #Initializes GameData and WorldMap. Builds World Map
-        print(f"After game data init")
+        # print(f"After game data init")
         # self.scenario = Scenario("default", self.game_data)
         # self.scenario = Scenario("complex_quest", self.game_data)
         # self.scenario = Scenario("ordered_quest", self.game_data)
