@@ -149,20 +149,6 @@ class WorldController:
                 self.move_character()
                 self.accumulated_time = 0.0
 
-    #TODO: add passable/collision logic
-    # def try_move_character(self, dx, dy):
-    #     new_x = self.character_rect.x + dx * view_cst.TILE_WIDTH
-    #     new_y = self.character_rect.y + dy * view_cst.TILE_HEIGHT
-    #
-    #     target_tile_x = new_x // view_cst.TILE_WIDTH
-    #     target_tile_y = new_y // view_cst.TILE_HEIGHT
-    #
-    #     target_tile = self.local_map.tiles[target_tile_y][target_tile_x]
-    #     if target_tile.is_passable():
-    #         self.character_rect.move_ip(dx * view_cst.TILE_WIDTH, dy * view_cst.TILE_HEIGHT)
-    #     else:
-    #         print("Can't move there!")
-
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
             self.quest_manager.handle_quest_giving()

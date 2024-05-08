@@ -199,12 +199,6 @@ class WorldView(Observer):
                 tile = self.local_map.tile_grid[i][j]
                 self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
-    #Render only the tile of grass the character moved away from
-    def dirty_render_background(self, x, y):
-        tile = self.local_map.tile_grid[x][y]
-        self.screen.blit(tile.image, (x * view_cst.TILE_WIDTH, y * view_cst.TILE_HEIGHT))
-
-
     def render_character(self, move_direction):
         if move_direction == "down":
             self.character_image = self.character_image_down
