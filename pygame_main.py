@@ -45,8 +45,8 @@ class Game:
         main_menu_controller.run()
 
     def setup(self):
-        self.initialize_scenario()
         self.initialize_screen()
+        self.initialize_scenario()
         self.initialize_game_controller()
 
     # def launch(self):

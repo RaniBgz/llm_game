@@ -31,6 +31,7 @@ class WorldController:
         # self.time_to_move_one_tile = view_cst.FPS / self.movement_speed
         self.time_to_move_one_tile = 0.3
         self.accumulated_time = 0.0
+        self.accumulated_frames = 0
         self.move_direction = (0, 0)
         self.clicked_npc = None
         self.clicked_item = None
@@ -91,16 +92,53 @@ class WorldController:
             self.back_to_main_menu()
         if key == pygame.K_LEFT:
             self.move_direction = (-1, 0)
-            self.view.set_move_direction("left")
+            self.view.set_character_direction("left")
         elif key == pygame.K_RIGHT:
             self.move_direction = (1, 0)
-            self.view.set_move_direction("right")
+            self.view.set_character_direction("right")
         elif key == pygame.K_UP:
             self.move_direction = (0, -1)
-            self.view.set_move_direction("up")
+            self.view.set_character_direction("up")
         elif key == pygame.K_DOWN:
             self.move_direction = (0, 1)
-            self.view.set_move_direction("down")
+            self.view.set_character_direction("down")
+
+    def update_movement(self, dt):
+        #TODO: handle animation here
+        self.accumulated_time += dt
+        self.accumulated_frames += 1
+        #Check movement direction
+        #increment anim counter
+
+        if self.move_direction != (0, 0):
+            if self.view.move_direction == "left":
+                pass
+            elif self.view.move_direction == "right":
+                pass
+            elif self.view.move_direction == "up":
+                pass
+            elif self.view.move_direction == "down":
+                pass
+            if self.accumulated_time >= self.time_to_move_one_tile:
+                self.move_character()
+                self.accumulated_time = 0.0
+
+    def move_character(self):
+        keys_pressed = pygame.key.get_pressed()
+        x_change = y_change = 0
+
+        if keys_pressed[pygame.K_LEFT]:
+            x_change = -1
+        if keys_pressed[pygame.K_RIGHT]:
+            x_change = 1
+        if keys_pressed[pygame.K_UP]:
+            y_change = -1
+        if keys_pressed[pygame.K_DOWN]:
+            y_change = 1
+
+        self.game_data.character.move(x_change, y_change)
+        self.view.update_character_position(x_change, y_change)
+        self.wrap_character()
 
     def handle_key_up(self, key):
         if (key == pygame.K_LEFT and self.move_direction == (-1, 0)) or \
@@ -141,13 +179,6 @@ class WorldController:
                 self.clicked_item = None
 
 
-    def update_movement(self, dt):
-        self.accumulated_time += dt
-
-        if self.move_direction != (0, 0):
-            if self.accumulated_time >= self.time_to_move_one_tile:
-                self.move_character()
-                self.accumulated_time = 0.0
 
     def handle_dialogue_return(self, return_code):
         if return_code == "accept_quest":
@@ -238,24 +269,6 @@ class WorldController:
             settings_controller.run()
         else:
             return
-
-
-    def move_character(self):
-        keys_pressed = pygame.key.get_pressed()
-        x_change = y_change = 0
-
-        if keys_pressed[pygame.K_LEFT]:
-            x_change = -1
-        if keys_pressed[pygame.K_RIGHT]:
-            x_change = 1
-        if keys_pressed[pygame.K_UP]:
-            y_change = -1
-        if keys_pressed[pygame.K_DOWN]:
-            y_change = 1
-
-        self.game_data.character.move(x_change, y_change)
-        self.view.update_character_position(x_change, y_change)
-        self.wrap_character()
 
     def wrap_character(self):
         is_wrapped = False
