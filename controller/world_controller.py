@@ -92,16 +92,20 @@ class WorldController:
             self.back_to_main_menu()
         if key == pygame.K_LEFT:
             self.move_direction = (-1, 0)
-            self.view.set_character_direction("left")
+            self.game_data.character.update_direction("left")
+            # self.view.set_character_direction("left")
         elif key == pygame.K_RIGHT:
             self.move_direction = (1, 0)
-            self.view.set_character_direction("right")
+            self.game_data.character.update_direction("right")
+            # self.view.set_character_direction("right")
         elif key == pygame.K_UP:
             self.move_direction = (0, -1)
-            self.view.set_character_direction("up")
+            self.game_data.character.update_direction("up")
+            # self.view.set_character_direction("up")
         elif key == pygame.K_DOWN:
             self.move_direction = (0, 1)
-            self.view.set_character_direction("down")
+            self.game_data.character.update_direction("down")
+            # self.view.set_character_direction("down")
 
     def update_movement(self, dt):
         #TODO: handle animation here
@@ -111,14 +115,14 @@ class WorldController:
         #increment anim counter
 
         if self.move_direction != (0, 0):
-            if self.view.move_direction == "left":
-                pass
-            elif self.view.move_direction == "right":
-                pass
-            elif self.view.move_direction == "up":
-                pass
-            elif self.view.move_direction == "down":
-                pass
+            # if self.view.move_direction == "left":
+            #     pass
+            # elif self.view.move_direction == "right":
+            #     pass
+            # elif self.view.move_direction == "up":
+            #     pass
+            # elif self.view.move_direction == "down":
+            #     pass
             if self.accumulated_time >= self.time_to_move_one_tile:
                 self.move_character()
                 self.accumulated_time = 0.0

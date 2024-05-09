@@ -30,7 +30,8 @@ class WorldView(Observer):
         self.grass_tile = pygame.transform.scale(self.grass_tile, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
 
         self.character_rect = None
-        self.move_direction = "down"
+        self.character_image = None
+        self.character_direction = "down"
 
         self.initialize_local_map(global_position[0], global_position[1])
 
@@ -49,9 +50,13 @@ class WorldView(Observer):
                 self.remove_item(entity)
             elif args[1] == "item_added_to_world":
                 self.initialize_item(entity)
+        if isinstance(entity, model.character.Character):
+            if args[1] == "character_direction_change":
+                self.character_image = args[2]
+                self.character_direction = args[3]
 
-    def set_character_direction(self, direction):
-        self.character.update_direction(direction)
+    # def set_character_direction(self, direction):
+    #     self.character.update_direction(direction)
 
     def update_character_position(self, x, y):
         x = x * view_cst.TILE_WIDTH
@@ -78,8 +83,8 @@ class WorldView(Observer):
         print(f"Loading entities")
         for entity in self.entities:
             if isinstance(entity, model.character.Character):
-                self.character = entity
-                self.initialize_character()
+                entity.attach(self)
+                self.initialize_character(entity)
             if isinstance(entity, model.npc.NPC):
                 entity.attach(self)
                 if entity.dead:
@@ -91,16 +96,16 @@ class WorldView(Observer):
                 if entity.in_world:
                     self.initialize_item(entity)
 
-    def initialize_character(self):
-        print(f"Loading Character: {self.character.name} at {self.character.local_position}")
+    def initialize_character(self, character):
+        print(f"Loading Character: {character.name} at {character.local_position}")
 
         #TODO: Initialize to correct direction/orientation
-        self.character_image = self.character.get_current_sprite()
+        self.character_image = character.get_current_sprite()
         print(f"Character image: {self.character_image}")
 
         self.character_rect = self.character_image.get_rect(center=(
-            self.character.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
-            self.character.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
+            character.local_position[0] * view_cst.TILE_WIDTH - (view_cst.TILE_WIDTH / 2),
+            character.local_position[1] * view_cst.TILE_HEIGHT - (view_cst.TILE_HEIGHT / 2)))
 
     def initialize_item(self, item):
         print(f"Loading Item: {item.name} at {item.local_position}")
@@ -192,16 +197,8 @@ class WorldView(Observer):
                 tile = self.local_map.tile_grid[i][j]
                 self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
-    def render_character(self, move_direction):
-        self.character_image = self.character.get_current_sprite()
-        # if move_direction == "down":
-        #     self.character_image = self.character_image_down
-        # elif move_direction == "up":
-        #     self.character_image = self.character_image_up
-        # elif move_direction == "left":
-        #     self.character_image = self.character_image_left
-        # elif move_direction == "right":
-        #     self.character_image = self.character_image_right
+    def render_character(self):
+        # self.character_image = self.character.get_current_sprite()
         self.screen.blit(self.character_image, self.character_rect)
 
     def render_npcs(self):
@@ -224,7 +221,7 @@ class WorldView(Observer):
     def render(self, x, y):
         self.render_background()
         self.render_npcs()
-        self.render_character(self.move_direction)
+        self.render_character()
         self.render_items()
         self.render_coordinates(x, y)
         self.game_menu_bar.display()

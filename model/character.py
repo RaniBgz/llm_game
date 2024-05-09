@@ -8,26 +8,22 @@ from model.item import Item
 from model.subject.subject import Subject
 
 
-class Character(Entity):
+class Character(Entity, Subject):
     def __init__(self, name,
                  hp,
                  global_position=(0, 0),
                  local_position=(0, 0),
                  sprite="./assets/sprites/character/character_idle_up.png",
                  embedding=None):
-        super().__init__()
+        Entity.__init__(self)
+        Subject.__init__(self)
         self.name = name
         self.hp = hp
         self.sprite = sprite
         self.directions = ["up", "down", "left", "right"]
+        self.current_direction = "down"
         self.idle_sprites = {}
         self.initialize_idle_sprites()
-        # self.idle_sprites = {
-        #     "down": "./assets/sprites/character/character_idle_down.png",
-        #     "up": "./assets/sprites/character/character_idle_up.png",
-        #     "left": "./assets/sprites/character/character_idle_left.png",
-        #     "right": "./assets/sprites/character/character_idle_right.png"
-        # }
         self.walking_sprites = {
             "down": [f"./assets/sprites/character/character_walk_down_{i}.png" for i in range(1, 6)],
             "up": [f"./assets/sprites/character/character_walk_up_{i}.png" for i in range(1, 6)],
@@ -41,17 +37,16 @@ class Character(Entity):
         self.local_position = local_position
         self.embedding = embedding
 
-    def attach(self, observer):
-        self.subject.attach(observer)
-
-    def detach(self, observer):
-        self.subject.detach(observer)
+    def notify(self, *args, **kwargs):
+        for observer in self._observers:
+            observer.update(self, *args, **kwargs)
 
     def initialize_idle_sprites(self):
         for direction in self.directions:
             sprite_path = f"./assets/sprites/character/character_idle_{direction}.png"
             self.idle_sprites[direction] = pygame.image.load(sprite_path).convert_alpha()
             self.idle_sprites[direction] = pygame.transform.scale(self.idle_sprites[direction], (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+            self.current_direction = direction
 
     def initialize_current_sprite(self):
         self.current_sprite = self.idle_sprites["down"]
@@ -59,6 +54,7 @@ class Character(Entity):
     def update_direction(self, direction):
         if direction in self.directions:
             self.current_sprite = self.idle_sprites[direction]
+            self.notify(self, "character_direction_change", self.current_sprite, direction)
 
     def set_current_sprite(self, state, direction):
         if state=="idle":
