@@ -66,10 +66,10 @@ class Character(Entity, Subject):
             self.current_sprite = self.idle_sprites[self.direction]
         elif self.state == "walking":
             sprites = self.walking_sprites[self.direction]
-            print(f"Frame index: {self.frame_index}")
-            print(f"Length of sprites: {len(sprites)}")
             self.current_sprite = sprites[self.frame_index]
-            self.frame_index = self.frame_index % len(sprites)
+            self.frame_index = self.frame_index + 1
+            if self.frame_index > len(sprites):
+                self.frame_index = 1
         self.notify(self, "character_sprite_change", self.current_sprite, self.state, self.direction)
 
     def update_state(self, state):
@@ -100,6 +100,7 @@ class Character(Entity, Subject):
     def move(self, x_change, y_change):
         self.local_position = (self.local_position[0] + x_change, self.local_position[1] + y_change)
         # self.subject.notify()
+
 
     def check_character_has_quest(self, quest_id):
         for quest in self.quests:

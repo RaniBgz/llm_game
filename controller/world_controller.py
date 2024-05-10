@@ -29,7 +29,7 @@ class WorldController:
                                                          self.game_data.character.global_position[1])
         # self.movement_speed = 3 # tiles per second
         # self.time_to_move_one_tile = view_cst.FPS / self.movement_speed
-        self.time_to_move_one_tile = 0.3
+        self.time_to_move_one_tile = 30
         self.accumulated_time = 0.0
         self.accumulated_frames = 0
         self.move_direction = (0, 0)
@@ -42,7 +42,7 @@ class WorldController:
         running = True
         while running:
             clock.tick(view_cst.FPS)
-            dt = clock.tick(view_cst.FPS)*10
+            dt = clock.tick(view_cst.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -108,12 +108,7 @@ class WorldController:
             self.game_data.character.update_state("walking")
 
     def update_movement(self, dt):
-        #TODO: handle animation here
         self.accumulated_time += dt
-        self.accumulated_frames += 1
-        #Check movement direction
-        #increment anim counter
-
         if self.move_direction != (0, 0):
             if self.accumulated_time >= self.time_to_move_one_tile:
                 self.move_character()
