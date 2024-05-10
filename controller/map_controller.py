@@ -7,10 +7,10 @@ class MapController:
     def __init__(self, game_data, view):
         self.game_data = game_data
         self.view = view
-        self.clicked_cell = None
         self.view.set_map_size(self.game_data.world_map.x_size, self.game_data.world_map.y_size)
         self.set_map_biomes_asset()
         self.view.initialize_text()
+        self.running = True
 
     def set_map_biomes_asset(self):
         #Iterate through world map grid
@@ -36,8 +36,7 @@ class MapController:
         self.view.initialize_map_biomes(map_biomes)
 
     def run(self):
-        running = True
-        while running:
+        while self.running:
             self.view.render()
             self.handle_events()
 
@@ -59,22 +58,18 @@ class MapController:
 
     def handle_mouse_down_events(self, event):
         mouse_pos = event.pos
+        if self.view.back_button_rect.collidepoint(mouse_pos):
+            self.running = False  # Exit the map view
         for coords, rect in self.view.grid_rects_dict.items():
             if rect.collidepoint(mouse_pos):
-                self.clicked_cell = coords
+                x, y = coords
+                biome = self.game_data.world_map.get_local_map_at(x, y).biome
+                print(f"Cell confirmed at coordinates: ({x}, {y}), Biome: {biome}")
                 break
 
     #TODO: Calls could be optimized to not go look in the world map to get the biome, but in the initialized map_biomes
     def handle_mouse_up_events(self, event):
-        mouse_pos = event.pos
-        if self.clicked_cell:  # Check if a cell was clicked down on previously
-            rect = self.view.grid_rects_dict.get(self.clicked_cell)
-            if rect and rect.collidepoint(mouse_pos):  # Mouse up within the same cell
-                x, y = self.clicked_cell
-                biome = self.game_data.world_map.get_local_map_at(x, y).biome
-                print(f"Cell confirmed at coordinates: ({x}, {y}), Biome: {biome}")
-            self.clicked_cell = None  # Reset the flag
-
+        pass
     def handle_mouse_motion_events(self, event):
         mouse_pos = event.pos
 

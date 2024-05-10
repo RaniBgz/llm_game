@@ -75,14 +75,11 @@ class Character(Entity, Subject):
     def update_state(self, state):
         if state in self.sates:
             self.state = state
-            # self.notify(self, "character_state_change", state)
 
     def update_direction(self, direction):
         if direction in self.directions:
             self.direction = direction
             self.frame_index = 1
-            # self.current_sprite = self.idle_sprites[direction]
-            # self.notify(self, "character_direction_change", self.current_sprite, direction)
 
     def set_current_sprite(self, state, direction):
         if state=="idle":

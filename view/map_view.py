@@ -84,8 +84,8 @@ class MapView:
 
     def render(self):
         self.screen.fill(view_cst.WHITE)
-        self.screen.blit(self.back_button_text, self.back_button_rect)
         self.draw_grid()
+        self.surface.blit(self.back_button_text, self.back_button_rect)
         self.surface.blit(self.coord_label_text, self.coord_label_rect)
         self.surface.blit(self.coord_display_text, self.coord_display_rect)
         self.surface.blit(self.biome_label_text, self.biome_label_rect)
