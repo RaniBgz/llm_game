@@ -21,15 +21,20 @@ class Character(Entity, Subject):
         self.hp = hp
         self.sprite = sprite
         self.directions = ["up", "down", "left", "right"]
-        self.current_direction = "down"
+        self.sates = ["idle", "walking"]
+        self.direction = "down"
+        self.state = "idle"
+        self.frame_index = 1
         self.idle_sprites = {}
         self.initialize_idle_sprites()
-        self.walking_sprites = {
-            "down": [f"./assets/sprites/character/character_walk_down_{i}.png" for i in range(1, 6)],
-            "up": [f"./assets/sprites/character/character_walk_up_{i}.png" for i in range(1, 6)],
-            "left": [f"./assets/sprites/character/character_walk_left_{i}.png" for i in range(1, 6)],
-            "right": [f"./assets/sprites/character/character_walk_right_{i}.png" for i in range(1, 6)]
-        }
+        self.walking_sprites = {}
+        self.initialize_walking_sprites()
+        # self.walking_sprites = {
+        #     "down": [f"./assets/sprites/character/character_walk_down_{i}.png" for i in range(1, 6)],
+        #     "up": [f"./assets/sprites/character/character_walk_up_{i}.png" for i in range(1, 6)],
+        #     "left": [f"./assets/sprites/character/character_walk_left_{i}.png" for i in range(1, 6)],
+        #     "right": [f"./assets/sprites/character/character_walk_right_{i}.png" for i in range(1, 6)]
+        # }
         self.current_sprite = self.idle_sprites["down"]
         self.inventory = []
         self.quests = []
@@ -46,15 +51,38 @@ class Character(Entity, Subject):
             sprite_path = f"./assets/sprites/character/character_idle_{direction}.png"
             self.idle_sprites[direction] = pygame.image.load(sprite_path).convert_alpha()
             self.idle_sprites[direction] = pygame.transform.scale(self.idle_sprites[direction], (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
-            self.current_direction = direction
+            # self.current_direction = direction
 
-    def initialize_current_sprite(self):
-        self.current_sprite = self.idle_sprites["down"]
+    def initialize_walking_sprites(self):
+        for direction in self.directions:
+            self.walking_sprites[direction] = {}
+            for i in range(1, 7):
+                sprite_path = f"./assets/sprites/character/character_walk_{direction}_{i}.png"
+                self.walking_sprites[direction][i] = pygame.image.load(sprite_path).convert_alpha()
+                self.walking_sprites[direction][i] = pygame.transform.scale(self.walking_sprites[direction][i], (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
+
+    def update_animation(self):
+        if self.state == "idle":
+            self.current_sprite = self.idle_sprites[self.direction]
+        elif self.state == "walking":
+            sprites = self.walking_sprites[self.direction]
+            print(f"Frame index: {self.frame_index}")
+            print(f"Length of sprites: {len(sprites)}")
+            self.current_sprite = sprites[self.frame_index]
+            self.frame_index = self.frame_index % len(sprites)
+        self.notify(self, "character_sprite_change", self.current_sprite, self.state, self.direction)
+
+    def update_state(self, state):
+        if state in self.sates:
+            self.state = state
+            # self.notify(self, "character_state_change", state)
 
     def update_direction(self, direction):
         if direction in self.directions:
-            self.current_sprite = self.idle_sprites[direction]
-            self.notify(self, "character_direction_change", self.current_sprite, direction)
+            self.direction = direction
+            self.frame_index = 1
+            # self.current_sprite = self.idle_sprites[direction]
+            # self.notify(self, "character_direction_change", self.current_sprite, direction)
 
     def set_current_sprite(self, state, direction):
         if state=="idle":

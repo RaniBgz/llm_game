@@ -31,7 +31,8 @@ class WorldView(Observer):
 
         self.character_rect = None
         self.character_image = None
-        self.character_direction = "down"
+        # self.character_direction = "down"
+        # self.character_state = "idle"
 
         self.initialize_local_map(global_position[0], global_position[1])
 
@@ -51,9 +52,10 @@ class WorldView(Observer):
             elif args[1] == "item_added_to_world":
                 self.initialize_item(entity)
         if isinstance(entity, model.character.Character):
-            if args[1] == "character_direction_change":
+            if args[1] == "character_sprite_change":
                 self.character_image = args[2]
-                self.character_direction = args[3]
+                # self.character_direction = args[3]
+                # self.character_state = args[4]
 
     # def set_character_direction(self, direction):
     #     self.character.update_direction(direction)
