@@ -1,5 +1,6 @@
 from model.map.local_map import LocalMap
 from model.map.biome import Biome
+from view.asset.texture_manager import TextureManager
 
 class WorldMap():
     _instance = None
@@ -13,7 +14,8 @@ class WorldMap():
         if "map_grid" not in self.__dict__:
             self.map_grid = {}  # Ensure this only happens once
             self.x_size = 0
-            self.x_size = 0
+            self.y_size = 0
+            self.texture_manager = TextureManager()
 
     @classmethod
     def get_instance(cls):
@@ -27,10 +29,14 @@ class WorldMap():
         for x in range(0, x_size):
             for y in range(0, y_size):
                 # XOR operation: True when one is odd and the other is even
-                if (x + y) % 2 == 0:
-                    self.map_grid[(x, y)] = LocalMap(biome=Biome.DESERT)
+                if x==3 and y==3:
+                    self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.VILLAGE)
+                elif (x + y) % 3 == 0:
+                    self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.DESERT)
+                elif (x + y) % 3 == 1:
+                    self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.PLAIN)
                 else:
-                    self.map_grid[(x, y)] = LocalMap(biome=Biome.PLAIN)
+                    self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.MOUNTAIN)
 
     def add_entity(self, entity, local_map_coords):
         local_map = self.map_grid[local_map_coords]

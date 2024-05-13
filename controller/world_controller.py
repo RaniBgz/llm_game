@@ -129,7 +129,7 @@ class WorldController:
             y_change = 1
 
         self.game_data.character.move(x_change, y_change)
-        self.view.update_character_position(x_change, y_change)
+        # self.view.update_character_position(x_change, y_change) #TODO: change to subject observer pattern
         self.wrap_character()
 
     def handle_key_up(self, key):
@@ -256,7 +256,11 @@ class WorldController:
         elif return_code == view_cst.MAP_MENU:
             map_view = MapView(self.view.screen)
             map_controller = MapController(self.game_data, map_view)
-            map_controller.run()
+            return_coordinates = map_controller.run()
+            if return_coordinates:
+                self.teleport_character(return_coordinates)
+                print(f"Character teleported to {return_coordinates[0]}, {return_coordinates[1]}, biome is")
+                pass
         elif return_code == view_cst.SETTINGS_MENU:
             settings_view = SettingsView(self.view.screen)
             settings_controller = SettingsController(self.game_data, settings_view)
@@ -264,32 +268,38 @@ class WorldController:
         else:
             return
 
+    def teleport_character(self, coordinates):
+        self.game_data.character.global_position = coordinates
+        self.view.initialize_local_map(coordinates[0], coordinates[1])
+        self.local_map = self.world_map.get_local_map_at(coordinates[0], coordinates[1])
+        self.view.local_map = self.local_map
+
     def wrap_character(self):
         is_wrapped = False
         # print(f"Character local position: {self.game_data.character.local_position}")
-        if self.view.character_rect.left < 0:
+        if self.view.character_rect.left < 0: #Left
             self.old_position = self.game_data.character.global_position
-            self.view.character_rect.right = view_cst.WIDTH
+            # self.view.character_rect.right = view_cst.WIDTH
             self.game_data.character.global_position = (self.game_data.character.global_position[0] - 1, self.game_data.character.global_position[1])
             self.game_data.character.local_position = (view_cst.H_TILES, self.game_data.character.local_position[1])
             is_wrapped = True
-        elif self.view.character_rect.right > view_cst.WIDTH:
+        elif self.view.character_rect.right > view_cst.WIDTH: #Right
             self.old_position = self.game_data.character.global_position
-            self.view.character_rect.left = 0
+            # self.view.character_rect.left = 0
             self.game_data.character.global_position = (self.game_data.character.global_position[0] + 1, self.game_data.character.global_position[1])
-            self.game_data.character.local_position = (0, self.game_data.character.local_position[1])
+            self.game_data.character.local_position = (1, self.game_data.character.local_position[1])
             is_wrapped = True
-        elif self.view.character_rect.top < 0:
+        elif self.view.character_rect.top < 0: #Up
             self.old_position = self.game_data.character.global_position
-            self.view.character_rect.bottom = view_cst.HEIGHT
+            # self.view.character_rect.bottom = view_cst.HEIGHT
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] + 1)
-            self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES)
+            self.game_data.character.local_position = (self.game_data.character.local_position[0], view_cst.V_TILES - 1)
             is_wrapped = True
-        elif self.view.character_rect.bottom > view_cst.HEIGHT-view_cst.MENU_BUTTON_HEIGHT:
+        elif self.view.character_rect.bottom > view_cst.HEIGHT-view_cst.MENU_BUTTON_HEIGHT: #Down
             self.old_position = self.game_data.character.global_position
-            self.view.character_rect.top = 0
+            # self.view.character_rect.top = 0
             self.game_data.character.global_position = (self.game_data.character.global_position[0], self.game_data.character.global_position[1] - 1)
-            self.game_data.character.local_position = (self.game_data.character.local_position[0], 0)
+            self.game_data.character.local_position = (self.game_data.character.local_position[0], 1)
             is_wrapped = True
         '''Changing local map'''
         if is_wrapped:

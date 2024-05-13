@@ -52,13 +52,18 @@ class WorldView(Observer):
             elif args[1] == "item_added_to_world":
                 self.initialize_item(entity)
         if isinstance(entity, model.character.Character):
-            if args[1] == "character_sprite_change":
+            if args[1] == "character_sprite_changed":
                 self.character_image = args[2]
-                # self.character_direction = args[3]
-                # self.character_state = args[4]
+            if args[1] == "character_moved":
+                self.update_character_position(args[2], args[3])
 
     # def set_character_direction(self, direction):
     #     self.character.update_direction(direction)
+
+    # def update_character_position(self, x, y):
+    #     x * view_cst.TILE_WIDTH
+    #     y * view_cst.TILE_HEIGHT
+    #     self.character_rect.move_ip(x, y)
 
     def update_character_position(self, x, y):
         x = x * view_cst.TILE_WIDTH

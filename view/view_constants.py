@@ -61,4 +61,9 @@ STONE_BUTTON = "./assets/buttons/stone_button.png"
 STONE_BUTTON_PRESSED = "./assets/buttons/stone_button_pressed.png"
 
 ''' Tiles constants '''
-GRASS = "./assets/tiles/maps/grass.png"
+GRASS_ASSET_PATH = "./assets/maps/tiles/grass.png"
+SAND_ASSET_PATH = "./assets/maps/tiles/sand.png"
+ROCK_ASSET_PATH = "./assets/maps/tiles/rock.png"
+
+''' Buildings constants '''
+FRIENDLY_HOUSE_ASSET_PATH = "./assets/maps/buildings/house.png"

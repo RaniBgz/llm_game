@@ -70,7 +70,7 @@ class Character(Entity, Subject):
             self.frame_index = self.frame_index + 1
             if self.frame_index > len(sprites):
                 self.frame_index = 1
-        self.notify(self, "character_sprite_change", self.current_sprite, self.state, self.direction)
+        self.notify(self, "character_sprite_changed", self.current_sprite, self.state, self.direction)
 
     def update_state(self, state):
         if state in self.sates:
@@ -92,11 +92,11 @@ class Character(Entity, Subject):
 
     def take_damage(self, damage):
         self.hp -= damage
-        self.subject.notify()
 
     def move(self, x_change, y_change):
         self.local_position = (self.local_position[0] + x_change, self.local_position[1] + y_change)
-        # self.subject.notify()
+        # print(f"Character moved to {self.local_position}")
+        self.notify(self, "character_moved", x_change, y_change)
 
 
     def check_character_has_quest(self, quest_id):

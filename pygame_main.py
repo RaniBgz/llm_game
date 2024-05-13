@@ -11,6 +11,7 @@ class Game:
     def __init__(self, screen_width, screen_height):
         self.screen = None  # Initialize screen later in setup
         # print(f"Before game data init")
+        self.initialize_screen()
         self.game_data = GameData() #Initializes GameData and WorldMap. Builds World Map
         # print(f"After game data init")
         # self.scenario = Scenario("default", self.game_data)
@@ -45,7 +46,6 @@ class Game:
         main_menu_controller.run()
 
     def setup(self):
-        self.initialize_screen()
         self.initialize_scenario()
         self.initialize_game_controller()
 

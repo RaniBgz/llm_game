@@ -5,6 +5,7 @@ from model.dialogue.dialogue import Dialogue
 from view import view_constants as view_cst
 
 class DialogueController:
+    #TODO: Think about a ButtonManager
     def __init__(self, screen, dialogue_box, npc, character, dialogue, dialogue_type="chat"):
         self.screen = screen
         self.npc = npc
@@ -39,8 +40,6 @@ class DialogueController:
             self.dialogue_box.set_name_color(view_cst.COFFEE_BROWN_3)
             self.dialogue_box.set_button_images(view_cst.WOOD_BUTTON, view_cst.WOOD_BUTTON_PRESSED)
 
-
-
     def start_dialogue(self):
         self.dialogue_index = self.dialogue.get_current_text_index() #Get current dialogue index
         print(f"Dialogue index: {self.dialogue_index}")
@@ -49,7 +48,6 @@ class DialogueController:
             self.handle_generate_quest_button_logic()
         self.handle_prev_next_buttons_logic()
         self.handle_quest_buttons_logic()
-
 
     def render_dialogue_box(self):
         #Render each button when it has to be rendered, skip if it's not
