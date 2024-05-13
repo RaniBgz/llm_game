@@ -29,29 +29,33 @@ class LocalMap(Map):
     def initialize_plain_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                grass_tile = Tile(TileType.GRASS, self.texture_manager)
+                grass_tile = Tile([TileType.GRASS], self.texture_manager)
                 self.tile_grid[i][j] = grass_tile
 
     def initialize_desert_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                sand_tile = Tile(TileType.SAND, self.texture_manager)
+                sand_tile = Tile([TileType.SAND], self.texture_manager)
                 self.tile_grid[i][j] = sand_tile
 
     def initialize_mountain_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                rock_tile = Tile(TileType.ROCK, self.texture_manager)
+                rock_tile = Tile([TileType.ROCK], self.texture_manager)
                 self.tile_grid[i][j] = rock_tile
 
     def initialize_village_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                if i==view_cst.H_TILES//2 and j==view_cst.V_TILES//2:
-                    house_tile = Tile(TileType.FRIENDLY_HOUSE, self.texture_manager)
-                    self.tile_grid[i][j] = house_tile
+                if (i==view_cst.H_TILES//2 - 1) or (i==view_cst.H_TILES//2 + 1):
+                    if (j==view_cst.V_TILES//2 - 1) or (j==view_cst.V_TILES//2 + 1):
+                        house_tile = Tile([TileType.GRASS, TileType.FRIENDLY_HOUSE], self.texture_manager)
+                        self.tile_grid[i][j] = house_tile
+                    else:
+                        grass_tile = Tile([TileType.GRASS], self.texture_manager)
+                        self.tile_grid[i][j] = grass_tile
                 else:
-                    grass_tile = Tile(TileType.GRASS, self.texture_manager)
+                    grass_tile = Tile([TileType.GRASS], self.texture_manager)
                     self.tile_grid[i][j] = grass_tile
 
     def add_entity(self, entity):

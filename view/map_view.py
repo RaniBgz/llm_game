@@ -36,7 +36,9 @@ class MapView:
         self.grid_height = self.cell_size * self.y_size
 
     def set_biome_asset(self, x, y, asset_path):
-        self.map_biomes[(x, y)] = asset_path
+        if (x, y) not in self.map_biomes:
+            self.map_biomes[(x, y)] = []
+        self.map_biomes[(x, y)].append(asset_path)
 
     def initialize_text(self):
         print(f"Initializing text")
@@ -77,10 +79,11 @@ class MapView:
             for x in range(self.y_size):
                 rect = pygame.Rect(x * self.cell_size, y * self.cell_size, self.cell_size, self.cell_size)
                 self.grid_rects_dict[(x, y)] = rect
-                image = self.map_biomes[(x, y)]
-                image = pygame.image.load(image).convert_alpha()
-                image = pygame.transform.scale(image, (self.cell_size, self.cell_size))
-                self.surface.blit(image, rect.topleft)
+                for i in range(0, len(self.map_biomes[(x, y)])):
+                    image = self.map_biomes[(x, y)][i]
+                    image = pygame.image.load(image).convert_alpha()
+                    image = pygame.transform.scale(image, (self.cell_size, self.cell_size))
+                    self.surface.blit(image, rect.topleft)
 
     def render(self):
         self.screen.fill(view_cst.WHITE)
