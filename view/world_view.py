@@ -81,8 +81,9 @@ class WorldView(Observer):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
                 tile = self.local_map.tile_grid[i][j]
-                tile.load_image()
-                self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+                tile.draw(self.screen, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+                # tile.load_image()
+                # self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
         self.load_entities()
 
@@ -202,7 +203,8 @@ class WorldView(Observer):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
                 tile = self.local_map.tile_grid[i][j]
-                self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+                tile.draw(self.screen, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
+                # self.screen.blit(tile.image, (i * view_cst.TILE_WIDTH, j * view_cst.TILE_HEIGHT))
 
     def render_character(self):
         # self.character_image = self.character.get_current_sprite()

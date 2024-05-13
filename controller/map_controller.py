@@ -28,6 +28,8 @@ class MapController:
                     self.view.set_biome_asset(x, y, view_cst.SAND_ASSET_PATH)
                 elif local_map.biome == Biome.MOUNTAIN:
                     self.view.set_biome_asset(x, y, view_cst.ROCK_ASSET_PATH)
+                elif local_map.biome == Biome.VILLAGE:
+                    self.view.set_biome_asset(x, y, view_cst.FRIENDLY_HOUSE_ASSET_PATH)
                     # print(f"Biome asset is sand_tile at ({x}, {y})")
 
 

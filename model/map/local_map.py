@@ -29,29 +29,29 @@ class LocalMap(Map):
     def initialize_plain_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                grass_tile = Tile(TileType.GRASS, view_cst.GRASS_ASSET_PATH)
+                grass_tile = Tile(TileType.GRASS, self.texture_manager)
                 self.tile_grid[i][j] = grass_tile
 
     def initialize_desert_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                sand_tile = Tile(TileType.SAND, view_cst.SAND_ASSET_PATH)
+                sand_tile = Tile(TileType.SAND, self.texture_manager)
                 self.tile_grid[i][j] = sand_tile
 
     def initialize_mountain_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                rock_tile = Tile(TileType.ROCK, view_cst.ROCK_ASSET_PATH)
+                rock_tile = Tile(TileType.ROCK, self.texture_manager)
                 self.tile_grid[i][j] = rock_tile
 
     def initialize_village_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
                 if i==view_cst.H_TILES//2 and j==view_cst.V_TILES//2:
-                    house_tile = Tile(TileType.FRIENDLY_HOUSE, view_cst.FRIENDLY_HOUSE_ASSET_PATH)
+                    house_tile = Tile(TileType.FRIENDLY_HOUSE, self.texture_manager)
                     self.tile_grid[i][j] = house_tile
                 else:
-                    grass_tile = Tile(TileType.GRASS, view_cst.GRASS_ASSET_PATH)
+                    grass_tile = Tile(TileType.GRASS, self.texture_manager)
                     self.tile_grid[i][j] = grass_tile
 
     def add_entity(self, entity):

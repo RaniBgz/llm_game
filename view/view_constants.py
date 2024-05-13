@@ -66,4 +66,5 @@ SAND_ASSET_PATH = "./assets/maps/tiles/sand.png"
 ROCK_ASSET_PATH = "./assets/maps/tiles/rock.png"
 
 ''' Buildings constants '''
-FRIENDLY_HOUSE_ASSET_PATH = "./assets/maps/buildings/house.png"
+FRIENDLY_HOUSE_ASSET_PATH = "./assets/maps/buildings/friendly_house.png"
+HOSTILE_HOUSE_ASSET_PATH = "./assets/maps/buildings/hostile_house.png"

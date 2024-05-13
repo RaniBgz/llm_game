@@ -9,6 +9,9 @@ class WorldMap():
             cls._instance = super(WorldMap, cls).__new__(cls, *args, **kwargs)
             # Initialize any variables here if needed
             cls._instance.map_grid = {}  # Use a dictionary for coordinate-based lookup
+            cls._instance.x_size = 0
+            cls._instance.y_size = 0
+            cls._instance.texture_manager = TextureManager()
         return cls._instance
     def __init__(self):
         if "map_grid" not in self.__dict__:
