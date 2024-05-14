@@ -19,7 +19,7 @@ class LocalMap(Map):
             self.initialize_plain_biome()
         elif self.biome == Biome.DESERT:
             self.initialize_desert_biome()
-        elif self.biome == Biome.MOUNTAIN or self.biome == Biome.DUNGEON:
+        elif self.biome == Biome.MOUNTAIN:
             self.initialize_mountain_biome()
         elif self.biome == Biome.VILLAGE:
             self.initialize_village_biome()
@@ -27,6 +27,8 @@ class LocalMap(Map):
             self.initialize_forest_biome()
         elif self.biome == Biome.HOSTILE_CAMP:
             self.initialize_hostile_camp()
+        elif self.biome == Biome.DUNGEON:
+            self.initialize_dungeon_biome()
 
         # self.initialize_tiles()
         # self.grass_tile = pygame.transform.scale(self.grass_tile.image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
@@ -90,6 +92,20 @@ class LocalMap(Map):
                 else:
                     grass_tile = Tile([TileType.GRASS], self.texture_manager)
                     self.tile_grid[i][j] = grass_tile
+
+    def initialize_dungeon_biome(self):
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                if i==view_cst.H_TILES//2 - 1:
+                    if j==view_cst.V_TILES//2 - 2:
+                        dungeon_entrance_tile = Tile([TileType.ROCK, TileType.DUNGEON_ENTRANCE], self.texture_manager)
+                        self.tile_grid[i][j] = dungeon_entrance_tile
+                    else:
+                        rock_tile = Tile([TileType.ROCK], self.texture_manager)
+                        self.tile_grid[i][j] = rock_tile
+                else:
+                    rock_tile = Tile([TileType.ROCK], self.texture_manager)
+                    self.tile_grid[i][j] = rock_tile
 
     def add_entity(self, entity):
         self.entities.append(entity)

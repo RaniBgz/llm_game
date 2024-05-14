@@ -10,6 +10,7 @@ class TileType(Enum):
     PINE_TREE = 4
     FRIENDLY_HOUSE = 5
     HOSTILE_HOUSE = 6
+    DUNGEON_ENTRANCE = 7
 
 class Tile:
     def __init__(self, layers, texture_manager):
@@ -22,16 +23,18 @@ class Tile:
     def get_texture_path(self, tile_type):
         if tile_type == TileType.GRASS:
             return view_cst.GRASS_ASSET_PATH
-        elif tile_type == TileType.SAND:
+        if tile_type == TileType.SAND:
             return view_cst.SAND_ASSET_PATH
-        elif tile_type == TileType.ROCK:
+        if tile_type == TileType.ROCK:
             return view_cst.ROCK_ASSET_PATH
-        elif tile_type == TileType.PINE_TREE:
+        if tile_type == TileType.PINE_TREE:
             return view_cst.PINE_TREE_ASSET_PATH
-        elif tile_type == TileType.FRIENDLY_HOUSE:
+        if tile_type == TileType.FRIENDLY_HOUSE:
             return view_cst.FRIENDLY_HOUSE_ASSET_PATH
-        elif tile_type == TileType.HOSTILE_HOUSE:
+        if tile_type == TileType.HOSTILE_HOUSE:
             return view_cst.HOSTILE_HOUSE_ASSET_PATH
+        if tile_type == TileType.DUNGEON_ENTRANCE:
+            return view_cst.DUNGEON_ENTRANCE_ASSET_PATH
 
     def draw(self, screen, position):
         for texture in self.textures:

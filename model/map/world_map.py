@@ -32,7 +32,9 @@ class WorldMap():
         for x in range(0, x_size):
             for y in range(0, y_size):
                 # XOR operation: True when one is odd and the other is even
-                if x==3 and y==3:
+                if x==2 and y==3:
+                    self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.DUNGEON)
+                elif x==3 and y==3:
                     self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.VILLAGE)
                 elif x==4 and y==3:
                     self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.FOREST)

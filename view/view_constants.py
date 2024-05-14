@@ -70,3 +70,4 @@ PINE_TREE_ASSET_PATH = "./assets/maps/tiles/pine_tree.png"
 ''' Buildings constants '''
 FRIENDLY_HOUSE_ASSET_PATH = "./assets/maps/buildings/friendly_house.png"
 HOSTILE_HOUSE_ASSET_PATH = "./assets/maps/buildings/hostile_house.png"
+DUNGEON_ENTRANCE_ASSET_PATH = "./assets/maps/buildings/dungeon_entrance.png"
