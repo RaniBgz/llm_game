@@ -237,7 +237,7 @@ class DBBuilder():
         # Insert NPCs
         npcs = [
             ('Blacksmith', 50, False, '3,3', f"{view_cst.H_TILES},{view_cst.V_TILES//2}", './assets/sprites/npcs/blacksmith.png', False),
-            ('Elder', 50, False, '3,3', f"{view_cst.H_TILES//3},1", './assets/sprites/npcs/elder.png', False),
+            ('Elder', 50, False, '3,3', f"{view_cst.H_TILES//2 - 1},1", './assets/sprites/npcs/elder.png', False),
             ('Enchantress', 20, False, '3,3', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
             ('Echo', 1000, True, '3,3', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
             ('Plant', 8, False, '3,4', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),

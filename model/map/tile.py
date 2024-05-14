@@ -7,8 +7,9 @@ class TileType(Enum):
     GRASS = 1
     SAND = 2
     ROCK = 3
-    FRIENDLY_HOUSE = 4
-    HOSTILE_HOUSE = 5
+    PINE_TREE = 4
+    FRIENDLY_HOUSE = 5
+    HOSTILE_HOUSE = 6
 
 class Tile:
     def __init__(self, layers, texture_manager):
@@ -25,6 +26,8 @@ class Tile:
             return view_cst.SAND_ASSET_PATH
         elif tile_type == TileType.ROCK:
             return view_cst.ROCK_ASSET_PATH
+        elif tile_type == TileType.PINE_TREE:
+            return view_cst.PINE_TREE_ASSET_PATH
         elif tile_type == TileType.FRIENDLY_HOUSE:
             return view_cst.FRIENDLY_HOUSE_ASSET_PATH
         elif tile_type == TileType.HOSTILE_HOUSE:

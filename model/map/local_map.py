@@ -17,12 +17,17 @@ class LocalMap(Map):
         # tile_image = pygame.image.load("./assets/maps/tiles/grass.png").convert_alpha()
         if self.biome == Biome.PLAIN:
             self.initialize_plain_biome()
-        elif self.biome == Biome.VILLAGE:
-            self.initialize_village_biome()
         elif self.biome == Biome.DESERT:
             self.initialize_desert_biome()
         elif self.biome == Biome.MOUNTAIN or self.biome == Biome.DUNGEON:
             self.initialize_mountain_biome()
+        elif self.biome == Biome.VILLAGE:
+            self.initialize_village_biome()
+        elif self.biome == Biome.FOREST:
+            self.initialize_forest_biome()
+        elif self.biome == Biome.HOSTILE_CAMP:
+            self.initialize_hostile_camp()
+
         # self.initialize_tiles()
         # self.grass_tile = pygame.transform.scale(self.grass_tile.image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
 
@@ -47,10 +52,38 @@ class LocalMap(Map):
     def initialize_village_biome(self):
         for i in range(view_cst.H_TILES):
             for j in range(view_cst.V_TILES):
-                if (i==view_cst.H_TILES//2 - 1) or (i==view_cst.H_TILES//2 + 1):
-                    if (j==view_cst.V_TILES//2 - 1) or (j==view_cst.V_TILES//2 + 1):
+                if (i==view_cst.H_TILES//2 - 2) or (i==view_cst.H_TILES//2 + 1):
+                    if view_cst.V_TILES //3 <=j<=2*view_cst.V_TILES //3-1:
                         house_tile = Tile([TileType.GRASS, TileType.FRIENDLY_HOUSE], self.texture_manager)
                         self.tile_grid[i][j] = house_tile
+                    else:
+                        grass_tile = Tile([TileType.GRASS], self.texture_manager)
+                        self.tile_grid[i][j] = grass_tile
+                else:
+                    grass_tile = Tile([TileType.GRASS], self.texture_manager)
+                    self.tile_grid[i][j] = grass_tile
+
+    def initialize_forest_biome(self):
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                if  view_cst.H_TILES // 2 - 2 <= i <= view_cst.H_TILES // 2 + 1:
+                    if view_cst.V_TILES // 3 <= j <= 2 * view_cst.V_TILES // 3 - 1:
+                        pine_tree_tile = Tile([TileType.GRASS, TileType.PINE_TREE], self.texture_manager)
+                        self.tile_grid[i][j] = pine_tree_tile
+                    else:
+                        grass_tile = Tile([TileType.GRASS], self.texture_manager)
+                        self.tile_grid[i][j] = grass_tile
+                else:
+                    grass_tile = Tile([TileType.GRASS], self.texture_manager)
+                    self.tile_grid[i][j] = grass_tile
+
+    def initialize_hostile_camp(self):
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                if (i==view_cst.H_TILES//2 - 2) or (i==view_cst.H_TILES//2 + 1):
+                    if view_cst.V_TILES //3 <=j<=2*view_cst.V_TILES //3-1:
+                        hostile_house_tile = Tile([TileType.GRASS, TileType.HOSTILE_HOUSE], self.texture_manager)
+                        self.tile_grid[i][j] = hostile_house_tile
                     else:
                         grass_tile = Tile([TileType.GRASS], self.texture_manager)
                         self.tile_grid[i][j] = grass_tile

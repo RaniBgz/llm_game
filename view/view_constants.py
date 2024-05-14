@@ -65,6 +65,8 @@ GRASS_ASSET_PATH = "./assets/maps/tiles/grass.png"
 SAND_ASSET_PATH = "./assets/maps/tiles/sand.png"
 ROCK_ASSET_PATH = "./assets/maps/tiles/rock.png"
 
+PINE_TREE_ASSET_PATH = "./assets/maps/tiles/pine_tree.png"
+
 ''' Buildings constants '''
 FRIENDLY_HOUSE_ASSET_PATH = "./assets/maps/buildings/friendly_house.png"
 HOSTILE_HOUSE_ASSET_PATH = "./assets/maps/buildings/hostile_house.png"
