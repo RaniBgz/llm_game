@@ -66,5 +66,5 @@ class NPC(Entity, Subject):
         self.quests.append(quest)
         quest_id = quest.get_id()
         self.quests_dialogue[quest_id] = dialogue
-        print(f"Quest dialogue: {self.quests_dialogue}")
+        # print(f"Quest dialogue: {self.quests_dialogue}")
 

@@ -56,7 +56,7 @@ class DBRetriever:
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
             game_character = Character(name, hp, global_position, local_position, sprite)
-            print(f"Retrieved Character: {game_character.name} with HP: {game_character.hp}")
+            # print(f"Retrieved Character: {game_character.name} with HP: {game_character.hp}")
             return game_character
         else:
             print("Character not found")
@@ -73,7 +73,7 @@ class DBRetriever:
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
             game_npc = NPC(name, hp, robot, sprite, global_position, local_position, hostile)
-            print(f"Retrieved NPC: {game_npc.name} with HP: {game_npc.hp} and Hostility: {game_npc.hostile}")
+            # print(f"Retrieved NPC: {game_npc.name} with HP: {game_npc.hp} and Hostility: {game_npc.hostile}")
             return game_npc
         else:
             print("NPC not found")
@@ -90,7 +90,7 @@ class DBRetriever:
             global_position = tuple(map(int, global_position.split(',')))
             local_position = tuple(map(int, local_position.split(',')))
             game_item = Item(name, description, global_position=global_position, local_position=local_position, sprite=sprite, in_world=in_world)
-            print(f"Retrieved Item: {game_item.name} with Description: {game_item.description}")
+            # print(f"Retrieved Item: {game_item.name} with Description: {game_item.description}")
             return game_item
         else:
             print("Item not found")
@@ -167,9 +167,9 @@ class DBRetriever:
                                        sprite=sprite,
                                        embedding=embedding)
             characters_list.append(game_character)
-            print(f"Character: {game_character.name}, HP: {game_character.hp}, Global: {game_character.global_position}, Local: {game_character.local_position}",
-                  f"Sprite: {game_character.sprite}")
-            print(f"Object instantiated: {game_character}\n")
+            # print(f"Character: {game_character.name}, HP: {game_character.hp}, Global: {game_character.global_position}, Local: {game_character.local_position}",
+            #       f"Sprite: {game_character.sprite}")
+            # print(f"Object instantiated: {game_character}\n")
         return characters_list
 
     def retrieve_items(self):
@@ -191,8 +191,8 @@ class DBRetriever:
                              in_world=in_world,
                              embedding=embedding)
             items_list.append(game_item)
-            print(f"Item ID: {game_item.id}, Name: {game_item.name}, Description: {game_item.description},  sprite: {game_item.sprite}. In world: {game_item.in_world}")
-            print(f"Object instantiated: {game_item}\n")
+            # print(f"Item ID: {game_item.id}, Name: {game_item.name}, Description: {game_item.description},  sprite: {game_item.sprite}. In world: {game_item.in_world}")
+            # print(f"Object instantiated: {game_item}\n")
         return items_list
 
     def retrieve_npcs(self):
@@ -215,9 +215,9 @@ class DBRetriever:
                            hostile=hostile,
                            embedding=embedding)
             npcs_list.append(game_npc)
-            print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile},"
-                  f"Global: {game_npc.global_position}, Local: {game_npc.local_position}")
-            print(f"Object instantiated: {game_npc}\n")
+            # print(f"NPC: {game_npc.name}, HP: {game_npc.hp}, Hostile: {game_npc.hostile},"
+            #       f"Global: {game_npc.global_position}, Local: {game_npc.local_position}")
+            # print(f"Object instantiated: {game_npc}\n")
         return npcs_list
 
 

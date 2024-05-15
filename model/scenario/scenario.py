@@ -231,11 +231,11 @@ class Scenario:
         # self.db_retriever.connect_to_db()
         character = self.db_retriever.retrieve_characters()[0]
         self.game_data.set_character(character)
-        print(f"Character: {self.game_data.character}")
+        # print(f"Character: {self.game_data.character}")
         npcs = self.db_retriever.retrieve_npcs()
-        print(f"NPCs: {npcs}")
+        # print(f"NPCs: {npcs}")
         items = self.db_retriever.retrieve_items()
-        print(f"Items: {items}")
+        # print(f"Items: {items}")
         for npc in npcs:
             self.game_data.add_npc(npc)
         for item in items:

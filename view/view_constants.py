@@ -53,6 +53,8 @@ MAP_MENU = "map"
 SETTINGS_MENU = "settings"
 
 ''' Dialogue constants '''
+DIALOGUE_BACKGROUND = "./assets/HUD/dialogue_background.png"
+DIALOGUE_FRAME = "./assets/HUD/dialogue_frame.png"
 
 ''' Button constants '''
 WOOD_BUTTON = "./assets/buttons/wood_button.png"

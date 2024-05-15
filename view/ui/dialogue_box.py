@@ -31,6 +31,14 @@ class DialogueBox(PopupBox):
     def set_background_color(self, color):
         self.background_color = color
 
+    def set_background_image(self, image_path):
+        self.background_image = pygame.image.load(image_path).convert_alpha()
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+
+    def set_frame_image(self, image_path):
+        self.frame_image = pygame.image.load(image_path).convert_alpha()
+        self.frame_image = pygame.transform.scale(self.frame_image, (self.width, self.height))
+
     def set_name_color(self, color):
         self.name_color = color
 
@@ -44,9 +52,11 @@ class DialogueBox(PopupBox):
         self.height_offset = 2*view_cst.HEIGHT // 3-100
         self.rect.topleft = (self.width_offset, self.height_offset)
         self.surface.fill(self.background_color)
+        if self.frame_image:
+            self.surface.blit(self.frame_image, (0, 0))
 
         name_rendered = self.fonts["name"].render(npc_name, True, self.name_color)
-        name_pos = (10 + self.width // 2 - name_rendered.get_width() // 2, 10)
+        name_pos = (10 + self.width // 2 - name_rendered.get_width() // 2, 15)
         self.surface.blit(name_rendered, name_pos)
 
         # Use the wrap_text function to get the lines of dialogue
