@@ -12,6 +12,7 @@ class LocalMap(Map):
         self.texture_manager = texture_manager
         self.entities = []
         self.biome = biome
+        self.region_name = ""
         self.tile_grid = [[None for _ in range(view_cst.V_TILES)] for _ in range(view_cst.H_TILES)]
         # Initialize grass tiles
         # tile_image = pygame.image.load("./assets/maps/tiles/grass.png").convert_alpha()

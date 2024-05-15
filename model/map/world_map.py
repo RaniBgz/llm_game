@@ -47,6 +47,16 @@ class WorldMap():
                 else:
                     self.map_grid[(x, y)] = LocalMap(self.texture_manager, biome=Biome.MOUNTAIN)
 
+    def get_context(self):
+        context_parts = []
+        context_parts.append(f"World Map Size: {self.x_size}x{self.y_size}")
+        for (x, y), local_map in self.map_grid.items():
+            biome_name = local_map.biome.name
+            region_name = local_map.region_name if local_map.region_name else ""
+            context_parts.append(f"Region ({x}, {y}): {biome_name} {region_name}")
+        context_string = " | ".join(context_parts)
+        return context_string
+
     def add_entity(self, entity, local_map_coords):
         local_map = self.map_grid[local_map_coords]
         local_map.add_entity(entity)

@@ -270,6 +270,9 @@ class Scenario:
         for quest in self.game_data.quests:
             context_parts.append(self.format_quest(quest))
 
+        world_map_context = self.game_data.world_map.get_context()
+        context_parts.append(world_map_context)
+
         # Combine all parts into a single string
         context_string = " | ".join(context_parts)
         return context_string
