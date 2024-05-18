@@ -277,6 +277,7 @@ class Scenario:
         context_string = " | ".join(context_parts)
         return context_string
 
+
 if __name__ == '__main__':
     game_data = GameData()
     scenario = Scenario("default", game_data)

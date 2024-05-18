@@ -9,8 +9,8 @@ from groq import Groq
 
 #TODO: Need to add concept of who is talking in the dialogue in order to generate the dialogue
 class LLMModel():
-    # path_to_functions = "./ai/llm/functions"
-    path_to_functions = "./functions/"
+    path_to_functions = "./ai/llm/functions"
+    # path_to_functions = "./functions/"
 
     def __init__(self, model_name):
         self.model_name = model_name
@@ -59,22 +59,7 @@ class LLMModel():
         # Parse the template with the given variables
         return self.parse_template(template_path, **kwargs)
 
-    # def extract_json(self, content):
-    #     # This regex looks for content encapsulated within ```json and ```
-    #     # and captures everything in between, across multiple lines.
-    #     match = re.search(r"```\n([\s\S]*?)\n```", content)
-    #     if match:
-    #         json_string = match.group(1)
-    #         try:
-    #             # Attempt to parse the extracted string into a Python dictionary
-    #             json_data = json.loads(json_string)
-    #             return json_data
-    #         except json.JSONDecodeError as e:
-    #             print("Failed to decode JSON:", e)
-    #             return None
-    #     else:
-    #         print("No JSON content found.")
-    #         return None
+
 
     def extract_json(self, content):
         try:
@@ -109,9 +94,11 @@ class LLMModel():
             ],
             model=self.model_name,
         )
-        print(f"Generated quest before json extraction: {chat_completion.choices[0].message.content}")
+        # print(f"Generated quest before json extraction: {chat_completion.choices[0].message.content}")
 
         quest_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        # print(f"Generated quest: {quest_json}")
 
         return quest_json
 
@@ -153,3 +140,21 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
+
+
+    # def extract_json(self, content):
+    #     # This regex looks for content encapsulated within ```json and ```
+    #     # and captures everything in between, across multiple lines.
+    #     match = re.search(r"```\n([\s\S]*?)\n```", content)
+    #     if match:
+    #         json_string = match.group(1)
+    #         try:
+    #             # Attempt to parse the extracted string into a Python dictionary
+    #             json_data = json.loads(json_string)
+    #             return json_data
+    #         except json.JSONDecodeError as e:
+    #             print("Failed to decode JSON:", e)
+    #             return None
+    #     else:
+    #         print("No JSON content found.")
+    #         return None

@@ -33,8 +33,6 @@ class WorldController:
         self.accumulated_time = 0.0
         self.accumulated_frames = 0
         self.move_direction = (0, 0)
-        self.clicked_npc = None
-        self.clicked_item = None
 
 
     async def run_async(self):
@@ -147,31 +145,17 @@ class WorldController:
         button = event.button #left or right click
         for npc, npc_image, npc_rect in self.view.npcs: #Check which NPC was clicked
             if npc_rect.collidepoint(pos):
-                self.clicked_npc = npc #update the flag
-                print(f"Clicked on NPC: {npc.name}")
+                self.handle_npc_interaction(pos, button)
 
         for item, item_image, item_rect in self.view.items: #Check which Item was clicked
             if item_rect.collidepoint(pos):
-                self.clicked_item = item #update the flag
-                print(f"Clicked on Item: {item.name}")
+                self.handle_item_interaction(pos, button)
 
         self.view.handle_popup_events(event)
 
 
     def handle_mouse_up_event(self, event):
-        pos = event.pos
-        button = event.button
-
-        for npc, npc_image, npc_rect in self.view.npcs: #Handling NPC interaction
-            if npc_rect.collidepoint(pos) and npc == self.clicked_npc:
-                self.handle_npc_interaction(pos, button)
-                self.clicked_npc = None
-
-        for item, item_image, item_rect in self.view.items: #Handling Item interaction
-            if item_rect.collidepoint(pos) and item == self.clicked_item:
-                self.handle_item_interaction(pos, button)
-                self.clicked_item = None
-
+        pass
 
 
     def handle_dialogue_return(self, return_code):

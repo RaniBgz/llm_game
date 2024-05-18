@@ -21,3 +21,41 @@ Game context:
 
 
 The output should be a JSON ONLY WITH NOTHING ELSE.
+Valid JSON Example:
+{
+  "name": "The Lost Castle's Ancient Scroll",
+  "description": "The kingdom's wisest mage has discovered a cryptic message hinting at the location of an ancient scroll within the long-abandoned castle of Argentum. This powerful artifact is rumored to hold the secrets of the ancient magic that defeated the dragon threatening the kingdom. Your quest is to retrieve this scroll and bring it back to the mage.",
+  "ordered": false,
+  "objectives": [
+    {
+      "type": "retrieval",
+      "name": "Retrieve the Key of Argentum",
+      "description": "Retrieve the rusty old key from the Argentum Castle's lost and found room. It will grant you access to the inner chambers.",
+      "target": "Key of Argentum"
+    },
+    {
+      "type": "kill",
+      "name": "Defeat the Cursed Guard",
+      "description": "Clear the outer courtyard of Argentum Castle from the cursed guard that has been terrorizing travelers. He is notoriously difficult to defeat, but the kingdom's bravest warriors have claimed victory over him.",
+      "target": "Cursed Guard"
+    },
+    {
+      "type": "talk_to_npc",
+      "name": "Speak with the Ancient Sage",
+      "description": "Seek out the ancient sage hidden within the castle's inner chambers. She possesses ancient knowledge and might hold the secrets to the scroll's hiding place.",
+      "target": "Ancient Sage"
+    },
+    {
+      "type": "kill",
+      "name": "Slay the Dragon's Pawn",
+      "description": "Eliminate the dragon's pawn, a fearsome beast terrorizing the castle's dungeon. Rumors suggest it is one of the dragon's most trusted minions.",
+      "target": "Dragon's Pawn"
+    },
+    {
+      "type": "retrieval",
+      "name": "Retrieve the Ancient Scroll",
+      "description": "With the Key of Argentum and the ancient sage's guidance, retrieve the ancient scroll said to be hidden within the castle's innermost sanctum.",
+      "target": null
+    }
+  ]
+}
