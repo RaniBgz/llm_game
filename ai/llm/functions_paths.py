@@ -1,3 +1,7 @@
 UNIT_QUEST = "UnitQuest"
 UNIT_QUEST_DIALOGUE = "UnitQuestDialogue"
 UNIT_QUEST_WITH_CONTEXT = "UnitQuestWithContext"
+KILL_OBJECTIVE = "KillObjective"
+RETRIEVAL_OBJECTIVE = "RetrievalObjective"
+TALK_TO_NPC_OBJECTIVE = "TalkToNPCObjective"
+LOCATION_OBJECTIVE = "LocationObjective"

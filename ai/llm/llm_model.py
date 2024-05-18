@@ -9,8 +9,8 @@ from groq import Groq
 
 #TODO: Need to add concept of who is talking in the dialogue in order to generate the dialogue
 class LLMModel():
-    path_to_functions = "./ai/llm/functions"
-    # path_to_functions = "./functions/"
+    # path_to_functions = "./ai/llm/functions" #Server version
+    path_to_functions = "./functions/" #Local version
 
     def __init__(self, model_name):
         self.model_name = model_name
@@ -59,19 +59,13 @@ class LLMModel():
         # Parse the template with the given variables
         return self.parse_template(template_path, **kwargs)
 
-
-
     def extract_json(self, content):
         try:
-            # Find the first opening curly brace
-            start_index = content.index('{')
-            # Find the last closing curly brace
-            end_index = content.rindex('}') + 1
-            # Extract the substring that is likely the JSON
-            json_string = content[start_index:end_index]
-            # Attempt to parse the string into a Python dictionary
-            json_data = json.loads(json_string)
-            return json_data
+            start_index = content.index('{') # Find the first opening curly brace
+            end_index = content.rindex('}') + 1 # Find the last closing curly brace
+            json_string = content[start_index:end_index] # Extract the substring that is likely the JSON
+            json_data = json.loads(json_string) # Attempt to parse the string into a Python dictionary
+            return json.dumps(json_data) # Return the JSON as a string
         except ValueError as e:
             # Error handling if '{' or '}' are not found, or json.loads() fails
             print("Error extracting JSON:", e)
@@ -95,9 +89,7 @@ class LLMModel():
             model=self.model_name,
         )
         # print(f"Generated quest before json extraction: {chat_completion.choices[0].message.content}")
-
         quest_json = self.extract_json(chat_completion.choices[0].message.content)
-
         # print(f"Generated quest: {quest_json}")
 
         return quest_json
@@ -122,19 +114,43 @@ class LLMModel():
 
         return dialogue_json
 
+    async def generate_kill_objective(self):
+        config_path = os.path.join(self.path_to_functions, fp.KILL_OBJECTIVE, 'config.json')
+        prompt_template_path = os.path.join(self.path_to_functions, fp.KILL_OBJECTIVE, 'prompt_template.txt')
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path)
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        print(f"Generated kill objective before json extraction: {chat_completion.choices[0].message.content}")
+
+        kill_objective_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        print(f"Generated kill objective: {kill_objective_json}")
+
+        return kill_objective_json
+
 
 async def main():
     model = LLMModel("llama3-8b-8192")
-    game_context = "You are a brave knight on a quest to save the kingdom from a dragon"
-    genre = "fantasy"
-    difficulty = "easy"
+    kill_objective_json = await model.generate_kill_objective()
 
-    quest_json = await model.generate_unit_quest_with_context(game_context, genre, difficulty)
-    print(f"Generated quest: {quest_json}")
+    # game_context = "You are a brave knight on a quest to save the kingdom from a dragon"
+    # genre = "fantasy"
+    # difficulty = "easy"
 
-    dialogue_json = await model.generate_unit_quest_dialogue(quest_json)
-
-    print(f"Generated dialogue: {dialogue_json}")
+    # quest_json = await model.generate_unit_quest_with_context(game_context, genre, difficulty)
+    # print(f"Generated quest: {quest_json}")
+    #
+    # dialogue_json = await model.generate_unit_quest_dialogue(quest_json)
+    #
+    # print(f"Generated dialogue: {dialogue_json}")
 
 
 if __name__ == "__main__":

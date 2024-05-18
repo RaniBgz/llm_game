@@ -1,0 +1,27 @@
+Generate a "kill" objective for a RPG game.
+The goal of this objective is for the player to kill a hostile NPC, or a monster.
+
+An objective has several attributes:
+- type: The type of the objective ("kill" in this case)
+- name: The name of the objective
+- description: A brief description of the objective
+- target: The target of the objective (e.g., the enemy to kill)
+
+The objective should be generated as a JSON object.
+
+Examples of JSON for a kill objective:
+Example 1:
+{
+  "type": "kill",
+  "name": "Kill the dragon",
+  "description": "Kill the dragon that is terrorizing the village",
+  "target": "dragon"
+}
+
+Example 2:
+{
+  "type": "kill",
+  "name": "Defeat the Cursed Guard",
+  "description": "Clear the outer courtyard of Argentum Castle from the cursed guard that has been terrorizing travelers. He is notoriously difficult to defeat, but the kingdom's bravest warriors have claimed victory over him.",
+  "target": "Cursed Guard"
+}
