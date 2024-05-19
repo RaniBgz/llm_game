@@ -1,0 +1,27 @@
+Generate a "location" objective for a RPG game.
+The goal of this objective is for the player to visit a specific location.
+
+An objective has several attributes:
+- type: The type of the objective ("location" in this case)
+- name: The name of the objective
+- description: A brief description of the objective
+- target: The target of the objective (e.g., the location to visit)
+
+The objective should be generated as a JSON object.
+
+Examples of JSON for a location objective:
+Example 1:
+{
+  "type": "location",
+  "name": "Visit the forest",
+  "description": "Explore the Broceliande forest",
+  "target": "Broceliande forest"
+}
+
+Example 2:
+{
+  "type": "location",
+  "name": "Go to the Kraken's Lair",
+  "description": "Find the Kraken's Lair",
+  "target": "Kraken's Lair"
+}

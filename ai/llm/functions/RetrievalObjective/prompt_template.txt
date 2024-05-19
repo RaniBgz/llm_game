@@ -1,0 +1,27 @@
+Generate a "retrieval" objective for a RPG game.
+The goal of this objective is for the player to retrieve an item.
+
+An objective has several attributes:
+- type: The type of the objective ("retrieval" in this case)
+- name: The name of the objective
+- description: A brief description of the objective
+- target: The target of the objective (e.g., the item to retrieve)
+
+The objective should be generated as a JSON object.
+
+Examples of JSON for a retrieve objective:
+Example 1:
+{
+  "type": "retrieval",
+  "name": "Retrieve the rusty key",
+  "description": "Retrieve the rusty key in the old cave",
+  "target": "Rusty Key"
+}
+
+Example 2:
+{
+  "type": "retrieval",
+  "name": "Retrieve the lost amulet",
+  "description": "The thieves have stolen the amulet. Retrieve it from their hideout",
+  "target": "Amulet of Kings"
+}

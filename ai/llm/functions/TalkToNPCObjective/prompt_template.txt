@@ -1,0 +1,27 @@
+Generate a "talk_to_npc" objective for a RPG game.
+The goal of this objective is for the player to talk to a friendly non-playable character (NPC) in the game.
+
+An objective has several attributes:
+- type: The type of the objective ("talk_to_npc" in this case)
+- name: The name of the objective
+- description: A brief description of the objective
+- target: The target of the objective (e.g., the NPC to talk to)
+
+The objective should be generated as a JSON object.
+
+Examples of JSON for a Talk to NPC objective:
+Example 1:
+{
+  "type": "talk_to_npc",
+  "name": "Talk to the Elder",
+  "description": "Go to the village and talk to the Elder",
+  "target": "Elder"
+}
+
+Example 2:
+{
+  "type": "talk_to_npc",
+  "name": "Talk to the King",
+  "description": "The King is waiting for you in the castle",
+  "target": "King Arthur"
+}

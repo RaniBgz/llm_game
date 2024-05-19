@@ -136,10 +136,78 @@ class LLMModel():
 
         return kill_objective_json
 
+    async def generate_retrieval_objective(self):
+        config_path = os.path.join(self.path_to_functions, fp.RETRIEVAL_OBJECTIVE, 'config.json')
+        prompt_template_path = os.path.join(self.path_to_functions, fp.RETRIEVAL_OBJECTIVE, 'prompt_template.txt')
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path)
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        print(f"Generated retrieval objective before json extraction: {chat_completion.choices[0].message.content}")
+
+        retrieval_objective_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        print(f"Generated retrieval objective: {retrieval_objective_json}")
+
+        return retrieval_objective_json
+
+    async def generate_talk_to_npc_objective(self):
+        config_path = os.path.join(self.path_to_functions, fp.TALK_TO_NPC_OBJECTIVE, 'config.json')
+        prompt_template_path = os.path.join(self.path_to_functions, fp.TALK_TO_NPC_OBJECTIVE, 'prompt_template.txt')
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path)
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        print(f"Generated talk to NPC objective before json extraction: {chat_completion.choices[0].message.content}")
+
+        talk_to_npc_objective_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        print(f"Generated talk to NPC objective: {talk_to_npc_objective_json}")
+
+        return talk_to_npc_objective_json
+
+    async def generate_location_objective(self):
+        config_path = os.path.join(self.path_to_functions, fp.LOCATION_OBJECTIVE, 'config.json')
+        prompt_template_path = os.path.join(self.path_to_functions, fp.LOCATION_OBJECTIVE, 'prompt_template.txt')
+        formatted_prompt = self.build_prompt(config_path, prompt_template_path)
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": formatted_prompt,
+                }
+            ],
+            model=self.model_name,
+        )
+
+        print(f"Generated location objective before json extraction: {chat_completion.choices[0].message.content}")
+
+        location_objective_json = self.extract_json(chat_completion.choices[0].message.content)
+
+        print(f"Generated location objective: {location_objective_json}")
+
+        return location_objective_json
 
 async def main():
     model = LLMModel("llama3-8b-8192")
     kill_objective_json = await model.generate_kill_objective()
+    retrieval_objective_json = await model.generate_retrieval_objective()
+    talk_to_npc_objective_json = await model.generate_talk_to_npc_objective()
+    location_objective_json = await model.generate_location_objective()
 
     # game_context = "You are a brave knight on a quest to save the kingdom from a dragon"
     # genre = "fantasy"
