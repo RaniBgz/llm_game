@@ -19,6 +19,7 @@ class Button(pygame.sprite.Sprite):
 
         self.text_rect.center = self.rect.center
         self.text_rect.y -= text_offset
+        self.active = True
 
     def draw(self, surface):
         self.true_rect = pygame.Rect(self.rect.topleft[0] + self.parent_offset[0],
@@ -26,21 +27,31 @@ class Button(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
         surface.blit(self.text_render, self.text_rect)
 
+    def set_active(self):
+        self.active = True
+
+    def set_inactive(self):
+        self.active = False
+
     def is_clicked(self, event):
-        return self.true_rect.collidepoint(event.pos)
+        if self.active:
+            return self.true_rect.collidepoint(event.pos)
 
     def handle_mouse_down(self):
-        self.image = pygame.transform.scale(self.pressed_image, (self.rect.width, self.rect.height))
-        # if self.is_clicked(event):
+        if self.active:
+            self.image = pygame.transform.scale(self.pressed_image, (self.rect.width, self.rect.height))
+            # if self.is_clicked(event):
 
 
     def handle_mouse_up(self):
-        self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
-        # if self.is_clicked(event):
-        #     print(f"Button {self.text} clicked")
+        if self.active:
+            self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
+            # if self.is_clicked(event):
+            #     print(f"Button {self.text} clicked")
 
     def handle_events(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            self.handle_mouse_up(event)
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.handle_mouse_down(event)
+        if self.active:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_up(event)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.handle_mouse_down(event)

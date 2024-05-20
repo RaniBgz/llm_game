@@ -71,8 +71,25 @@ class DialogueController:
     def reset_dialogue(self):
         self.dialogue_box.show = False
         self.dialogue_box.reinitialize_close_button()
+        self.reset_buttons()
         self.dialogue.current_text_index = 0
         self.dialogue_length = self.dialogue.get_dialogue_length()
+
+    def reset_buttons(self):
+        if getattr(self.dialogue_box, 'close_button', None):
+            self.dialogue_box.close_button = None
+        if getattr(self.dialogue_box, 'prev_button', None):
+            self.dialogue_box.prev_button = None
+        if getattr(self.dialogue_box, 'next_button', None):
+            self.dialogue_box.next_button = None
+        if getattr(self.dialogue_box, 'generate_quest_button', None):
+            self.dialogue_box.generate_quest_button = None
+        if getattr(self.dialogue_box, 'accept_button', None):
+            self.dialogue_box.accept_button = None
+        if getattr(self.dialogue_box, 'decline_button', None):
+            self.dialogue_box.decline_button = None
+        if getattr(self.dialogue_box, 'end_quest_button', None):
+            self.dialogue_box.end_quest_button = None
 
     #TODO: fix that, the buttons are probably not created properly
     #TODO: add button flags
