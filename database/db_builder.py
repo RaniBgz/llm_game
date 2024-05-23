@@ -227,13 +227,20 @@ class DBBuilder():
 
         # Insert NPCs
         npcs = [
-            ('Blacksmith', 50, False, '3,3', f"{H},{V//2}", './assets/sprites/npcs/blacksmith.png', False),
+            ('Blacksmith', 50, False, '3,3', f"{H // 2+3},{V//2}", './assets/sprites/npcs/blacksmith.png', False),
             ('Elder', 50, False, '3,3', f"{H//2 - 1},1", './assets/sprites/npcs/elder.png', False),
-            ('Enchantress', 20, False, '3,3', f"1,{V//2}", './assets/sprites/npcs/enchantress.png', False),
+            ('Enchantress', 20, False, '3,3', f"{H // 2-2},{V//2}", './assets/sprites/npcs/enchantress.png', False),
             ('Echo', 1000, True, '3,3', f"{2*H//3},1", './assets/sprites/npcs/robot.png', False),
-            ('Plant', 8, False, '3,4', f"{H//4},1", './assets/sprites/npcs/plant.png', True),
-            ('Goblin', 10, False, '3,4', f"{H//2},1", './assets/sprites/npcs/goblin.png', True),
-            ('Skeleton', 12, False, '3,4', f"{3*H//4},1", './assets/sprites/npcs/skeleton.png', True),
+            ('King', 500, False, '5,6', f"{H//2},{V//2}", './assets/sprites/npcs/warlord.png', False),
+            ('Paladin', 300, False, '5,6', f"{H//2+1},{V//2}", './assets/sprites/npcs/blue_paladin.png', False),
+            ('Paladin', 300, False, '5,6', f"{H // 2-1},{V // 2}", './assets/sprites/npcs/blue_paladin.png', False),
+            ('Artisan', 50, False, '5,2', f"{H // 2},{V // 2 - 1}", './assets/sprites/npcs/artisan.png', False),
+
+            ('Plant', 8, False, '1,3', f"{H//4},1", './assets/sprites/npcs/plant.png', True),
+            ('Goblin', 10, False, '1,3', f"{H//2},1", './assets/sprites/npcs/goblin.png', True),
+            ('Skeleton', 12, False, '1,3', f"{3*H//4},1", './assets/sprites/npcs/skeleton.png', True),
+            ('Boom Goblin', 16, False, '1,1', f"{H // 3},{V//2}", './assets/sprites/npcs/red_tnt_goblin.png', True),
+            ('Goblin Scout', 12, False, '1,1', f"{2*H // 3+1},{V // 2}", './assets/sprites/npcs/red_torch_goblin.png', True),
         ]
         for npc in npcs:
             cursor.execute("""
@@ -247,8 +254,15 @@ class DBBuilder():
             ('Wooden Shield', "A common wooden shield", '3,3', f"{H//2},{V-1}", './assets/sprites/items/wooden_shield.png', False),
             ('Small Health Potion', "A weak health potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/small_health_potion.png', False),
             ('Small Mana Potion', "A weak mana potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/small_mana_potion.png', False),
+
             ('Mushroom', "Good in an omelette", '4,3', f"{H//2},{V//2}", './assets/sprites/items/mushroom.png', True),
-            ('Throwing daggers', "Make sure to grab them by the correct end.", '4,3', f"{H},{V//2}",'./assets/sprites/items/throwing_daggers.png', True),
+            ('Brainshroom', "A wild mushroom that boosts intelligence", '4,4', f"{H},{V // 2}", './assets/sprites/items/brain_mushroom.png', False),
+            ('Medium Health Potion', "A regular health potion", '4,4', f"{H // 2},{V - 1}",'./assets/sprites/items/health_potion.png', False),
+            ('Medium Mana Potion', "A regular mana potion", '4,4', f"{H // 2},{V - 1}",'./assets/sprites/items/mana_potion.png', False),
+
+            ('Throwing Daggers', "Make sure to grab them by the correct end.", '5,5', f"{H},{V//2}",'./assets/sprites/items/throwing_daggers.png', False),
+            ('Fire Dagger', "A fiery dagger that causes mayhem", '4,4', f"{H},{V // 2}",'./assets/sprites/items/throwing_daggers.png', False),
+
         ]
         for item in items:
             cursor.execute("""
@@ -308,17 +322,17 @@ class DBBuilder():
 
 if __name__ == "__main__":
     db_builder = DBBuilder()
-    # db_builder.clear_all_tables()
-    # db_builder.populate_tables(db_builder.conn)
-    # db_builder.build_character_vectors()
-    # db_builder.verify_vectors('characters')
-    # db_builder.build_npcs_vectors()
-    # db_builder.verify_vectors('npcs')
-    # db_builder.build_items_vectors()
-    # db_builder.verify_vectors('items')
+    db_builder.clear_all_tables()
+    db_builder.populate_tables(db_builder.conn)
+    db_builder.build_character_vectors()
+    db_builder.verify_vectors('characters')
+    db_builder.build_npcs_vectors()
+    db_builder.verify_vectors('npcs')
+    db_builder.build_items_vectors()
+    db_builder.verify_vectors('items')
 
-    db_builder.add_npc('New NPC', 30, False, '1,1', '2,2', './assets/sprites/npcs/new_npc.png', False)
-    db_builder.add_item('New Item', 'A mysterious new item', '1,1', '2,2', './assets/sprites/items/new_item.png', True)
+    # db_builder.add_npc('New NPC', 30, False, '1,1', '2,2', './assets/sprites/npcs/new_npc.png', False)
+    # db_builder.add_item('New Item', 'A mysterious new item', '1,1', '2,2', './assets/sprites/items/new_item.png', True)
 
     # db_builder.remove_vector_column('npcs')
     # db_builder.remove_vector_column('items')
