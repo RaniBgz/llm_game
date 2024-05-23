@@ -30,6 +30,8 @@ class LocalMap(Map):
             self.initialize_hostile_camp()
         elif self.biome == Biome.DUNGEON:
             self.initialize_dungeon_biome()
+        elif self.biome == Biome.FORT:
+            self.initialize_fort_biome()
 
         # self.initialize_tiles()
         # self.grass_tile = pygame.transform.scale(self.grass_tile.image, (view_cst.TILE_WIDTH, view_cst.TILE_HEIGHT))
@@ -107,6 +109,21 @@ class LocalMap(Map):
                 else:
                     rock_tile = Tile([TileType.ROCK], self.texture_manager)
                     self.tile_grid[i][j] = rock_tile
+
+    def initialize_fort_biome(self):
+        for i in range(view_cst.H_TILES):
+            for j in range(view_cst.V_TILES):
+                if i==view_cst.H_TILES//2 - 1:
+                    if j==view_cst.V_TILES//2 - 2:
+                        castle_tile = Tile([TileType.ROCK, TileType.CASTLE], self.texture_manager)
+                        self.tile_grid[i][j] = castle_tile
+                    else:
+                        rock_tile = Tile([TileType.ROCK], self.texture_manager)
+                        self.tile_grid[i][j] = rock_tile
+                else:
+                    rock_tile = Tile([TileType.ROCK], self.texture_manager)
+                    self.tile_grid[i][j] = rock_tile
+
 
     def add_entity(self, entity):
         self.entities.append(entity)

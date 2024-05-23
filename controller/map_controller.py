@@ -38,6 +38,9 @@ class MapController:
                 elif local_map.biome == Biome.DUNGEON:
                     self.view.set_biome_asset(x, y, view_cst.ROCK_ASSET_PATH)
                     self.view.set_biome_asset(x, y, view_cst.DUNGEON_ENTRANCE_ASSET_PATH)
+                elif local_map.biome == Biome.FORT:
+                    self.view.set_biome_asset(x, y, view_cst.ROCK_ASSET_PATH)
+                    self.view.set_biome_asset(x, y, view_cst.CASTLE_ASSET_PATH)
 
 
     def initialize_map_biomes(self):

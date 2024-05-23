@@ -11,6 +11,8 @@ class TileType(Enum):
     FRIENDLY_HOUSE = 5
     HOSTILE_HOUSE = 6
     DUNGEON_ENTRANCE = 7
+    CASTLE = 8
+    TOWER = 9
 
 class Tile:
     def __init__(self, layers, texture_manager):
@@ -35,6 +37,10 @@ class Tile:
             return view_cst.HOSTILE_HOUSE_ASSET_PATH
         if tile_type == TileType.DUNGEON_ENTRANCE:
             return view_cst.DUNGEON_ENTRANCE_ASSET_PATH
+        if tile_type == TileType.CASTLE:
+            return view_cst.CASTLE_ASSET_PATH
+        if tile_type == TileType.TOWER:
+            return view_cst.TOWER_ASSET_PATH
 
     def draw(self, screen, position):
         for texture in self.textures:
