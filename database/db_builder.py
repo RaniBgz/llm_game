@@ -1,21 +1,12 @@
 import psycopg2
 import view.view_constants as view_cst
 import json
-import semantic_kernel as sk
-from semantic_kernel.connectors.ai.open_ai.services.open_ai_text_embedding import OpenAITextEmbedding
-from semantic_kernel.core_plugins.text_memory_plugin import TextMemoryPlugin
-from semantic_kernel.kernel import Kernel
-from semantic_kernel.memory.semantic_text_memory import SemanticTextMemory
-from semantic_kernel.memory.volatile_memory_store import VolatileMemoryStore
 import database.data_constants as data_cst
 from langchain_openai.embeddings import OpenAIEmbeddings
 from sentence_transformers import SentenceTransformer
 
-#https://github.com/microsoft/semantic-kernel/blob/main/python/notebooks/06-memory-and-embeddings.ipynb
-#https://platform.openai.com/docs/models/embeddings
-
-
-#1,536
+H = view_cst.H_TILES
+V = view_cst.V_TILES
 
 class DBBuilder():
     def __init__(self):
@@ -232,17 +223,17 @@ class DBBuilder():
         cursor.execute("""
             INSERT INTO characters (name, hp, global_position, local_position, sprite)
             VALUES (%s, %s, %s, %s, %s)
-        """, ('Gary', 16, '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/character/character.png'))
+        """, ('Gary', 16, '3,3', f"{H//2},{V-1}", './assets/sprites/character/character.png'))
 
         # Insert NPCs
         npcs = [
-            ('Blacksmith', 50, False, '3,3', f"{view_cst.H_TILES},{view_cst.V_TILES//2}", './assets/sprites/npcs/blacksmith.png', False),
-            ('Elder', 50, False, '3,3', f"{view_cst.H_TILES//2 - 1},1", './assets/sprites/npcs/elder.png', False),
-            ('Enchantress', 20, False, '3,3', f"1,{view_cst.V_TILES//2}", './assets/sprites/npcs/enchantress.png', False),
-            ('Echo', 1000, True, '3,3', f"{2*view_cst.H_TILES//3},1", './assets/sprites/npcs/robot.png', False),
-            ('Plant', 8, False, '3,4', f"{view_cst.H_TILES//4},1", './assets/sprites/npcs/plant.png', True),
-            ('Goblin', 10, False, '3,4', f"{view_cst.H_TILES//2},1", './assets/sprites/npcs/goblin.png', True),
-            ('Skeleton', 12, False, '3,4', f"{3*view_cst.H_TILES//4},1", './assets/sprites/npcs/skeleton.png', True),
+            ('Blacksmith', 50, False, '3,3', f"{H},{V//2}", './assets/sprites/npcs/blacksmith.png', False),
+            ('Elder', 50, False, '3,3', f"{H//2 - 1},1", './assets/sprites/npcs/elder.png', False),
+            ('Enchantress', 20, False, '3,3', f"1,{V//2}", './assets/sprites/npcs/enchantress.png', False),
+            ('Echo', 1000, True, '3,3', f"{2*H//3},1", './assets/sprites/npcs/robot.png', False),
+            ('Plant', 8, False, '3,4', f"{H//4},1", './assets/sprites/npcs/plant.png', True),
+            ('Goblin', 10, False, '3,4', f"{H//2},1", './assets/sprites/npcs/goblin.png', True),
+            ('Skeleton', 12, False, '3,4', f"{3*H//4},1", './assets/sprites/npcs/skeleton.png', True),
         ]
         for npc in npcs:
             cursor.execute("""
@@ -252,10 +243,10 @@ class DBBuilder():
 
         # Insert items
         items = [
-            ('Dagger', "A common iron dagger", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/dagger.png', False),
-            ('Shield', "A common wooden shield", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/shield.png', False),
-            ('Health Potion', "A weak health potion", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/health_potion.png', False),
-            ('Mana Potion', "A weak mana potion", '3,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES-1}", './assets/sprites/items/mana_potion.png', False),
+            ('Dagger', "A common iron dagger", '3,3', f"{H//2},{V-1}", './assets/sprites/items/dagger.png', False),
+            ('Shield', "A common wooden shield", '3,3', f"{H//2},{V-1}", './assets/sprites/items/shield.png', False),
+            ('Health Potion', "A weak health potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/health_potion.png', False),
+            ('Mana Potion', "A weak mana potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/mana_potion.png', False),
             ('Mushroom', "Good in an omelette", '4,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", './assets/sprites/items/mushroom.png', True),
             ('Throwing daggers', "Make sure to grab them by the correct end.", '4,3', f"{view_cst.H_TILES},{view_cst.V_TILES // 2}",'./assets/sprites/items/throwing_daggers.png', True),
         ]
@@ -282,19 +273,52 @@ class DBBuilder():
         finally:
             cursor.close()
 
+    def add_npc(self, name, hp, robot, global_position, local_position, sprite, hostile):
+        cursor = self.conn.cursor()
+        try:
+            npc_vector = self.embed_text_to_list(name)
+            cursor.execute("""
+                INSERT INTO npcs (name, hp, robot, global_position, local_position, sprite, hostile, embedding)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """, (name, hp, robot, global_position, local_position, sprite, hostile, npc_vector))
+            self.conn.commit()
+            print("NPC added successfully")
+        except psycopg2.Error as e:
+            print("Error adding NPC:", e)
+        finally:
+            cursor.close()
+
+    def add_item(self, name, description, global_position, local_position, sprite, in_world):
+        cursor = self.conn.cursor()
+        try:
+            item_vector = self.embed_text_to_list(name)
+            cursor.execute("""
+                INSERT INTO items (name, description, global_position, local_position, sprite, in_world, embedding)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (name, description, global_position, local_position, sprite, in_world, item_vector))
+            self.conn.commit()
+            print("Item added successfully")
+        except psycopg2.Error as e:
+            print("Error adding item:", e)
+        finally:
+            cursor.close()
+
     def close_connection(self):
         self.conn.close()
 
 if __name__ == "__main__":
     db_builder = DBBuilder()
-    db_builder.clear_all_tables()
-    db_builder.populate_tables(db_builder.conn)
-    db_builder.build_character_vectors()
-    db_builder.verify_vectors('characters')
-    db_builder.build_npcs_vectors()
-    db_builder.verify_vectors('npcs')
-    db_builder.build_items_vectors()
-    db_builder.verify_vectors('items')
+    # db_builder.clear_all_tables()
+    # db_builder.populate_tables(db_builder.conn)
+    # db_builder.build_character_vectors()
+    # db_builder.verify_vectors('characters')
+    # db_builder.build_npcs_vectors()
+    # db_builder.verify_vectors('npcs')
+    # db_builder.build_items_vectors()
+    # db_builder.verify_vectors('items')
+
+    db_builder.add_npc('New NPC', 30, False, '1,1', '2,2', './assets/sprites/npcs/new_npc.png', False)
+    db_builder.add_item('New Item', 'A mysterious new item', '1,1', '2,2', './assets/sprites/items/new_item.png', True)
 
     # db_builder.remove_vector_column('npcs')
     # db_builder.remove_vector_column('items')
