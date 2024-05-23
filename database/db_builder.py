@@ -243,12 +243,12 @@ class DBBuilder():
 
         # Insert items
         items = [
-            ('Dagger', "A common iron dagger", '3,3', f"{H//2},{V-1}", './assets/sprites/items/dagger.png', False),
-            ('Shield', "A common wooden shield", '3,3', f"{H//2},{V-1}", './assets/sprites/items/shield.png', False),
-            ('Health Potion', "A weak health potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/health_potion.png', False),
-            ('Mana Potion', "A weak mana potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/mana_potion.png', False),
-            ('Mushroom', "Good in an omelette", '4,3', f"{view_cst.H_TILES//2},{view_cst.V_TILES//2}", './assets/sprites/items/mushroom.png', True),
-            ('Throwing daggers', "Make sure to grab them by the correct end.", '4,3', f"{view_cst.H_TILES},{view_cst.V_TILES // 2}",'./assets/sprites/items/throwing_daggers.png', True),
+            ('Iron Dagger', "A common iron dagger", '3,3', f"{H//2},{V-1}", './assets/sprites/items/iron_dagger.png', False),
+            ('Wooden Shield', "A common wooden shield", '3,3', f"{H//2},{V-1}", './assets/sprites/items/wooden_shield.png', False),
+            ('Small Health Potion', "A weak health potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/small_health_potion.png', False),
+            ('Small Mana Potion', "A weak mana potion", '3,3', f"{H//2},{V-1}", './assets/sprites/items/small_mana_potion.png', False),
+            ('Mushroom', "Good in an omelette", '4,3', f"{H//2},{V//2}", './assets/sprites/items/mushroom.png', True),
+            ('Throwing daggers', "Make sure to grab them by the correct end.", '4,3', f"{H},{V//2}",'./assets/sprites/items/throwing_daggers.png', True),
         ]
         for item in items:
             cursor.execute("""
